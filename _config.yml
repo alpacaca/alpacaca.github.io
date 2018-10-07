@@ -50,7 +50,7 @@ highlight:
 # order_by: Posts order. (Order by date descending by default)
 index_generator:
   path: ''
-  per_page: 10
+  per_page: 8
   order_by: -date
   
 # Category & Tag
@@ -67,7 +67,7 @@ time_format: HH:mm:ss
 
 # Pagination
 ## Set per_page to 0 to disable pagination
-per_page: 10
+per_page: 8
 pagination_dir: page
 
 # Extensions
@@ -81,7 +81,7 @@ deploy:
   type: git
   repo: git@github.com:alpacaca/alpacaca.github.io.git
   branch: master
- 
+
 # yilia
 jsonContent:
   meta: false
@@ -93,12 +93,12 @@ jsonContent:
     text: false
     raw: false
     content: false
-    slug: false
+    slug: true
     updated: false
-    comments: false
+    comments: true
     link: false
     permalink: false
-    excerpt: false
+    excerpt: true
     categories: false
     tags: true
 
