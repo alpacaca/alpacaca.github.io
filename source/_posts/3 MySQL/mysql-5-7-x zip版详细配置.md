@@ -6,7 +6,7 @@ tags: mysql
 {% asset_img mysql.png MySQL %}
 
 # MySQL 5.7.x 解压版配置和服务安装
-<!-- more -->
+<!--more-->
 
 1. 下载5.7.x zip版本MySQL并解压到本地
 2. 在文件根目录下新建my.ini文件，并编辑如下内容
@@ -16,7 +16,10 @@ tags: mysql
 
 port = 3306
 basedir=A:\dev\mysql-5.7.23-winx64
-datadir=A:\dev\mysql-5.7.23-winx64\data 
+datadir=A:\dev\mysql-5.7.23-winx64\data
+#如果不生效，则使用下列表达形式
+#basedir=A:\\dev\\mysql-5.7.23-winx64
+#datadir=A:\\dev\\mysql-5.7.23-winx64\\data
 
 max_connections=200
 

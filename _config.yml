@@ -4,7 +4,7 @@
 
 # Site
 title: zhy's blog
-subtitle: Stay Hungry , Stay Foolish
+subtitle: Stay Hungry , Stay Young
 description:
 keywords: zhy blog
 author: zhy
@@ -73,7 +73,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: yilia
+theme: icarus
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html

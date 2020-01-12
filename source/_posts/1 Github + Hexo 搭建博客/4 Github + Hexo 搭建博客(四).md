@@ -11,7 +11,7 @@ toc: hexo
 
 首先介绍Hexo博客的原理：本地编辑好的文本通过`hexo generate`命令，编译为静态html文本并发布到远端展示。换句话说，Hexo展示的内容都是Html文本形式的，这就意味着在本地编写的文本支持编译html。<br/><br/>
 
-<!-- more -->
+<!--more-->
 
 这就引入了Markdown文本编辑<br/><br/>
 

@@ -10,7 +10,9 @@ toc: hexo
 
 初次浏览全局配置文件，在本地根目录下找到_config.yml文件
 
-<!-- more -->
+<!--more-->
+
+
 
 ```yml
 # Hexo Configuration
@@ -213,6 +215,8 @@ deploy:
 - deploy 部署
 
 > <h3>关于deploy</h3>当安装了hexo部署插件后，可以通过配置deploy自动进行部署，我选择的是以git方式发布到repo中的master分支
+>
+> 最终，使用`hexo d -g`发布到远程仓库
 
 <br/> <br />
 

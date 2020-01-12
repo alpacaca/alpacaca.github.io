@@ -9,7 +9,9 @@ toc: hexo
 # 1 申请Github的page域名
 访问[Github](https://github.com)官网新建账号，并创建个人仓库。
 
-<!-- more -->
+<!--more-->
+
+
 
 在个人仓库操作框下进行设置`settings`，要满足三级域名要求必须进行如下操作。
 
