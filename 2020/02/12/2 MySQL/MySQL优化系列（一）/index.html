@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8" />
+
+<meta name="generator" content="Hexo 3.9.0" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<title>MySQL优化系列（一） - zhy&#39;s blog</title>
+
+
+    <meta name="description" content="MySQL优化系列（一）">
+<meta name="keywords" content="mysql,MySQL优化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL优化系列（一）">
+<meta property="og:url" content="http://yoursite.com/2020/02/12/2 MySQL/MySQL优化系列（一）/index.html">
+<meta property="og:site_name" content="zhy&#39;s blog">
+<meta property="og:description" content="MySQL优化系列（一）">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/og_image.png">
+<meta property="og:updated_time" content="2020-04-23T15:10:28.348Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL优化系列（一）">
+<meta name="twitter:description" content="MySQL优化系列（一）">
+<meta name="twitter:image" content="http://yoursite.com/images/og_image.png">
+
+
+
+
+
+
+
+<link rel="icon" href="/images/favicon.svg">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+<style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+    
+    
+    
+    
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+    
+    <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/banner/3.jpg" alt="MySQL优化系列（一）" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/categories">Categories</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    <a class="navbar-item" target="_blank" rel="noopener" title="My GitHub" href="https://alpacaca.github.io">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main">
+<div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2020-02-11T16:00:00.000Z">2020-02-12</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    30 minutes 读完 (大约 4500 个字)
+                </span>
+                
+                
+                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
+                    <i class="far fa-eye"></i>
+                    <span id="busuanzi_value_page_pv">0</span>次访问
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                MySQL优化系列（一）
+            
+        </h1>
+        <div class="content">
+            <img src="/2020/02/12/2%20MySQL/MySQL优化系列（一）/image1.jpg" title="MySQL">
+<h1 id="MySQL优化系列（一）"><a href="#MySQL优化系列（一）" class="headerlink" title="MySQL优化系列（一）"></a>MySQL优化系列（一）</h1><a id="more"></a>
+<h2 id="0-总述"><a href="#0-总述" class="headerlink" title="0 总述"></a>0 总述</h2><p>按照Java当前框架式的开发模式，我总结<strong>单系统</strong>Mysql优化主要分为三类：</p>
+<ol>
+<li>代码级优化。</li>
+<li>数据库级优化。</li>
+<li>框架级优化。</li>
+</ol>
+<p><strong>代码级优化</strong>主要包含：</p>
+<ol>
+<li>尽量使用联接查询代替子查询（嵌套查询）。</li>
+<li>避免使用关键字LIKE或正则表达式匹配，会导致全表扫描。</li>
+<li>DELETE删除大量数据后，使用Optimize table tb_xxx释放残余空间。</li>
+<li>避免在where中使用函数或表达式。</li>
+<li>避免使用使索引失效的操作。</li>
+<li>避免使用select *，会导致全表查询。</li>
+<li>使用相对较高的性能分页，比如where id &gt; 100 limit 20 性能优于limit 100, 20。</li>
+<li>Join时使驱动表为小数据量表。</li>
+</ol>
+<p><strong>数据库级优化</strong>主要包含：</p>
+<ol>
+<li>建立索引，并使用explain调试接近最优查询。</li>
+<li>合理使用存储过程。</li>
+<li>选择适合业务特点的数据库引擎（事务、锁机制）。</li>
+<li>掌握使用慢查询日志。</li>
+<li>mysql buffer和cache。</li>
+<li>物理资源使用分析（cpu使用率和io阻塞）。</li>
+</ol>
+<p><strong>框架级优化</strong>主要指多级缓存策略，其中包含：</p>
+<ol>
+<li>关系型数据库中，ORM框架支持的一二级缓存。</li>
+<li>非关系型数据库中，redis数据库缓存。</li>
+</ol>
+<img src="/2020/02/12/2%20MySQL/MySQL优化系列（一）/MySQL优化总结.png" title="MySQL优化脑图">
+<p><br /></p>
+<h2 id="1-准备"><a href="#1-准备" class="headerlink" title="1 准备"></a>1 准备</h2><h3 id="1-1-数据准备"><a href="#1-1-数据准备" class="headerlink" title="1.1 数据准备"></a>1.1 数据准备</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在展开研究Mysql数据库优化前，我们先创建一组数据，用于分析所有涉及的操作行为。四张数据表的数据字典如下：（主键id均为整型自增，非特别说明都使用varchar类型）</p>
+<blockquote>
+<p><code>tb_course</code> : id，name（课程名），is_required（是否必修课 boolean），credit（学分 int）</p>
+<p><code>tb_teacher</code> :  id，name（教师名），age（年龄），course_id（所授课程id）</p>
+<p><code>tb_student</code> : id，name（学生名），age（年龄 int）</p>
+<p><code>tb_student_course</code> :  id，student_id（学生id），course_id（课程id），is_pass（是否及格 boolean），score（得分 int）</p>
+</blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;创建数据库脚本代码如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> <span class="string">`optdemo`</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> <span class="string">'utf8'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">USE</span> <span class="string">`optdemo`</span>;</span><br><span class="line"></span><br><span class="line">#创建课程表，包括id，名称，是否必修课，学分</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">table</span> <span class="string">`tb_course`</span>(</span><br><span class="line">	<span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> auto_increment,</span><br><span class="line">	<span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">20</span>),</span><br><span class="line">	is_required <span class="built_in">boolean</span>,</span><br><span class="line">	credit <span class="built_in">int</span></span><br><span class="line">)<span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> = utf8;</span><br><span class="line"></span><br><span class="line">#创建老师表，包括id，名称，年龄，教授课程</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">table</span> <span class="string">`tb_teacher`</span>(</span><br><span class="line">	<span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> auto_increment,</span><br><span class="line">	<span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">20</span>),</span><br><span class="line">	age <span class="built_in">int</span>,</span><br><span class="line">	course_id <span class="built_in">int</span></span><br><span class="line">)<span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> = utf8;</span><br><span class="line"></span><br><span class="line">#创建学生表，包括id，名称，年龄，所学课程</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">table</span> <span class="string">`tb_student`</span>(</span><br><span class="line">	<span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> auto_increment,</span><br><span class="line">	<span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">20</span>),</span><br><span class="line">	age <span class="built_in">int</span></span><br><span class="line">)<span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> = utf8;</span><br><span class="line"></span><br><span class="line">#创建学生--课程关系表，包括id，学生id，课程id，是否通过</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">table</span> <span class="string">`tb_student_course`</span>(</span><br><span class="line">	<span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> auto_increment,</span><br><span class="line">	student_id <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">	course_id <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">	is_pass <span class="built_in">boolean</span>,</span><br><span class="line">	score <span class="built_in">int</span></span><br><span class="line">)<span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> = utf8;</span><br><span class="line"></span><br><span class="line">#初始化表</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`tb_course`</span> (<span class="keyword">name</span>, is_required, credit) </span><br><span class="line"><span class="keyword">VALUES</span> </span><br><span class="line">(<span class="string">'C'</span>, <span class="literal">true</span>, <span class="number">4</span>), </span><br><span class="line">(<span class="string">'JAVA'</span>, <span class="literal">true</span>, <span class="number">4</span>), </span><br><span class="line">(<span class="string">'数据结构'</span>, <span class="literal">true</span>, <span class="number">3</span>), </span><br><span class="line">(<span class="string">'操作系统'</span>, <span class="literal">true</span>, <span class="number">4</span>), </span><br><span class="line">(<span class="string">'C#'</span>, <span class="literal">false</span>, <span class="number">2</span>), </span><br><span class="line">(<span class="string">'Python'</span>, <span class="literal">false</span>, <span class="number">3</span>), </span><br><span class="line">(<span class="string">'人工智能'</span>, <span class="literal">true</span>, <span class="number">4</span>), </span><br><span class="line">(<span class="string">'TCP/IP'</span>, <span class="literal">false</span>, <span class="number">2</span>), </span><br><span class="line">(<span class="string">'计算机网络'</span>, <span class="literal">true</span>, <span class="number">3</span>),</span><br><span class="line">(<span class="string">'Linux'</span>, <span class="literal">false</span>, <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`tb_teacher`</span> (<span class="keyword">name</span>, age, course_id)</span><br><span class="line"><span class="keyword">VALUES</span></span><br><span class="line">(<span class="string">'老张'</span>, <span class="number">45</span>, <span class="number">1</span>),</span><br><span class="line">(<span class="string">'老王'</span>, <span class="number">46</span>, <span class="number">2</span>),</span><br><span class="line">(<span class="string">'老李'</span>, <span class="number">48</span>, <span class="number">3</span>),</span><br><span class="line">(<span class="string">'老赵'</span>, <span class="number">35</span>, <span class="number">4</span>),</span><br><span class="line">(<span class="string">'老吴'</span>, <span class="number">55</span>, <span class="number">5</span>),</span><br><span class="line">(<span class="string">'老孙'</span>, <span class="number">45</span>, <span class="number">6</span>),</span><br><span class="line">(<span class="string">'老刘'</span>, <span class="number">40</span>, <span class="number">7</span>),</span><br><span class="line">(<span class="string">'老贾'</span>, <span class="number">39</span>, <span class="number">8</span>),</span><br><span class="line">(<span class="string">'老钱'</span>, <span class="number">32</span>, <span class="number">9</span>),</span><br><span class="line">(<span class="string">'老周'</span>, <span class="number">36</span>, <span class="number">10</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`tb_student`</span> (<span class="keyword">name</span>, age)</span><br><span class="line"><span class="keyword">VALUES</span></span><br><span class="line">(<span class="string">'小张'</span>, <span class="number">18</span>),</span><br><span class="line">(<span class="string">'小王'</span>, <span class="number">18</span>),</span><br><span class="line">(<span class="string">'小李'</span>, <span class="number">18</span>),</span><br><span class="line">(<span class="string">'小赵'</span>, <span class="number">18</span>),</span><br><span class="line">(<span class="string">'小吴'</span>, <span class="number">18</span>),</span><br><span class="line">(<span class="string">'小孙'</span>, <span class="number">18</span>),</span><br><span class="line">(<span class="string">'小刘'</span>, <span class="number">18</span>),</span><br><span class="line">(<span class="string">'小贾'</span>, <span class="number">18</span>),</span><br><span class="line">(<span class="string">'小钱'</span>, <span class="number">18</span>),</span><br><span class="line">(<span class="string">'小周'</span>, <span class="number">18</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`tb_student_course`</span> (student_id, course_id, is_pass, score)</span><br><span class="line"><span class="keyword">VALUES</span></span><br><span class="line">(<span class="number">1</span>,<span class="number">1</span>,<span class="literal">true</span>, <span class="number">80</span>), (<span class="number">1</span>,<span class="number">2</span>,<span class="literal">true</span>, <span class="number">90</span>), (<span class="number">1</span>,<span class="number">3</span>,<span class="literal">true</span>, <span class="number">92</span>), (<span class="number">1</span>,<span class="number">4</span>,<span class="literal">true</span>, <span class="number">93</span>), (<span class="number">1</span>,<span class="number">7</span>,<span class="literal">true</span>,<span class="number">87</span>), (<span class="number">1</span>,<span class="number">9</span>,<span class="literal">true</span>, <span class="number">89</span>), (<span class="number">1</span>,<span class="number">10</span>,<span class="literal">true</span>, <span class="number">78</span>), </span><br><span class="line">(<span class="number">2</span>,<span class="number">1</span>,<span class="literal">true</span>, <span class="number">99</span>), (<span class="number">2</span>,<span class="number">2</span>,<span class="literal">true</span>, <span class="number">98</span>), (<span class="number">2</span>,<span class="number">3</span>,<span class="literal">true</span>, <span class="number">100</span>), (<span class="number">2</span>,<span class="number">4</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">2</span>,<span class="number">7</span>,<span class="literal">true</span>,<span class="number">95</span>), (<span class="number">2</span>,<span class="number">8</span>,<span class="literal">true</span>,<span class="number">91</span>), (<span class="number">2</span>,<span class="number">9</span>,<span class="literal">false</span>,<span class="number">55</span>),</span><br><span class="line">(<span class="number">3</span>,<span class="number">1</span>,<span class="literal">true</span>, <span class="number">76</span>), (<span class="number">3</span>,<span class="number">2</span>,<span class="literal">true</span>,<span class="number">68</span>), (<span class="number">3</span>,<span class="number">3</span>,<span class="literal">true</span>,<span class="number">82</span>), (<span class="number">3</span>,<span class="number">5</span>,<span class="literal">true</span>,<span class="number">77</span>), (<span class="number">3</span>,<span class="number">7</span>,<span class="literal">true</span>,<span class="number">71</span>), (<span class="number">3</span>,<span class="number">9</span>,<span class="literal">false</span>,<span class="number">59</span>),</span><br><span class="line">(<span class="number">4</span>,<span class="number">1</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">4</span>,<span class="number">2</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">4</span>,<span class="number">3</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">4</span>,<span class="number">4</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">4</span>,<span class="number">7</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">4</span>,<span class="number">9</span>,<span class="literal">true</span>,<span class="number">100</span>),</span><br><span class="line">(<span class="number">5</span>,<span class="number">1</span>,<span class="literal">false</span>, <span class="number">42</span>), (<span class="number">5</span>,<span class="number">2</span>,<span class="literal">false</span>,<span class="number">39</span>), (<span class="number">5</span>,<span class="number">3</span>,<span class="literal">false</span>,<span class="number">33</span>), (<span class="number">5</span>,<span class="number">4</span>,<span class="literal">false</span>,<span class="number">21</span>), (<span class="number">5</span>,<span class="number">5</span>,<span class="literal">true</span>,<span class="number">60</span>), (<span class="number">5</span>,<span class="number">7</span>,<span class="literal">false</span>,<span class="number">0</span>), (<span class="number">5</span>,<span class="number">9</span>,<span class="literal">false</span>,<span class="number">58</span>),</span><br><span class="line">(<span class="number">6</span>,<span class="number">1</span>,<span class="literal">false</span>,<span class="number">82</span>), (<span class="number">6</span>,<span class="number">2</span>,<span class="literal">true</span>,<span class="number">78</span>), (<span class="number">6</span>,<span class="number">3</span>,<span class="literal">true</span>,<span class="number">78</span>), (<span class="number">6</span>,<span class="number">4</span>,<span class="literal">false</span>,<span class="number">49</span>), (<span class="number">6</span>,<span class="number">6</span>,<span class="literal">true</span>,<span class="number">63</span>), (<span class="number">6</span>,<span class="number">7</span>,<span class="literal">false</span>,<span class="number">47</span>), (<span class="number">6</span>,<span class="number">9</span>,<span class="literal">true</span>,<span class="number">82</span>),</span><br><span class="line">(<span class="number">7</span>,<span class="number">1</span>,<span class="literal">true</span>,<span class="number">98</span>), (<span class="number">7</span>,<span class="number">2</span>,<span class="literal">true</span>,<span class="number">96</span>), (<span class="number">7</span>,<span class="number">3</span>,<span class="literal">true</span>,<span class="number">92</span>), (<span class="number">7</span>,<span class="number">4</span>,<span class="literal">true</span>,<span class="number">91</span>), (<span class="number">7</span>,<span class="number">5</span>,<span class="literal">true</span>,<span class="number">96</span>), (<span class="number">7</span>,<span class="number">6</span>,<span class="literal">true</span>,<span class="number">99</span>), (<span class="number">7</span>,<span class="number">7</span>,<span class="literal">true</span>,<span class="number">93</span>), (<span class="number">7</span>,<span class="number">8</span>,<span class="literal">true</span>,<span class="number">99</span>), (<span class="number">7</span>,<span class="number">9</span>,<span class="literal">true</span>,<span class="number">94</span>), (<span class="number">7</span>,<span class="number">10</span>,<span class="literal">true</span>,<span class="number">98</span>),</span><br><span class="line">(<span class="number">8</span>,<span class="number">1</span>,<span class="literal">false</span>,<span class="number">32</span>), (<span class="number">8</span>,<span class="number">2</span>,<span class="literal">false</span>,<span class="number">33</span>), (<span class="number">8</span>,<span class="number">3</span>,<span class="literal">false</span>,<span class="number">42</span>), (<span class="number">8</span>,<span class="number">4</span>,<span class="literal">false</span>,<span class="number">43</span>), (<span class="number">8</span>,<span class="number">7</span>,<span class="literal">false</span>,<span class="number">52</span>), (<span class="number">8</span>,<span class="number">9</span>,<span class="literal">false</span>,<span class="number">53</span>),</span><br><span class="line">(<span class="number">9</span>,<span class="number">1</span>,<span class="literal">false</span>,<span class="number">36</span>), (<span class="number">9</span>,<span class="number">2</span>,<span class="literal">false</span>,<span class="number">39</span>), (<span class="number">9</span>,<span class="number">3</span>,<span class="literal">false</span>,<span class="number">56</span>), (<span class="number">9</span>,<span class="number">4</span>,<span class="literal">false</span>,<span class="number">55</span>), (<span class="number">9</span>,<span class="number">7</span>,<span class="literal">false</span>,<span class="number">55</span>), (<span class="number">9</span>,<span class="number">9</span>,<span class="literal">false</span>,<span class="number">51</span>),</span><br><span class="line">(<span class="number">10</span>,<span class="number">1</span>,<span class="literal">true</span>,<span class="number">86</span>), (<span class="number">10</span>,<span class="number">2</span>,<span class="literal">true</span>,<span class="number">88</span>), (<span class="number">10</span>,<span class="number">3</span>,<span class="literal">true</span>,<span class="number">92</span>), (<span class="number">10</span>,<span class="number">4</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">10</span>,<span class="number">5</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">10</span>,<span class="number">6</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">10</span>,<span class="number">7</span>,<span class="literal">false</span>,<span class="number">100</span>), (<span class="number">10</span>,<span class="number">8</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">10</span>,<span class="number">9</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">10</span>,<span class="number">10</span>,<span class="literal">true</span>,<span class="number">100</span>);</span><br></pre></td></tr></table></figure>
+<p><br /></p>
+<h3 id="1-2-Mysql逻辑分层结构"><a href="#1-2-Mysql逻辑分层结构" class="headerlink" title="1.2 Mysql逻辑分层结构"></a>1.2 Mysql逻辑分层结构</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先确定一个概念，通常开发中操作的是Mysql Client客户端，与Client相连并且处理数据和存储数据的称为Mysql Server或者Database Manager System（DBMS），Client职责就是输入并发送给Server处理，所以这里我们只讨论Server的逻辑分层结构。</p>
+<img src="/2020/02/12/2%20MySQL/MySQL优化系列（一）/架构图.png" title="Mysql架构图">
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从上图大体可以看出来，按逻辑共分为四层，概括一下包含：连接层、服务层、数据驱动层（引擎层）和数据层。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;① <strong>连接层</strong>被设计为连接池形式，主要负责与Client的通信，同时提供授权和安全等策略；</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;② <strong>服务层</strong>是Mysql Server的核心结构，主要包括：管理服务、SQL接口、SQL解析器、SQL优化器和缓存，具体介绍请看下一段。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;③ <strong>数据驱动层（引擎层）</strong>是由Mysql提供的插件式数据引擎套件，按照业务实际需要选择合适的引擎，将会很大程度上提高算力。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;④ <strong>数据层</strong>主要是物理层次的数据及相关信息的存储，例如慢查询日志等。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在服务层中，管理服务主要负责备份、恢复、数据迁移、集群等操作；SQL接口主要负责最熟悉的DML、DDL、存储过程、视图和触发器等处理；SQL解析器主要负责语法解析；SQL优化器主要负责重写<em>系统判定</em>不够优化的语句，也就是说，当我们通过Client提交一个SQL之后，优化器可能会对我们的SQL等效重写并继续向下执行，重写后的语句是Server认为足够优化的语句。SQL缓存将在之后章节具体介绍。</p>
+<blockquote>
+<p>由于SQL优化器的存在，我们写的SQL并不一定是Server执行的SQL。</p>
+</blockquote>
+<p><br /></p>
+<h3 id="1-3-DQL执行顺序与SQL优化器"><a href="#1-3-DQL执行顺序与SQL优化器" class="headerlink" title="1.3 DQL执行顺序与SQL优化器"></a>1.3 DQL执行顺序与SQL优化器</h3><blockquote>
+<p>DQL : Data Query Language 数据查询语言，特指Select及相关的(group by etc.)操作统称。</p>
+<p>DML : Data Manipulation Language 数据操作语言，包含INSERT、DELETE、UPDATE。</p>
+<p>DDL : Data Defination Language 数据定义语言，包含CREATE、 DROP等。</p>
+</blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在数据库DQL中，存在一条线性的关键字匹配和处理流程，这里所说的关键字就是与数据库操作有关的系统关键字。首先看下列关键字序列：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span></span><br><span class="line">    &lt; select_list &gt;</span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">    &lt; left_table &gt; </span><br><span class="line">&lt; join_type &gt; <span class="keyword">JOIN</span> &lt; right_table &gt; </span><br><span class="line"><span class="keyword">ON</span> &lt; join_condition &gt;</span><br><span class="line"><span class="keyword">WHERE</span></span><br><span class="line">    &lt; where_condition &gt;</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span></span><br><span class="line">    &lt; group_by_list &gt;</span><br><span class="line"><span class="keyword">HAVING</span></span><br><span class="line">    &lt; having_condition &gt;</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span></span><br><span class="line">    &lt; order_by_condition &gt;</span><br><span class="line"><span class="keyword">LIMIT</span> &lt; limit_number &gt;</span><br></pre></td></tr></table></figure>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这是一条日常开发中涉及较多关键字的SQL，也是SQL解析器认为合法的表示流程，但实际上，SQL解析器解析之后是按照如下顺序执行：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">FROM &lt;left_table&gt;</span><br><span class="line">ON &lt;join_condition&gt;</span><br><span class="line">&lt;join_type&gt; JOIN &lt;right_table&gt;</span><br><span class="line">WHERE &lt;where_condition&gt;</span><br><span class="line">GROUP BY &lt;group_by_list&gt;</span><br><span class="line">HAVING &lt;having_condition&gt;</span><br><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line"><span class="keyword">DISTINCT</span> &lt;select_list&gt;</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> &lt;order_by_condition&gt;</span><br><span class="line"><span class="keyword">LIMIT</span> &lt;limit_number&gt;</span><br></pre></td></tr></table></figure>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;掌握Mysql执行过程很重要，因为在后续优化过程中，经常需要确定驱动表以及多表查询时的执行顺序影响效率问题。</p>
+<blockquote>
+<p>简化表示：FROM…ON…JOIN…WHERE…GROUP BY… HAVING…SELECT…DISTINCT…ORDER BY…LIMIT</p>
+<p>简单来说，就是按顺序找到表，再从表中抽数据，再组织数据</p>
+</blockquote>
+<p><br /></p>
+<h2 id="2-代码级优化"><a href="#2-代码级优化" class="headerlink" title="2 代码级优化"></a>2 代码级优化</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;代码级优化是指，针对手写或者ORM框架生成的原生SQL语句进行优化，优化目的是产生运行效率更高的执行语句。多数情况下，我们针对DQL进行优化。</p>
+<p><br /></p>
+<h3 id="2-1-使用联接代替子查询"><a href="#2-1-使用联接代替子查询" class="headerlink" title="2.1 使用联接代替子查询"></a>2.1 使用联接代替子查询</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;子查询是指，使用SELECT查询出目标结果集，然后将该结果集当作其他查询的过滤条件使用。换句话说就是一个SELECT查询中的WHERE条件嵌套另一个或多个SELECT语句，这种写法不仅将多个逻辑联系起来更符合自然逻辑，而且避免了执行中的死锁和事务安全问题，但是，在执行过程中，Mysql会对子查询创建临时表，这就增加了IO消耗。</p>
+<blockquote>
+<p>例：查询选修了Python课程的学生信息。</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="string">`tb_student`</span></span><br><span class="line"><span class="keyword">WHERE</span> <span class="keyword">id</span> <span class="keyword">IN</span> ( </span><br><span class="line">    <span class="keyword">SELECT</span> student_id <span class="keyword">FROM</span> <span class="string">`tb_student_course`</span></span><br><span class="line">	<span class="keyword">WHERE</span> course_id <span class="keyword">IN</span> ( </span><br><span class="line">        <span class="keyword">SELECT</span> <span class="keyword">id</span> <span class="keyword">FROM</span> <span class="string">`tb_course`</span></span><br><span class="line">		<span class="keyword">WHERE</span> <span class="keyword">name</span> = <span class="string">'Python'</span>));</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><font color=red>声明：</font>为了方便，使用SELECT *写法，实际业务处理中应使用具体字段SELECT id, name, age写法。</p>
+</blockquote>
+<p>上述例子中，使用了三层SELECT语句组成的完整查询，逻辑清晰但实际运行效率并不高，下面改成JOIN写法。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> t1.* </span><br><span class="line"><span class="keyword">FROM</span> <span class="string">`tb_student`</span> t1 <span class="keyword">JOIN</span> <span class="string">`tb_student_course`</span> t2 </span><br><span class="line"><span class="keyword">ON</span> t1.id = t2.student_id <span class="keyword">JOIN</span> <span class="string">`tb_course`</span> t3</span><br><span class="line"><span class="keyword">ON</span> t2.course_id = t3.id</span><br><span class="line"><span class="keyword">WHERE</span> t3.name = <span class="string">'Python'</span>;</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> t1.* </span><br><span class="line"><span class="keyword">FROM</span> <span class="string">`tb_student`</span> t1, <span class="string">`tb_student_course`</span> t2, <span class="string">`tb_course`</span> t3 </span><br><span class="line"><span class="keyword">WHERE</span> t1.id = t2.student_id <span class="keyword">AND</span> t2.course_id = t3.id <span class="keyword">AND</span> t3.name = <span class="string">'Python'</span>;</span><br></pre></td></tr></table></figure>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在排除SQL优化器和缓存条件（重复执行，效率会提高）时，从执行时间来看，后两者效率明显比前者效率高。</p>
+<p><br /></p>
+<h3 id="2-2-删除操作"><a href="#2-2-删除操作" class="headerlink" title="2.2 删除操作"></a>2.2 删除操作</h3><h4 id="2-2-1-DELETE、DROP和TRUNCATE的区别"><a href="#2-2-1-DELETE、DROP和TRUNCATE的区别" class="headerlink" title="2.2.1 DELETE、DROP和TRUNCATE的区别"></a>2.2.1 DELETE、DROP和TRUNCATE的区别</h4><ol>
+<li>DELETE属于DML，执行操作时，每次从目标表中删除一行数据，并且删除行为作为日志保存以便进行”恢复“操作；而DROP和TRUNCATE属于DDL，其操作不能回滚。</li>
+<li>DELETE时会执行相关的触发器，并且执行之后需要显示的commit才能完成删除动作<sup>[1]</sup>；而DROP和TRUNCATE会隐式commit，且不会执行触发器。</li>
+<li>DROP删除表中所有数据，并释放表空间；TRUNCATE删除表中所有数据，重置高水位（high watermark）<sup>[2]</sup>；DELETE逐行删除，高水位保持不变。</li>
+</ol>
+<blockquote>
+<p>[1] : 在Mysql中，默认DML开启了自动提交，所以执行DML之后无需commit，但并不代表它是隐式执行，可以通过<code>SHOW VARIABLES LIKE &#39;autocommit&#39;</code>查看。</p>
+</blockquote>
+<blockquote>
+<p>[2] : 举个例子，例如表中id主键自增且当前id=10，当DELETE 全表之后再新增，id为11；而TRUNCATE和DROP之后再新增，id=1。</p>
+</blockquote>
+<p><br /></p>
+<h4 id="2-2-2-DELETE大数据量优化"><a href="#2-2-2-DELETE大数据量优化" class="headerlink" title="2.2.2 DELETE大数据量优化"></a>2.2.2 DELETE大数据量优化</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE删除大数据量后，不仅产生了许多日志空间，且所删除的空间并未被释放，此时需要使用OPTIMIZE TABLE [数据库]来释放。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DELETE</span> <span class="keyword">FROM</span> <span class="string">`tb_student_course`</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">OPTIMIZE</span> <span class="keyword">TABLE</span> <span class="string">`tb_student_course`</span>;</span><br></pre></td></tr></table></figure>
+<p><br /></p>
+<h3 id="2-3-避免使用SELECT"><a href="#2-3-避免使用SELECT" class="headerlink" title="2.3 避免使用SELECT *"></a>2.3 避免使用SELECT *</h3><ol>
+<li><p>使用SELECT *会查询全表字段作为结果集，当我们只需要部分而不是全部字段作为结果集时，就会造成资源浪费，不仅降低了查询效率，还增加了网络IO使用率；当多人维护表时，如果表字段发生变化（增加或者删除）就会造成预期外的结果，或者需要额外的后台代码进行过滤，不利于维护。</p>
+</li>
+<li><p>安全性考虑，如果发生SQL注入风险，有可能被攻击者创建联表条件，从而更多信息被暴露。</p>
+</li>
+<li><p>SELECT 目标列正好是索引时，会更快的从内存（B+Tree）中读取数据并返回而不产生本地IO。</p>
+</li>
+<li><p>【本条转自】：<a href="https://blog.csdn.net/u013240038/article/details/90731874">https://blog.csdn.net/u013240038/article/details/90731874</a></p>
+<p> 连接查询时，<em> 无法进入缓冲池查询。<br> 每次驱动表加载一条数据到内存中，然后被驱动表所有的数据都需要往内存中加载一遍进行比较。效率很低，所以mysql中可以指定一个缓冲池的大小，缓冲池大的话可以同时加载多条驱动表的数据进行比较，放的数据条数越多io操作就越少，性能也就越好。所以，如果此时使用select </em> 放一些无用的列，只会白白的占用缓冲空间。浪费本可以提高性能的机会。</p>
+</li>
+</ol>
+<p><br /></p>
+<h3 id="2-4-分页优化"><a href="#2-4-分页优化" class="headerlink" title="2.4 分页优化"></a>2.4 分页优化</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数据库层级的分页优化，实际上就是针对LIMIT关键字的优化，Mysql支持的LIMIT关键字系统中可以用作分页处理，表达式：LIMIT offset,rows 或 LIMIT rows。比如<code>LIMIT 123456,50</code>，从123456行开始查询50条数据；<code>LIMIT 50</code>将查询结果取前50条数据。LIMIT虽然使用方便但在大数据量时就会出现性能问题，随着offset增大，性能急剧下降，究其原因是因为<code>LIMIT 123456,50</code>会先扫描123456+50=123506条数据，然后返回50条，额外扫描的123456并不是我们需要的，事实上这样的设计显得多余，当数据量级增加之后，性能必然骤降。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;优化方式一：从实际情况来看，受影响的似乎只有<code>LIMIT offset, rows</code>形式，而<code>LIMIT rows</code>并不影响性能，实际上后者只扫描rows行数据，所以我们可以进行如下替换：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">table</span> <span class="keyword">LIMIT</span> <span class="number">123456</span>,<span class="number">50</span>;</span><br><span class="line">#LIMIT扫描123506条数据</span><br><span class="line">#转换后</span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">table</span> <span class="keyword">WHERE</span> <span class="keyword">id</span> &gt;= <span class="number">123456</span> <span class="keyword">LIMIT</span> <span class="number">50</span>;</span><br><span class="line">#LIMIT只扫描50条数据</span><br></pre></td></tr></table></figure>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;优化方式二：使用覆盖索引，在后续介绍索引时将深入介绍，在此简单提一下：覆盖索引是指，查询列正好全部具有索引，则结果直接从B+Tree中获取而不用回表操作。比如<code>SELECT col1 FROM tb_test LIMIT 123456,50；</code>，正好col1具有索引，那么执行该语句的时候会直接从col1索引对应的数据结构中获得结果，而不用回表到tb_test中再次查询，减少了磁盘IO。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> <span class="string">`tb_test`</span> <span class="keyword">ADD</span> <span class="keyword">INDEX</span> col1_index(col1);</span><br><span class="line"><span class="keyword">SELECT</span> col1 <span class="keyword">FROM</span> tb_test <span class="keyword">LIMIT</span> <span class="number">123456</span>, <span class="number">50</span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注：创建表并添加主键之后，会自动创建主键索引 Primary Key Index。</p>
+</blockquote>
+<p><br /></p>
+<h3 id="2-5-JOIN时使驱动表为小数据量表"><a href="#2-5-JOIN时使驱动表为小数据量表" class="headerlink" title="2.5 JOIN时使驱动表为小数据量表"></a>2.5 JOIN时使驱动表为小数据量表</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在前文中我们已经提到使用JOIN代替子查询可以明显提高效率，但JOIN本身也有需要更进一步的优化。首先介绍一下JOIN的原理：将驱动表的查询结果作为“输入”，当作条件逐条的在被驱动表内进行过滤，最终返回过滤后的数据，这种JOIN的方式被称作NEST LOOP。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> t1.* </span><br><span class="line"><span class="keyword">FROM</span> tabel1 t1 <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> table2 t2 </span><br><span class="line"><span class="keyword">ON</span> t1.condition = t2.condition</span><br><span class="line"><span class="keyword">JOIN</span> table3 t3</span><br><span class="line"><span class="keyword">ON</span> t1.condition = t3.condition <span class="keyword">AND</span> t2.condition = t3.condition</span><br><span class="line"><span class="keyword">WHERE</span> ....</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> t2.id <span class="keyword">DESC</span>;</span><br></pre></td></tr></table></figure>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这是一个相对复杂的例子，其中用到了LEFT JOIN和JOIN，解析一下过程：将table1当作驱动表查询并返回结果result1，将result1当作被驱动表t2的“输入”，并将result1中的数据逐条取出在table2中匹配，并将最终的结果返回result2，将table1和table2联合查询后的结果result2当作table3的”输入“，并逐条匹配并返回最终结果result3，排序后当作最终的结果返回。所以在使用多表JOIN时，明确表的数据条的多少，有助于我们确定使用小表作为驱动表，从而减少循环次数，达到优化的目的。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;庆幸的是，在不显式地指定驱动表时，SQL优化器帮助我们将最小的表作为驱动表来执行，所谓显式指定是指LEFT JOIN时左侧表为驱动表，RIGHT JOIN时右侧表为驱动表，而JOIN属于隐式，SQL优化器会自行决定小表为驱动表。</p>
+<blockquote>
+<p>思考：上述SQL还存在严重影响性能的地方，可以先做思考，将在后续索引章节介绍。</p>
+</blockquote>
+<p><br /></p>
+<h3 id="2-6-避免使用LIKE和正则匹配"><a href="#2-6-避免使用LIKE和正则匹配" class="headerlink" title="2.6 避免使用LIKE和正则匹配"></a>2.6 避免使用LIKE和正则匹配</h3><blockquote>
+<p>题：找出年龄是5或5的倍数的所有老师信息。</p>
+</blockquote>
+<p>使用LIKE关键字查找如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> tb_teacher</span><br><span class="line"><span class="keyword">WHERE</span> age <span class="keyword">LIKE</span> <span class="string">"%5"</span> <span class="keyword">OR</span> age <span class="keyword">LIKE</span> <span class="string">"%0"</span>;</span><br></pre></td></tr></table></figure>
+<p>使用正则表达式如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> tb_teacher</span><br><span class="line"><span class="keyword">WHERE</span> age REGEXP <span class="string">".5|0"</span>;</span><br></pre></td></tr></table></figure>
+<p>两者效果等价，结果如下：</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+<th>age</th>
+<th>course_id</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>老张</td>
+<td>55</td>
+<td>1</td>
+</tr>
+<tr>
+<td>4</td>
+<td>老赵</td>
+<td>45</td>
+<td>4</td>
+</tr>
+<tr>
+<td>5</td>
+<td>老吴</td>
+<td>35</td>
+<td>5</td>
+</tr>
+<tr>
+<td>6</td>
+<td>老孙</td>
+<td>45</td>
+<td>6</td>
+</tr>
+<tr>
+<td>7</td>
+<td>老刘</td>
+<td>40</td>
+<td>7</td>
+</tr>
+</tbody>
+</table>
+<p>可以看到LIKE和正则在进行内容过滤检索时很灵活，也很方便，但是 这两者查询都是基于全表的查询，大数据量时查询效率很低，所以给出一下两种解决办法。</p>
+<ol>
+<li><p>当使用MyISAM引擎时，建议使用全文索引FULLTEXT，因为只有MyISAM引擎是支撑该特殊索引方式的，所以可以在创建表的时候使用<code>FULLTEXT(字段)</code>来定义，如下：</p>
+ <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">table</span> <span class="string">`tb_student`</span>(</span><br><span class="line">	<span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> auto_increment,</span><br><span class="line">	<span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">20</span>),</span><br><span class="line">	age <span class="built_in">int</span>,</span><br><span class="line">    description <span class="built_in">text</span>,</span><br><span class="line">    FULLTEXT(description)</span><br><span class="line">)<span class="keyword">ENGINE</span> = Myisam <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> = utf8;</span><br></pre></td></tr></table></figure>
+<p> Mysql会创建索引表维护该索引列，查询时使用如下方式：</p>
+ <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> tb_student <span class="keyword">WHERE</span> <span class="keyword">MATCH</span>(description) AGAINST(<span class="string">'关键字'</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>当业务中不得不实现LIKE模糊匹配时，最好在匹配字符中不以占位符开始<code>LIKE &#39;关键字%&#39;</code>，这样可以使查询字段的索引生效，相反则会索引失败进行全表查询；如果不得不以占位符开始，那么可以使用覆盖索引来提高效率。</p>
+</li>
+</ol>
+
+        </div>
+        
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/MySQL优化/">MySQL优化</a>, <a class="has-link-grey -link" href="/tags/mysql/">mysql</a>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        <div class="social-share"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/css/share.min.css">
+<script src="https://cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/js/social-share.min.js"></script>
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
+            
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        <div class="level-start">
+            <a class="level level-item has-link-grey  article-nav-prev" href="/2020/02/22/2 MySQL/MySQL优化系列（二）/">
+                <i class="level-item fas fa-chevron-left"></i>
+                <span class="level-item">MySQL优化系列（二）</span>
+            </a>
+        </div>
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2018/10/08/2 MySQL/mysql-5-7-x zip版详细配置/">
+                <span class="level-item">mysql-5.7.x zip版详细配置</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="title is-5 has-text-weight-normal">评论</h3>
+        
+<div id="comment-container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+	var gitment = new Gitment({
+		id: '3c4aeb76172f3f196a289900698d55b0',
+		owner: 'alpaca',
+		repo: 'alpacaca.github.io',
+		oauth: {
+			client_id: 'e17f481b09f8cf119e89',
+			client_secret: 'bd462646e2303946237a040c2afde10a4f5cd418',
+		},
+	})
+	gitment.render('comment-container')
+</script>
+
+    </div>
+</div>
+</div>
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered" style="flex-shrink: 1">
+                <div>
+                    
+                    <figure class="image is-128x128 has-mb-6">
+						<div style="border-radius: 0.3">
+							<img class="" src="/images/avatar.jpg" alt="Alpacaca">
+						</div>
+                    </figure>
+                    
+                    <p class="is-size-4 is-block">
+                        Alpacaca
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        Web Developer
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>Xi&#39;an , China</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <a href="/archives">
+                        <p class="title has-text-weight-normal">
+                            11
+                        </p>
+                    </a>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <a href="/categories">
+                        <p class="title has-text-weight-normal">
+                            0
+                        </p>
+                    </a>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <a href="/tags">
+                        <p class="title has-text-weight-normal">
+                            5
+                        </p>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/alpacaca" target="_blank" rel="noopener">
+                关注我</a>
+        </div>
+        
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="Github" href="https://github.com/alpacaca">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="Facebook" href="https://facebook.com">
+                
+                <i class="fab fa-facebook"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="Twitter" href="https://twitter.com">
+                
+                <i class="fab fa-twitter"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="linkedin" href="https://www.linkedin.com/">
+                
+                <i class="fab fa-linkedin"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                分类
+            </h3>
+            <ul class="menu-list">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            标签云
+        </h3>
+        <a href="/tags/MySQL优化/" style="font-size: 16.67px;">MySQL优化</a> <a href="/tags/hexo/" style="font-size: 13.33px;">hexo</a> <a href="/tags/mysql/" style="font-size: 20px;">mysql</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/缓存/" style="font-size: 10px;">缓存</a>
+    </div>
+</div>
+    
+    
+        <div class="column-right-shadow is-hidden-widescreen ">
+        
+            <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2020/04/01/3 算法/常用算法——分治法/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="常用算法——分治法">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-31T16:00:00.000Z">2020-04-01</time></div>
+                    <a href="/2020/04/01/3 算法/常用算法——分治法/" class="title has-link-black-ter is-size-6 has-text-weight-normal">常用算法——分治法</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/03/10/2 MySQL/MySQL优化系列（五）/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（五）（缓存篇）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-09T16:00:00.000Z">2020-03-10</time></div>
+                    <a href="/2020/03/10/2 MySQL/MySQL优化系列（五）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（五）（缓存篇）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/03/03/2 MySQL/MySQL优化系列（四）/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（四）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-02T16:00:00.000Z">2020-03-03</time></div>
+                    <a href="/2020/03/03/2 MySQL/MySQL优化系列（四）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（四）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/02/24/2 MySQL/MySQL优化系列（三）/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（三）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-02-23T16:00:00.000Z">2020-02-24</time></div>
+                    <a href="/2020/02/24/2 MySQL/MySQL优化系列（三）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（三）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/02/22/2 MySQL/MySQL优化系列（二）/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（二）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-02-21T16:00:00.000Z">2020-02-22</time></div>
+                    <a href="/2020/02/22/2 MySQL/MySQL优化系列（二）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（二）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/04/">
+                <span class="level-start">
+                    <span class="level-item">April 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/03/">
+                <span class="level-start">
+                    <span class="level-item">March 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/02/">
+                <span class="level-start">
+                    <span class="level-item">February 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">October 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">September 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/MySQL优化/">
+                        <span class="tag">MySQL优化</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/hexo/">
+                        <span class="tag">hexo</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/mysql/">
+                        <span class="tag">mysql</span>
+                        <span class="tag is-grey">6</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/数据结构/">
+                        <span class="tag">数据结构</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/缓存/">
+                        <span class="tag">缓存</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right ">
+    
+        <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2020/04/01/3 算法/常用算法——分治法/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="常用算法——分治法">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-31T16:00:00.000Z">2020-04-01</time></div>
+                    <a href="/2020/04/01/3 算法/常用算法——分治法/" class="title has-link-black-ter is-size-6 has-text-weight-normal">常用算法——分治法</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/03/10/2 MySQL/MySQL优化系列（五）/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（五）（缓存篇）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-09T16:00:00.000Z">2020-03-10</time></div>
+                    <a href="/2020/03/10/2 MySQL/MySQL优化系列（五）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（五）（缓存篇）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/03/03/2 MySQL/MySQL优化系列（四）/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（四）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-02T16:00:00.000Z">2020-03-03</time></div>
+                    <a href="/2020/03/03/2 MySQL/MySQL优化系列（四）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（四）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/02/24/2 MySQL/MySQL优化系列（三）/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（三）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-02-23T16:00:00.000Z">2020-02-24</time></div>
+                    <a href="/2020/02/24/2 MySQL/MySQL优化系列（三）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（三）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/02/22/2 MySQL/MySQL优化系列（二）/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（二）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-02-21T16:00:00.000Z">2020-02-22</time></div>
+                    <a href="/2020/02/22/2 MySQL/MySQL优化系列（二）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（二）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/04/">
+                <span class="level-start">
+                    <span class="level-item">April 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/03/">
+                <span class="level-start">
+                    <span class="level-item">March 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/02/">
+                <span class="level-start">
+                    <span class="level-item">February 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">October 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">September 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/MySQL优化/">
+                        <span class="tag">MySQL优化</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/hexo/">
+                        <span class="tag">hexo</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/mysql/">
+                        <span class="tag">mysql</span>
+                        <span class="tag is-grey">6</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/数据结构/">
+                        <span class="tag">数据结构</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/缓存/">
+                        <span class="tag">缓存</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/banner/3.jpg" alt="MySQL优化系列（一）" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2020 zhy&nbsp;
+                Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> & <a
+                        href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a>
+                
+                <br>
+                <span id="busuanzi_container_site_uv">
+                共<span id="busuanzi_value_site_uv">0</span>个访客
+                </span>
+                
+                </p>
+            </div>
+            <div class="level-end">
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-Hans");</script>
+
+
+<script>
+var IcarusThemeSettings = {
+    site: {
+        url: 'http://yoursite.com',
+        external_link: {"enable":true,"exclude":[]}
+    },
+    article: {
+        highlight: {
+            clipboard: true,
+            fold: 'unfolded'
+        }
+    }
+};
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+
+
+
+
+
+<script src="/js/animation.js"></script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+<script src="/js/gallery.js" defer></script>
+
+
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+
+
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+	
+	<script src="/js/click.js"></script>
+	<script src="/js/snow.js"></script>
+</body>
+</html>

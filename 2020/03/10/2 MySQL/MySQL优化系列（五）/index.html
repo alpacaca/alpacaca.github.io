@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8" />
+
+<meta name="generator" content="Hexo 3.9.0" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<title>MySQL优化系列（五）（缓存篇） - zhy&#39;s blog</title>
+
+
+    <meta name="description" content="MySQL优化系列（五）（缓存篇）">
+<meta name="keywords" content="mysql,MySQL优化,缓存">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL优化系列（五）（缓存篇）">
+<meta property="og:url" content="http://yoursite.com/2020/03/10/2 MySQL/MySQL优化系列（五）/index.html">
+<meta property="og:site_name" content="zhy&#39;s blog">
+<meta property="og:description" content="MySQL优化系列（五）（缓存篇）">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/og_image.png">
+<meta property="og:updated_time" content="2020-04-23T15:10:28.361Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL优化系列（五）（缓存篇）">
+<meta name="twitter:description" content="MySQL优化系列（五）（缓存篇）">
+<meta name="twitter:image" content="http://yoursite.com/images/og_image.png">
+
+
+
+
+
+
+
+<link rel="icon" href="/images/favicon.svg">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+<style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+    
+    
+    
+    
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+    
+    <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/banner/3.jpg" alt="MySQL优化系列（五）（缓存篇）" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/categories">Categories</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    <a class="navbar-item" target="_blank" rel="noopener" title="My GitHub" href="https://alpacaca.github.io">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main">
+<div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2020-03-09T16:00:00.000Z">2020-03-10</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    32 minutes 读完 (大约 4833 个字)
+                </span>
+                
+                
+                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
+                    <i class="far fa-eye"></i>
+                    <span id="busuanzi_value_page_pv">0</span>次访问
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                MySQL优化系列（五）（缓存篇）
+            
+        </h1>
+        <div class="content">
+            <img src="/2020/03/10/2%20MySQL/MySQL优化系列（五）/image1.jpg" title="MySQL">
+<h1 id="MySQL优化系列（五）（缓存篇）"><a href="#MySQL优化系列（五）（缓存篇）" class="headerlink" title="MySQL优化系列（五）（缓存篇）"></a>MySQL优化系列（五）（缓存篇）</h1><a id="more"></a>
+<h2 id="4-缓存"><a href="#4-缓存" class="headerlink" title="4 缓存"></a>4 缓存</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;说明：由于是MySQL优化系列，本篇缓存旨在引导向，并不深入介绍，后续将开篇深入介绍，同样的，作为Java端持久化框架Mybatis、Hibernate和 JPA 也适用此说明，由于JPA基于Hibernate轻量化封装，所以框架缓存策略选择JPA介绍即可。</p>
+<h3 id="4-1-为什么使用缓存"><a href="#4-1-为什么使用缓存" class="headerlink" title="4.1 为什么使用缓存"></a>4.1 为什么使用缓存</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;缓存，是以提升数据响应为目的，以合理的缓存策略为条件，以数据中间件的形式为手段的一种技术。在计算机纵向世界，软硬件都有各自的缓存，并且缓存都是以提升现有框架约束的性能为价值，且成为衡量系统性能的重要指标之一。再此我们仅讨论软件领域以内存为驱动模型的缓存。</p>
+<p><strong>缓存的用途</strong>，使用缓存可以减少某条频繁进行数据处理链路上的性能损耗，通常是读多写少的场景，缓存是一种空间换时间的解决方案，通常在内存中进行。</p>
+<p><strong>缓存的位置</strong>，众所周知，在计算机科学发展历史长河中，困难的问题往往都是通过增加第三方中间件来解决的，而缓存的位置随着业务覆盖的不同而不同。</p>
+<blockquote>
+<p>比如，在web前端页面，经常会缓存页面渲染或数据处理常用的信息，如多次浏览同一商品的信息，这一功能现代浏览器基本都支持。</p>
+<p>比如，还是web前端，用户通过点击页面按钮多次进行查询，通过http访问后端控制器接口就可以添加相应的缓存，而无需经过服务层乃至持久层查询。</p>
+<p>再比如，数据频繁的读场景，通常是在业务层和持久层中添加缓存，以减少数据库访问带来的IO性能损耗和数据连接开销。</p>
+</blockquote>
+<p><strong>缓存的分类</strong>，应用开发层面的数据结构如Map，持久层数据中间件如EhCache、Memcache、Redis等，数据库自带的缓存特性如Mysql和Oracle等。</p>
+<p><strong>缓存的策略</strong>，由于不同系统的数据访问模式不同，同一种缓存策略很难在不同的数据访问模式下取得满意的性能，通常使用如下几种策略：</p>
+<ol>
+<li>基于访问的时间：按各缓存项被访问时间来组织缓存队列，决定替换对象。如 FIFO，LRU；</li>
+<li>基于访问频率：用缓存项的被访问频率来组织缓存。如 LFU、LRU2；</li>
+<li>访问时间与频率兼顾：兼顾访问时间和频率，使数据在变化时缓存策略仍有较好性能。多数此类算法具有一个可调或自适应参数，通过该参数的调节使缓存策略在基于访问时间与频率间取得一个平衡，如 FBR；</li>
+<li>基于访问模式：某些应用有较明确的数据访问特点，进而产生与其相适应的缓存策略。</li>
+</ol>
+<blockquote>
+<p>FIFO，First In Last Out，即先进先出，如果一个数据是最先进入的，那么可以认为在将来它被访问的可能性很小，当缓存空间不足，它最先被释放。</p>
+<p>LRU：Least Recently Use，即最近最久未使用算法，选择最近最久未使用的数据予以淘汰，在缓存空间内，最近一直没有被使用的数据会被释放，由新访问数据代替</p>
+<p>LFU：Least Frequently Used，即最近最少使用算法，如果一个数据在最近一段时间很少（频率）被访问到，那么可以认为在将来它被访问的可能性也很小。因此，当空间满时，最小频率访问的数据最先被释放。</p>
+<p>LRU2：Least Recently Used 2，即LRU的改进版本，每当一次缓存记录的使用，会把它放到栈的顶端。当栈满了的时候，再把栈底的对象给换成新进来的对象。</p>
+<p>FBR：Frequency-based replacement， 需要可调参数平衡访问时间和频率。</p>
+</blockquote>
+<p><strong>数据一致性</strong>，当分布式缓存中读写并发执行，有可能导致同一数据先读后写，那么缓存中保存的将是旧数据；先操作数据库，再清除缓存，如果缓存删除失败，就会出现数据不一致问题，解决方案如下：</p>
+<ol>
+<li>前者可以采取将读写纳入同一节点的缓存按照同步处理，或者采取数据写入前后一并删除相关缓存。</li>
+<li>缓存删除失败，可以将删除失败的key存入队列中并重复删除直到成功为止。</li>
+</ol>
+<p><strong>缓存的指标</strong>，命中率=命中次数/访问次数，命中率是缓存最重要的指标，它直接决定了缓存设计的合理性，若查询一个缓存，十次查询九次能得到正确结果，那么命中率就是90%。而直接影响缓存命中率的因素包含：缓存容量、内存空间和缓存策略。</p>
+<h3 id="4-2-MySQL缓存"><a href="#4-2-MySQL缓存" class="headerlink" title="4.2 MySQL缓存"></a>4.2 MySQL缓存</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从前面介绍已经可以了解到，Mysql在执行时需要经过四层逻辑分层（客户端接口 -&gt; 服务 -&gt; 引擎 -&gt; 持久层），并在服务层和插件引擎层还需要经过解析、优化、执行过程，并最终在持久层完成IO操作，这一些列耗时耗力的操作在QPS峰值时是噩梦般的存在，所以Mysql自身也支持缓存策略，在MyIsam中使用缓存策略，在InnoDB中使用缓冲池策略。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"># 查询是否支持查询缓存</span><br><span class="line">mysql&gt; show variables like &apos;have_query_cache&apos;;</span><br><span class="line">+------------------+-------+</span><br><span class="line">| Variable_name    | Value |</span><br><span class="line">+------------------+-------+</span><br><span class="line">| have_query_cache | YES   |</span><br><span class="line">+------------------+-------+</span><br><span class="line"></span><br><span class="line"># 查询当前缓存状态</span><br><span class="line">mysql&gt; show status like &apos;%qcache%&apos;;</span><br><span class="line">+-------------------------+-------+</span><br><span class="line">| Variable_name           | Value |</span><br><span class="line">+-------------------------+-------+</span><br><span class="line">| Qcache_free_blocks      | 0     |  缓存空闲的内存块</span><br><span class="line">| Qcache_free_memory      | 0     |  在query_cache_size设置的缓存中的空闲的内存</span><br><span class="line">| Qcache_hits             | 0     |  缓存的命中次数</span><br><span class="line">| Qcache_inserts          | 0     |  查询缓存区此前总共缓存过多少条查询命令的结果</span><br><span class="line">| Qcache_lowmem_prunes    | 0     |  查询缓存区已满而从其中溢出和删除的查询结果的个数</span><br><span class="line">| Qcache_not_cached       | 0     |  </span><br><span class="line">| Qcache_queries_in_cache | 0     |  缓存查询次数</span><br><span class="line">| Qcache_total_blocks     | 0     |  缓存总的内存块</span><br><span class="line">+-------------------------+-------+</span><br></pre></td></tr></table></figure>
+<p>通过修改mysql配置文件来配置缓存</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">query_cache_type=1 #0不使用，1使用，2适时使用</span><br><span class="line">query_cache_size=10485760 #10M，单位字节</span><br><span class="line">query_cache_limit=1048576 #1M, 单个查询允许使用的最大缓存</span><br></pre></td></tr></table></figure>
+<h3 id="4-3-Memcache和Redis"><a href="#4-3-Memcache和Redis" class="headerlink" title="4.3 Memcache和Redis"></a>4.3 Memcache和Redis</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;缓存界两位翘楚，都是基于内存的存储机制，亦可称为内存数据库。两者都是高性能的分布式缓存，在缓存层面都可以很好的满足业务要求。</p>
+<h4 id="4-3-1-Memcache"><a href="#4-3-1-Memcache" class="headerlink" title="4.3.1 Memcache"></a>4.3.1 Memcache</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Memcache是一套分布式的高速缓存系统，对于大型的需要频繁访问数据库的网站访问速度提升效果十分显著，以提升网站的访问速度。通过在内存里维护一个统一的巨大的hash表，它能够用来存储各种格式的数据，包括图像、视频、文件以及数据库检索的结果等。简单来说就是将数据调用到内存中，然后从内存中读取，从而提高读取速度。Memcached是以守护线程方式运行于一个或多个服务器中，随时接收客户端的连接和操作。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于完全依赖内存，使Memcache的容量根据部署节点的内存而定，在32位系统中容量最大限定2G。由于在内存中维护一个Hash表结构来缓存数据，所以它的数据保存形式遵从K-V简单结构，key默认最大不能超过128个字 节，value默认大小是1M，不过可以针对每条数据设定过期策略。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Memcache操作也相对简单，针对Hash表常用的操作如：set设置、get读取、replace替换、delete删除和flush刷新等。目前只支持文本类型的存取，所以在面向对象中可以将需要存储的对象经过序列化处理并保存，读取之后可以通过反序列化还原。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Memcache采用LRU过期策略，不支持持久化，所以当内存断电时会发生数据丢失，且无备份功能。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Java 调用Memcache */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MemcachedJava</span> </span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">   </span><br><span class="line">      <span class="keyword">try</span>&#123;</span><br><span class="line">         <span class="comment">// 连接本地的 Memcached 服务</span></span><br><span class="line">         MemcachedClient mcc = <span class="keyword">new</span> MemcachedClient(<span class="keyword">new</span> InetSocketAddress(<span class="string">"127.0.0.1"</span>, <span class="number">11211</span>));</span><br><span class="line">         <span class="comment">// 存储数据</span></span><br><span class="line">         Future future = mcc.set(<span class="string">"key1"</span>, <span class="number">900</span>, <span class="string">"This is Value1"</span>);</span><br><span class="line">         <span class="comment">// 查看存储状态</span></span><br><span class="line">         System.out.println(<span class="string">"set status:"</span> + future.get());</span><br><span class="line">         <span class="comment">// 缓存读取</span></span><br><span class="line">         System.out.println(<span class="string">"value in cache : "</span> + mcc.get(<span class="string">"key1"</span>));</span><br><span class="line">         <span class="comment">// 新增数据</span></span><br><span class="line">         mcc.add(<span class="string">"key2"</span>, <span class="number">900</span>, <span class="string">"This is Value2"</span>);</span><br><span class="line">         <span class="comment">// 数据替换</span></span><br><span class="line">         mcc.replace(<span class="string">"key2"</span>, <span class="number">900</span>, <span class="string">"is"</span>);</span><br><span class="line">         <span class="comment">// 数据后向追加</span></span><br><span class="line">         mcc.append(<span class="string">"key2"</span>, <span class="number">900</span>, <span class="string">" Value2"</span>);</span><br><span class="line">         <span class="comment">// 数据前向追缴</span></span><br><span class="line">         mcc.prepend(<span class="string">"key2"</span>, <span class="number">900</span>, <span class="string">"This "</span>);</span><br><span class="line">         <span class="comment">// 删除数据</span></span><br><span class="line">         mcc.delete(<span class="string">"key1"</span>);</span><br><span class="line">         <span class="comment">// 关闭连接</span></span><br><span class="line">         mcc.shutdown();</span><br><span class="line">      &#125;<span class="keyword">catch</span>(Exception ex)&#123;</span><br><span class="line">         System.out.println( ex.getMessage() );</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="4-3-2-Redis"><a href="#4-3-2-Redis" class="headerlink" title="4.3.2 Redis"></a>4.3.2 Redis</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;相比于Memcache，Redis具有更多的功能扩展性，可以满足更复杂的场景，并且支持String、Hash、Set、List和sorted set类型，还支持数据的持久化、虚拟内存等。它可以用作数据库、缓存和消息中间件。redis会周期性的把更新的数据写入磁盘或者把修改操作写入追加的记录文件，并且在此基础上实现了master-slave(主从)同步。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Redis支持主从同步，数据可以从主服务器向任意数量的从服务器上同步，从服务器可以是关联其他从服务器的主服务器。由于完全实现了发布/订阅机制，使得从数据库在任何地方同步树时，可订阅一个频道并接收主服务器完整的消息发布记录。同步对读取操作的可扩展性和数据冗余很有帮助</p>
+<blockquote>
+<p>发布/订阅机制：是一种消息通信模式,发布者(pub)发送消息到特定的频道( channel)，订阅者(sub)通过观察频道( channe)接收消息。在分布式环境中，Redis分为客户端和服务端，消息的发布和订阅都是客户端行为，服务端提供channel，如果没有订阅消息，客户端会进入订阅监听状态，一旦接收到订阅消息就会进行消息同步。</p>
+<p>类似于，有一档天气预报的节目，节目主持人（channel）实时获得气象局（pub）发布的气象信息，并把消息告诉正在观看节目的观众（订阅者），观众会一直盯着节目看直到收到气象预报并更新大脑关于今天的气象信息。</p>
+</blockquote>
+<p>Redis的虚拟内存技术VM提升了数据保存的界限，其实际原理是当数据量已经达到存储边界，会对数据进行冷热隔离，将热数据继续保存在内存中，而冷数据通过压缩手段保存到磁盘上，压缩后的数据仅为原数据的1/10，虽然冷数据的查询效率不及热数据，但考虑到本身查询频率低，并不会影响整体性能。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedisJava</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//连接本地的 Redis 服务</span></span><br><span class="line">        Jedis jedis = <span class="keyword">new</span> Jedis(<span class="string">"localhost"</span>);</span><br><span class="line">        <span class="comment">//查看服务是否运行</span></span><br><span class="line">        System.out.println(<span class="string">"服务正在运行: "</span>+jedis.ping());</span><br><span class="line">       </span><br><span class="line">        <span class="comment">// redis 字符串</span></span><br><span class="line">        jedis.set(<span class="string">"key1"</span>, <span class="string">"This is key1"</span>);</span><br><span class="line">        System.out.println(jedis.get(<span class="string">"key1"</span>));</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// redis list</span></span><br><span class="line">        jedis.lpush(<span class="string">"list"</span>, <span class="string">"val1"</span>);</span><br><span class="line">        jedis.lpush(<span class="string">"list"</span>, <span class="string">"val2"</span>);</span><br><span class="line">        jedis.lpush(<span class="string">"list"</span>, <span class="string">"val3"</span>);</span><br><span class="line">        jedis.llen(<span class="string">"list"</span>); <span class="comment">// 长度</span></span><br><span class="line">        List&lt;String&gt; list = jedis.lrange(<span class="string">"list"</span>, <span class="number">0</span> ,<span class="number">2</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 排序</span></span><br><span class="line">        SortingParams sortingParams = <span class="keyword">new</span> SortingParams();</span><br><span class="line">        sortingParams.alpha();</span><br><span class="line">        sortingParams.limit(<span class="number">0</span>, <span class="number">3</span>);</span><br><span class="line">        jedis.sort(list, sortingParams)</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// keys</span></span><br><span class="line">        Set&lt;String&gt; keys = jedis.keys(<span class="string">"*"</span>); </span><br><span class="line">        Iterator&lt;String&gt; it=keys.iterator() ;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 删除</span></span><br><span class="line">        <span class="keyword">if</span> (jedis.exists(<span class="string">"key1"</span>))</span><br><span class="line">        	jedis.del(<span class="string">"key1"</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 过期策略</span></span><br><span class="line">        jedis.persist(<span class="string">"key1"</span>);</span><br><span class="line">        jedis.ttl(<span class="string">"key1"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="4-3-3-Memcache和Redis的区别以及性能比较"><a href="#4-3-3-Memcache和Redis的区别以及性能比较" class="headerlink" title="4.3.3 Memcache和Redis的区别以及性能比较"></a>4.3.3 Memcache和Redis的区别以及性能比较</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际上，两者既存在竞争又存在互补，由于实现细节的不同触手会伸向对方触及不到的业务场景。</p>
+<ol>
+<li><strong>内存空间</strong>：MemCached可以修改最大内存，但终究首先于内存。Redis增加了VM的特性，突破了物理内存的限制，实现冷热分离。</li>
+<li><strong>操作</strong>：MemCached数据结构单一，仅用来缓存数据，面向对象保存需要用到序列化和反序列化手段；Redis支持更加丰富的数据类型，也可以在服务器端直接对数据进行丰富的操作,这样可以减少网络IO次数和数据体积。</li>
+<li><strong>可靠性</strong>：MemCache不支持数据持久化，断电或重启后数据消失。Redis支持数据持久化和数据恢复，允许单点故障，但是同时也会付出性能的代价。</li>
+<li><strong>应用场景</strong>：Memcache动态系统中减轻数据库负载，提升性能，适合多读少写标准缓存场景。<br> Redis适用于对读写效率要求都很高，数据处理业务复杂和对安全性要求较高的系统。</li>
+<li><strong>性能</strong>：性能上都很出色，具体到细节，由于Redis只使用单核，而Memcached可以使用多核，所以平均每一个核上Redis在存储小数据时比<br> Memcached性能更高。而在100k以上的数据中，Memcached性能要高于Redis。</li>
+</ol>
+<h3 id="4-4-JPA缓存策略"><a href="#4-4-JPA缓存策略" class="headerlink" title="4.4  JPA缓存策略"></a>4.4  JPA缓存策略</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;JPA是Java持久层接口，是官方发布的ORM标准，Hibernate是对JPA的全量实现框架支持全自动处理，移植性更好；Mybatis仅部分遵循JPA规则实现半自动处理，灵活性更高。我们再此不展开讨论两者孰优孰劣，仅从缓存层面来看框架级对持久层缓存的支持情况。</p>
+<h4 id="4-4-1-Spring-JPA-Data-Hibernate-缓存策略"><a href="#4-4-1-Spring-JPA-Data-Hibernate-缓存策略" class="headerlink" title="4.4.1 Spring-JPA-Data(Hibernate)缓存策略"></a>4.4.1 Spring-JPA-Data(Hibernate)缓存策略</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Spring-JPA-Data是Spring框架对实现JPA接口的ORM框架的轻量级封装，默认使用Hibernate。Hibernate缓存包括两大类：一级缓存和二级缓存。一级缓存又被称为“Session的缓存”。Session缓存是内置的，不能被卸载，是事务范围的缓存，session级别缓存数据不共享；二级缓存又称为“SessionFactory的缓存”，由于SessionFactory对象的生命周期和应用程序的整个过程对应，因此Hibernate二级缓存是进程范围或者集群范围的缓存，是可以被不同Session所共享的，默认使用EhCache也可显示的替换为Memcache或其他缓存产品。</p>
+<ol>
+<li>一级缓存默认开启，仅存在与session周期内，缓存时间短，范围小，效果不明显。</li>
+<li>二级缓存默认不开启，需手动配置开启，是热拔插设计，不影响整体性能，可以显著提高效率，同样的将占用更多的内存空间。</li>
+</ol>
+<h4 id="4-4-2-Mybatis缓存策略"><a href="#4-4-2-Mybatis缓存策略" class="headerlink" title="4.4.2 Mybatis缓存策略"></a>4.4.2 Mybatis缓存策略</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mybatis同样采用一二级缓存策略，情况类似与Hibernate的使用。一级缓存称为SqlSession级缓存，与Hibernate的Session缓存一致，二级缓存属于SqlSessionFactory级别，类似于SessionFactory，不同的是，Mybatis二级缓存支持在单一对象映射中使用，比如针对特定的Mapper进行缓存，这就对选择业务场景使用更有帮助。</p>
+<h3 id="4-5-缓存击穿、穿透、雪崩、污染"><a href="#4-5-缓存击穿、穿透、雪崩、污染" class="headerlink" title="4.5 缓存击穿、穿透、雪崩、污染"></a>4.5 缓存击穿、穿透、雪崩、污染</h3><img src="/2020/03/10/2%20MySQL/MySQL优化系列（五）/缓存过程.png" title="缓存过程">
+<p><strong>缓存穿透</strong>：缓存和数据库中都没有真实数据，此时大量访问该无效数据造成系统压力增大，如果攻击者使用缓存穿透持续攻击，将造成持久层崩溃。</p>
+<blockquote>
+<p>解决方案</p>
+<ol>
+<li>对无效数据访问后可在缓存创建值为null的返回，并设定较短的过期时间，可以有效避免攻击。</li>
+<li>业务层添加有效性校验，拦截较容易识别的风险。</li>
+</ol>
+</blockquote>
+<p><strong>缓存击穿</strong>：当缓存数据过期，此时QPS达到峰值并对该数据进行大规模并发访问，造成数据库瞬间访问量骤增导致奔溃。击穿的特点是少量数据过期，之后对这些数据高并发访问。</p>
+<blockquote>
+<p>解决方案</p>
+<ol>
+<li>甄别热点数据，采用合适的过期策略如LRU或LFU。</li>
+<li>在高QPS来临前，设置Redis冷热数据隔离，假如冷数据发生高并发访问，也可以保证从缓存冷数据读取。</li>
+<li>业务层创建互斥锁，当缓存数据不存在时，可以保证同一类请求只有一个可以访问数据库，其他请求阻塞，访问成功后刷新缓存，使其他请求通过缓存访问。</li>
+</ol>
+</blockquote>
+<p><strong>缓存雪崩</strong>：缓存数据大量过期，此时业务查询增大，同样导致数据库压力骤增容易发生奔溃。雪崩特点是大量数据过期，之后被大量访问，区别于缓存击穿。</p>
+<blockquote>
+<p>解决方案</p>
+<ol>
+<li>设置合理的缓存过期策略和过期时间，可以自定义一个过期时间范围，并将缓存单数据过期时间以哈希方式分散到不同时间范围。</li>
+<li>可以设置热点数据永久不过期。</li>
+</ol>
+</blockquote>
+<p><strong>缓存污染</strong>：系统将不常用的数据从内存移到缓存，造成常用数据的失效，降低了缓存的利用率。缓存容量是弥足珍贵的，容量过大反而容易影响查询效率，所以在有效的空间内保证热点数据很重要。</p>
+<blockquote>
+<p>解决策略</p>
+<ol>
+<li>设置合理的过期策略，FIFO、LRU、LFU等。</li>
+<li>业务层识别，避免大而全的数据添加进缓存中。</li>
+</ol>
+</blockquote>
+
+        </div>
+        
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/MySQL优化/">MySQL优化</a>, <a class="has-link-grey -link" href="/tags/mysql/">mysql</a>, <a class="has-link-grey -link" href="/tags/缓存/">缓存</a>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        <div class="social-share"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/css/share.min.css">
+<script src="https://cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/js/social-share.min.js"></script>
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
+            
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        <div class="level-start">
+            <a class="level level-item has-link-grey  article-nav-prev" href="/2020/04/01/3 算法/常用算法——分治法/">
+                <i class="level-item fas fa-chevron-left"></i>
+                <span class="level-item">常用算法——分治法</span>
+            </a>
+        </div>
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2020/03/03/2 MySQL/MySQL优化系列（四）/">
+                <span class="level-item">MySQL优化系列（四）</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="title is-5 has-text-weight-normal">评论</h3>
+        
+<div id="comment-container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+	var gitment = new Gitment({
+		id: 'b739bf99cd4f90f9226171a48747025f',
+		owner: 'alpaca',
+		repo: 'alpacaca.github.io',
+		oauth: {
+			client_id: 'e17f481b09f8cf119e89',
+			client_secret: 'bd462646e2303946237a040c2afde10a4f5cd418',
+		},
+	})
+	gitment.render('comment-container')
+</script>
+
+    </div>
+</div>
+</div>
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered" style="flex-shrink: 1">
+                <div>
+                    
+                    <figure class="image is-128x128 has-mb-6">
+						<div style="border-radius: 0.3">
+							<img class="" src="/images/avatar.jpg" alt="Alpacaca">
+						</div>
+                    </figure>
+                    
+                    <p class="is-size-4 is-block">
+                        Alpacaca
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        Web Developer
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>Xi&#39;an , China</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <a href="/archives">
+                        <p class="title has-text-weight-normal">
+                            11
+                        </p>
+                    </a>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <a href="/categories">
+                        <p class="title has-text-weight-normal">
+                            0
+                        </p>
+                    </a>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <a href="/tags">
+                        <p class="title has-text-weight-normal">
+                            5
+                        </p>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/alpacaca" target="_blank" rel="noopener">
+                关注我</a>
+        </div>
+        
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="Github" href="https://github.com/alpacaca">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="Facebook" href="https://facebook.com">
+                
+                <i class="fab fa-facebook"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="Twitter" href="https://twitter.com">
+                
+                <i class="fab fa-twitter"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="linkedin" href="https://www.linkedin.com/">
+                
+                <i class="fab fa-linkedin"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                分类
+            </h3>
+            <ul class="menu-list">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            标签云
+        </h3>
+        <a href="/tags/MySQL优化/" style="font-size: 16.67px;">MySQL优化</a> <a href="/tags/hexo/" style="font-size: 13.33px;">hexo</a> <a href="/tags/mysql/" style="font-size: 20px;">mysql</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/缓存/" style="font-size: 10px;">缓存</a>
+    </div>
+</div>
+    
+    
+        <div class="column-right-shadow is-hidden-widescreen ">
+        
+            <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2020/04/01/3 算法/常用算法——分治法/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="常用算法——分治法">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-31T16:00:00.000Z">2020-04-01</time></div>
+                    <a href="/2020/04/01/3 算法/常用算法——分治法/" class="title has-link-black-ter is-size-6 has-text-weight-normal">常用算法——分治法</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/03/10/2 MySQL/MySQL优化系列（五）/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（五）（缓存篇）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-09T16:00:00.000Z">2020-03-10</time></div>
+                    <a href="/2020/03/10/2 MySQL/MySQL优化系列（五）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（五）（缓存篇）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/03/03/2 MySQL/MySQL优化系列（四）/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（四）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-02T16:00:00.000Z">2020-03-03</time></div>
+                    <a href="/2020/03/03/2 MySQL/MySQL优化系列（四）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（四）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/02/24/2 MySQL/MySQL优化系列（三）/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（三）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-02-23T16:00:00.000Z">2020-02-24</time></div>
+                    <a href="/2020/02/24/2 MySQL/MySQL优化系列（三）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（三）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/02/22/2 MySQL/MySQL优化系列（二）/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（二）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-02-21T16:00:00.000Z">2020-02-22</time></div>
+                    <a href="/2020/02/22/2 MySQL/MySQL优化系列（二）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（二）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/04/">
+                <span class="level-start">
+                    <span class="level-item">April 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/03/">
+                <span class="level-start">
+                    <span class="level-item">March 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/02/">
+                <span class="level-start">
+                    <span class="level-item">February 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">October 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">September 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/MySQL优化/">
+                        <span class="tag">MySQL优化</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/hexo/">
+                        <span class="tag">hexo</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/mysql/">
+                        <span class="tag">mysql</span>
+                        <span class="tag is-grey">6</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/数据结构/">
+                        <span class="tag">数据结构</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/缓存/">
+                        <span class="tag">缓存</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right ">
+    
+        <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2020/04/01/3 算法/常用算法——分治法/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="常用算法——分治法">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-31T16:00:00.000Z">2020-04-01</time></div>
+                    <a href="/2020/04/01/3 算法/常用算法——分治法/" class="title has-link-black-ter is-size-6 has-text-weight-normal">常用算法——分治法</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/03/10/2 MySQL/MySQL优化系列（五）/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（五）（缓存篇）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-09T16:00:00.000Z">2020-03-10</time></div>
+                    <a href="/2020/03/10/2 MySQL/MySQL优化系列（五）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（五）（缓存篇）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/03/03/2 MySQL/MySQL优化系列（四）/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（四）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-02T16:00:00.000Z">2020-03-03</time></div>
+                    <a href="/2020/03/03/2 MySQL/MySQL优化系列（四）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（四）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/02/24/2 MySQL/MySQL优化系列（三）/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（三）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-02-23T16:00:00.000Z">2020-02-24</time></div>
+                    <a href="/2020/02/24/2 MySQL/MySQL优化系列（三）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（三）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/02/22/2 MySQL/MySQL优化系列（二）/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（二）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-02-21T16:00:00.000Z">2020-02-22</time></div>
+                    <a href="/2020/02/22/2 MySQL/MySQL优化系列（二）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（二）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/04/">
+                <span class="level-start">
+                    <span class="level-item">April 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/03/">
+                <span class="level-start">
+                    <span class="level-item">March 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/02/">
+                <span class="level-start">
+                    <span class="level-item">February 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">October 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">September 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/MySQL优化/">
+                        <span class="tag">MySQL优化</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/hexo/">
+                        <span class="tag">hexo</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/mysql/">
+                        <span class="tag">mysql</span>
+                        <span class="tag is-grey">6</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/数据结构/">
+                        <span class="tag">数据结构</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/缓存/">
+                        <span class="tag">缓存</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/banner/3.jpg" alt="MySQL优化系列（五）（缓存篇）" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2020 zhy&nbsp;
+                Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> & <a
+                        href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a>
+                
+                <br>
+                <span id="busuanzi_container_site_uv">
+                共<span id="busuanzi_value_site_uv">0</span>个访客
+                </span>
+                
+                </p>
+            </div>
+            <div class="level-end">
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-Hans");</script>
+
+
+<script>
+var IcarusThemeSettings = {
+    site: {
+        url: 'http://yoursite.com',
+        external_link: {"enable":true,"exclude":[]}
+    },
+    article: {
+        highlight: {
+            clipboard: true,
+            fold: 'unfolded'
+        }
+    }
+};
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+
+
+
+
+
+<script src="/js/animation.js"></script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+<script src="/js/gallery.js" defer></script>
+
+
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+
+
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+	
+	<script src="/js/click.js"></script>
+	<script src="/js/snow.js"></script>
+</body>
+</html>

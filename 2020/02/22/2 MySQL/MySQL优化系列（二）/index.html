@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8" />
+
+<meta name="generator" content="Hexo 3.9.0" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<title>MySQL优化系列（二） - zhy&#39;s blog</title>
+
+
+    <meta name="description" content="MySQL优化系列（二）">
+<meta name="keywords" content="mysql,MySQL优化,数据结构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL优化系列（二）">
+<meta property="og:url" content="http://yoursite.com/2020/02/22/2 MySQL/MySQL优化系列（二）/index.html">
+<meta property="og:site_name" content="zhy&#39;s blog">
+<meta property="og:description" content="MySQL优化系列（二）">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/og_image.png">
+<meta property="og:updated_time" content="2020-04-23T15:10:28.356Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL优化系列（二）">
+<meta name="twitter:description" content="MySQL优化系列（二）">
+<meta name="twitter:image" content="http://yoursite.com/images/og_image.png">
+
+
+
+
+
+
+
+<link rel="icon" href="/images/favicon.svg">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+<style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+    
+    
+    
+    
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+    
+    <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/banner/3.jpg" alt="MySQL优化系列（二）" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/categories">Categories</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    <a class="navbar-item" target="_blank" rel="noopener" title="My GitHub" href="https://alpacaca.github.io">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main">
+<div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2020-02-21T16:00:00.000Z">2020-02-22</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    21 minutes 读完 (大约 3076 个字)
+                </span>
+                
+                
+                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
+                    <i class="far fa-eye"></i>
+                    <span id="busuanzi_value_page_pv">0</span>次访问
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                MySQL优化系列（二）
+            
+        </h1>
+        <div class="content">
+            <img src="/2020/02/22/2%20MySQL/MySQL优化系列（二）/image1.jpg" title="MySQL">
+<h1 id="MySQL优化系列（二）"><a href="#MySQL优化系列（二）" class="headerlink" title="MySQL优化系列（二）"></a>MySQL优化系列（二）</h1><a id="more"></a>
+<h2 id="3-数据库级优化"><a href="#3-数据库级优化" class="headerlink" title="3 数据库级优化"></a>3 数据库级优化</h2><h3 id="3-1-索引数据结构"><a href="#3-1-索引数据结构" class="headerlink" title="3.1 索引数据结构"></a>3.1 索引数据结构</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;索引是DQL优化的核心，可以显著提高查询的效率，但值得注意的是凡事有利则有弊，数据检索性能的提高是依赖数据库内部维护的检索表，它是一个B+Tree的数据结构，本身就会占用空间且当对表做出DML操作时，需要同步维护该索引，所以DML的效率则会下降，效果可以类比线性表存储结构。建议对频繁进行数据查询的表创建索引，并选择合适的索引类型，同时以满足业务需求为目的创建，否则会适得其反。</p>
+<p><br /></p>
+<h4 id="3-1-1-B-Tree"><a href="#3-1-1-B-Tree" class="headerlink" title="3.1.1 B-Tree"></a>3.1.1 B-Tree</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B-Tree是数据库中使用最为常见的数据结构，由平衡二叉查找树演化而来，现在多使用的B+Tree结构由B-Tree演化而来，所以有必要先介绍B-Tree。</p>
+<blockquote>
+<p>B-Tree中的B是Balance而非Binary；”B-Tree”和”B+Tree”会被有些人称为”B减树“和”B加树“，这样称呼看似合人情但不合理，因为B-Tree创建之时不可能已经意识到B+Tree的存在，也就不存在名称对立，所以个人认为，“-”只是一个连接符，没有任何含义，应该称为“B树”和“B加树”。</p>
+<p>B-Tree并不是二叉树，而是多叉树。</p>
+</blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先需要理解，为什么需要B-Tree，这就需要从非关系型数据库的存储来讲，我们在开发过程中通常将MVC分层中数据库DML操作称为“持久化”过程，其实是因为数据库中的数据都是保存在磁盘中的。系统从磁盘读取数据并保存到内存是以“磁盘块（block）”为基础单位，位于同一磁盘块的数据会被一次性加载进来，而不是按需加载。那么，B-Tree的意义就是如何以最优的方式找到数据所在的磁盘块加载需要的数据，减少io损耗。</p>
+<blockquote>
+<p>众所周知，磁盘IO是系统的瓶颈之一，且无法大幅优化提升效率，那么减少IO次数就很关键。</p>
+</blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;定义一组普通映射[key, data]，key为索引的键（数据不同则键值不同），data为索引对应的一行表数据。B-Tree数据结构定义如下：</p>
+<ol>
+<li>所有叶子节点都在同一层，且没有指向其他节点的指针。</li>
+<li>每个非末端节点包含n个关键字或引用，保存每个节点保存更多的信息。</li>
+<li>满足平衡二叉树的定义，即节点的索引值大于左子树索引值，小于右子树索引值，但可以有多个子节点。</li>
+<li>索引值必包含对应的映射数据信息。</li>
+</ol>
+<img src="/2020/02/22/2%20MySQL/MySQL优化系列（二）/B-Tree.png" title="MySQL">
+<blockquote>
+<p>题：以查找索引值51为例，经过的步骤如下：</p>
+</blockquote>
+<ol>
+<li>根节点磁盘块读取并存入内存中，48 &lt; 51，所以指向指针P2的子节点。（1次磁盘IO，1次内存加载）</li>
+<li>P3指向的磁盘块读取并存入内存，找到目标51并返回对应的行数据。（1次磁盘IO，1次内存加载）</li>
+</ol>
+<blockquote>
+<p>题：以查找索引值15为例，经过的步骤如下：</p>
+</blockquote>
+<ol>
+<li>根节点磁盘块读取并存入内存中，13 &lt; 15 &lt; 48，所以指向指针P2的子节点。（1次磁盘IO，1次内存加载）</li>
+<li>P2指向的磁盘块读取并存入内存，15 &lt; 20，所以指向指针P1的子节点。（1次磁盘IO，1次内存加载）</li>
+<li>P1指向的磁盘块读取并存入内存，找到目标15返回对应行数据。（1次磁盘IO，1次内存加载）</li>
+</ol>
+<p>经过上述步骤查找，最终经过3次磁盘IO和3次内存加载，定位到索引15并读取的对应的行信息返回。所以在当前索引中最优结果是1次磁盘IO和1次内存加载，即根节点位置定位。最差结果是3次磁盘IO和3次内存加载，相比于平衡二叉树或红黑树等数据结构，由于节点保存的信息较多，所以树的高度偏扁平，这样减少了磁盘IO，从而提高了查找效率。</p>
+<p><br /></p>
+<h4 id="3-1-2-B-Tree"><a href="#3-1-2-B-Tree" class="headerlink" title="3.1.2 B+Tree"></a>3.1.2 B+Tree</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B-Tree虽然已经很适合作为非关系型数据库的索引模型，但它还存在一些弊端：<strong>索引根节点是固定的，没必要每次查找都经过1次磁盘IO读取和加载；由于磁盘块容量有限，而节点保存数据会占用节点很大的空间，所以一个磁盘块能够保存的索引个数会减少，导致树高度可能增加；范围查找变得效率不高。</strong>所以在此基础之上，B+Tree做到了如下优化:</p>
+<ol>
+<li>根节点常驻内存，减少1次IO损耗；</li>
+<li>所有非叶子节点只保存索引值或引用，不保存映射数据，扩增节点保存关键信息的能力；</li>
+<li>有两个全局指针，一个指向根节点，另一个指向索引值最小的节点（最左叶子节点）。</li>
+<li>所有叶子节点保存索引值和映射数据，且叶子节点由单链表关联，指针指向相邻的右兄弟节点，结合第3条信息，这就提供了查找的多样性，可以选择从根节点开始检索树，也可以从顺序链表头开始进行查询，因为有链表的存在，支持范围查询且效率比B-Tree更好。</li>
+</ol>
+<img src="/2020/02/22/2%20MySQL/MySQL优化系列（二）/B+Tree.png" title="MySQL">
+<blockquote>
+<p>题：以查找索引值41为例，经过的步骤如下（与B-Tree一致）：</p>
+</blockquote>
+<ol>
+<li>从内存加载根节点，找到 13 &lt; 41 &lt; 48，指向指针P2的节点。</li>
+<li>读取磁盘块，找到 20 &lt; 41 &lt; 42，指向指针P2的几点。</li>
+<li>读取磁盘块，找到目标并返回对应数据。</li>
+</ol>
+<blockquote>
+<p>题：以查找索引值13为例，过程如下：</p>
+</blockquote>
+<ol>
+<li>内存加载根节点，找到目标13（<font color=red>此时从右指针查找</font>）。</li>
+<li>加载磁盘块，13 &lt; 20，指向P1指针节点。</li>
+<li>加载磁盘块，找到目标并返回。</li>
+</ol>
+<p><strong>注：为什么非叶子节点定位到目标值要从右侧指针查找，查找了大量网络资源都没有找到合适的答案，最终从维基百科和《高性能Mysql》一书中推测而来。欢迎各位交换意见。</strong></p>
+<img src="/2020/02/22/2%20MySQL/MySQL优化系列（二）/wiki.png" title="MySQL">
+<img src="/2020/02/22/2%20MySQL/MySQL优化系列（二）/performance.jpg" title="MySQL">
+<p><br /></p>
+<h4 id="3-1-3-扩展：B-Tree"><a href="#3-1-3-扩展：B-Tree" class="headerlink" title="3.1.3 扩展：B*Tree"></a>3.1.3 扩展：B*Tree</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B*Tree是B+Tree的优化，进一步要求，在非根非叶子节点各层中的节点之间互相产生指向相邻右兄弟</p>
+<p>节点的指针。</p>
+<img src="/2020/02/22/2%20MySQL/MySQL优化系列（二）/BMulti-Tree.png" title="MySQL">
+<p><br /></p>
+<h4 id="3-1-4-聚簇索引、非聚簇索引和辅助索引"><a href="#3-1-4-聚簇索引、非聚簇索引和辅助索引" class="headerlink" title="3.1.4 聚簇索引、非聚簇索引和辅助索引"></a>3.1.4 聚簇索引、非聚簇索引和辅助索引</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B+Tree在数据库中的实现方式即为聚簇索引，其含义是指在一张索引表中，既存在索引值同时存在映射数据；<strong>在Innodb引擎中使用聚簇索引，在MyISAM引擎中就使用非聚簇索引</strong>，其含义是指，在B+Tree结构中叶子节点索引值对应的并不是数据而是数据在数据页中的地址，通过地址就可以直接在内存中获得数据，数据页是管理磁盘块的最小单位；辅助索引是指，在索引表Index1中查找关键字key1时，需要先从索引表Index2中查找关键字key2对应的关键字key1。</p>
+<p><br /></p>
+<h3 id="3-2-索引的创建与修改"><a href="#3-2-索引的创建与修改" class="headerlink" title="3.2 索引的创建与修改"></a>3.2 索引的创建与修改</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在我们已经创建的四张表中，都设置了整型自增主键id，Mysql已经自动帮我们添加了主键索引（MySQL 5.7+版本），也就是说当我们使用id查询时是通过主键索引进行查询。索引按照创建方式可以分为：<strong>一般索引、唯一索引、复合索引、主键索引和全文索引</strong>。其中主键索引属于唯一索引范畴，全文索引已经在<strong>2.6</strong>章节中进行了介绍，是MyISAM引擎支持的文本类索引，在此不再深入讨论。</p>
+<p><br /></p>
+<h4 id="3-2-1-一般索引"><a href="#3-2-1-一般索引" class="headerlink" title="3.2.1 一般索引"></a>3.2.1 一般索引</h4><blockquote>
+<p>创建tb_course表时对课程名name添加索引</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#创建课程表，包括id，名称，是否必修课，学分</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">table</span> <span class="string">`tb_course`</span>(</span><br><span class="line">	<span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> auto_increment,</span><br><span class="line">	<span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">20</span>),</span><br><span class="line">	is_required <span class="built_in">boolean</span>,</span><br><span class="line">	credit <span class="built_in">int</span>,</span><br><span class="line">	<span class="keyword">INDEX</span> course_name_index(<span class="keyword">name</span>)</span><br><span class="line">)<span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> = utf8;</span><br></pre></td></tr></table></figure>
+<p>执行命令<code>SHOW INDEX FROM tb_course \G</code>查看当前表的所有索引：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show index from tb_course \G</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">        Table: tb_course</span><br><span class="line">   Non_unique: 0</span><br><span class="line">     Key_name: PRIMARY</span><br><span class="line"> Seq_in_index: 1</span><br><span class="line">  Column_name: id</span><br><span class="line">    Collation: A</span><br><span class="line">  Cardinality: 0</span><br><span class="line">     Sub_part: NULL</span><br><span class="line">       Packed: NULL</span><br><span class="line">         Null:</span><br><span class="line">   Index_type: BTREE</span><br><span class="line">      Comment:</span><br><span class="line">Index_comment:</span><br><span class="line">*************************** 2. row ***************************</span><br><span class="line">        Table: tb_course</span><br><span class="line">   Non_unique: 1</span><br><span class="line">     Key_name: course_name_index</span><br><span class="line"> Seq_in_index: 1</span><br><span class="line">  Column_name: name</span><br><span class="line">    Collation: A</span><br><span class="line">  Cardinality: 0</span><br><span class="line">     Sub_part: NULL</span><br><span class="line">       Packed: NULL</span><br><span class="line">         Null: YES</span><br><span class="line">   Index_type: BTREE</span><br><span class="line">      Comment:</span><br><span class="line">Index_comment:</span><br></pre></td></tr></table></figure>
+<p>可以看到row1是系统自动添加的主键索引，row2是我们创建的自定义索引。</p>
+<blockquote>
+<p>通过 CREATE 和 ALTER关键字创建索引</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">INDEX</span> course_name_index <span class="keyword">ON</span> <span class="string">`tb_course`</span>(<span class="keyword">name</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> <span class="string">`tb_course`</span> <span class="keyword">ADD</span> <span class="keyword">INDEX</span> course_name_index(<span class="keyword">name</span>);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>删除索引</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DROP</span> <span class="keyword">INDEX</span> course_name_index <span class="keyword">ON</span> <span class="string">`tb_course`</span>;</span><br></pre></td></tr></table></figure>
+<p><br /></p>
+<h4 id="3-2-2-唯一索引"><a href="#3-2-2-唯一索引" class="headerlink" title="3.2.2 唯一索引"></a>3.2.2 唯一索引</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;唯一索引与一般索引的不同之处在于，它所持有的字段必须是唯一的，如果是唯一复合索引，那么复合字段必须是唯一的，其他用法一直，只需要将<code>INDEX</code>替换为<code>UNIQE INDEX</code>。</p>
+<blockquote>
+<p>创建tb_course表时对课程名name添加唯一索引</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#创建课程表，包括id，名称，是否必修课，学分</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">table</span> <span class="string">`tb_course`</span>(</span><br><span class="line">	<span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> auto_increment,</span><br><span class="line">	<span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">20</span>),</span><br><span class="line">	is_required <span class="built_in">boolean</span>,</span><br><span class="line">	credit <span class="built_in">int</span>,</span><br><span class="line">	<span class="keyword">UNIQUE</span> <span class="keyword">INDEX</span> course_name_index(<span class="keyword">name</span>)</span><br><span class="line">)<span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> = utf8;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>通过 CREATE 和 ALTER关键字创建唯一索引</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">UNIQUE</span> <span class="keyword">INDEX</span> course_name_index <span class="keyword">ON</span> <span class="string">`tb_course`</span>(<span class="keyword">name</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> <span class="string">`tb_course`</span> <span class="keyword">ADD</span> <span class="keyword">UNIQUE</span> <span class="keyword">INDEX</span> course_name_index(<span class="keyword">name</span>);</span><br></pre></td></tr></table></figure>
+<p><br /></p>
+<h4 id="3-2-3-复合索引"><a href="#3-2-3-复合索引" class="headerlink" title="3.2.3 复合索引"></a>3.2.3 复合索引</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;复合索引语法与一般索引一致，只是持有多个字段。</p>
+<blockquote>
+<p>创建tb_course表时对课程名、是否必修和学分添加复合索引</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#创建课程表，包括id，名称，是否必修课，学分</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">table</span> <span class="string">`tb_course`</span>(</span><br><span class="line">	<span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> auto_increment,</span><br><span class="line">	<span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">20</span>),</span><br><span class="line">	is_required <span class="built_in">boolean</span>,</span><br><span class="line">	credit <span class="built_in">int</span>,</span><br><span class="line">	<span class="keyword">INDEX</span> union_index(<span class="keyword">name</span>, is_required, credit)</span><br><span class="line">)<span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> = utf8;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>通过 CREATE 和 ALTER关键字创建复合索引</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">INDEX</span> union_index <span class="keyword">ON</span> <span class="string">`tb_course`</span>(<span class="keyword">name</span>, is_required, credit);</span><br><span class="line"></span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> <span class="string">`tb_course`</span> <span class="keyword">ADD</span> <span class="keyword">INDEX</span> union_index(<span class="keyword">name</span>, is_required, credit);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>通过命令SHOW INDEX FROM tb_course \G查看结果</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show index from tb_course \G</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">        Table: tb_course</span><br><span class="line">   Non_unique: 0</span><br><span class="line">     Key_name: PRIMARY</span><br><span class="line"> Seq_in_index: 1</span><br><span class="line">  Column_name: id</span><br><span class="line">    Collation: A</span><br><span class="line">  Cardinality: 0</span><br><span class="line">     Sub_part: NULL</span><br><span class="line">       Packed: NULL</span><br><span class="line">         Null:</span><br><span class="line">   Index_type: BTREE</span><br><span class="line">      Comment:</span><br><span class="line">Index_comment:</span><br><span class="line">*************************** 2. row ***************************</span><br><span class="line">        Table: tb_course</span><br><span class="line">   Non_unique: 1</span><br><span class="line">     Key_name: union_index</span><br><span class="line"> Seq_in_index: 1</span><br><span class="line">  Column_name: name</span><br><span class="line">    Collation: A</span><br><span class="line">  Cardinality: 0</span><br><span class="line">     Sub_part: NULL</span><br><span class="line">       Packed: NULL</span><br><span class="line">         Null: YES</span><br><span class="line">   Index_type: BTREE</span><br><span class="line">*************************** 3. row ***************************</span><br><span class="line">        Table: tb_course</span><br><span class="line">   Non_unique: 1</span><br><span class="line">     Key_name: union_index</span><br><span class="line"> Seq_in_index: 2</span><br><span class="line">  Column_name: is_required</span><br><span class="line">    Collation: A</span><br><span class="line">  Cardinality: 0</span><br><span class="line">     Sub_part: NULL</span><br><span class="line">       Packed: NULL</span><br><span class="line">         Null: YES</span><br><span class="line">   Index_type: BTREE</span><br><span class="line"></span><br><span class="line">*************************** 4. row ***************************</span><br><span class="line">        Table: tb_course</span><br><span class="line">   Non_unique: 1</span><br><span class="line">     Key_name: union_index</span><br><span class="line"> Seq_in_index: 3</span><br><span class="line">  Column_name: credit</span><br><span class="line">    Collation: A</span><br><span class="line">  Cardinality: 0</span><br><span class="line">     Sub_part: NULL</span><br><span class="line">       Packed: NULL</span><br><span class="line">         Null: YES</span><br><span class="line">   Index_type: BTREE</span><br></pre></td></tr></table></figure>
+<p>可以看到row 2.3.4信息中，索引名称相同，都是union_index，并且索引序列<code>Seq_in_index</code>分别是1,2,3，也就是说我们复合索引查找是有序列限制的（最左原则，后续章节介绍）。</p>
+
+        </div>
+        
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/MySQL优化/">MySQL优化</a>, <a class="has-link-grey -link" href="/tags/mysql/">mysql</a>, <a class="has-link-grey -link" href="/tags/数据结构/">数据结构</a>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        <div class="social-share"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/css/share.min.css">
+<script src="https://cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/js/social-share.min.js"></script>
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
+            
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        <div class="level-start">
+            <a class="level level-item has-link-grey  article-nav-prev" href="/2020/02/24/2 MySQL/MySQL优化系列（三）/">
+                <i class="level-item fas fa-chevron-left"></i>
+                <span class="level-item">MySQL优化系列（三）</span>
+            </a>
+        </div>
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2020/02/12/2 MySQL/MySQL优化系列（一）/">
+                <span class="level-item">MySQL优化系列（一）</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="title is-5 has-text-weight-normal">评论</h3>
+        
+<div id="comment-container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+	var gitment = new Gitment({
+		id: '7d2c5ebec46eec87c1fef969230cdb44',
+		owner: 'alpaca',
+		repo: 'alpacaca.github.io',
+		oauth: {
+			client_id: 'e17f481b09f8cf119e89',
+			client_secret: 'bd462646e2303946237a040c2afde10a4f5cd418',
+		},
+	})
+	gitment.render('comment-container')
+</script>
+
+    </div>
+</div>
+</div>
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered" style="flex-shrink: 1">
+                <div>
+                    
+                    <figure class="image is-128x128 has-mb-6">
+						<div style="border-radius: 0.3">
+							<img class="" src="/images/avatar.jpg" alt="Alpacaca">
+						</div>
+                    </figure>
+                    
+                    <p class="is-size-4 is-block">
+                        Alpacaca
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        Web Developer
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>Xi&#39;an , China</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <a href="/archives">
+                        <p class="title has-text-weight-normal">
+                            11
+                        </p>
+                    </a>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <a href="/categories">
+                        <p class="title has-text-weight-normal">
+                            0
+                        </p>
+                    </a>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <a href="/tags">
+                        <p class="title has-text-weight-normal">
+                            5
+                        </p>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/alpacaca" target="_blank" rel="noopener">
+                关注我</a>
+        </div>
+        
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="Github" href="https://github.com/alpacaca">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="Facebook" href="https://facebook.com">
+                
+                <i class="fab fa-facebook"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="Twitter" href="https://twitter.com">
+                
+                <i class="fab fa-twitter"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="linkedin" href="https://www.linkedin.com/">
+                
+                <i class="fab fa-linkedin"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                分类
+            </h3>
+            <ul class="menu-list">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            标签云
+        </h3>
+        <a href="/tags/MySQL优化/" style="font-size: 16.67px;">MySQL优化</a> <a href="/tags/hexo/" style="font-size: 13.33px;">hexo</a> <a href="/tags/mysql/" style="font-size: 20px;">mysql</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/缓存/" style="font-size: 10px;">缓存</a>
+    </div>
+</div>
+    
+    
+        <div class="column-right-shadow is-hidden-widescreen ">
+        
+            <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2020/04/01/3 算法/常用算法——分治法/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="常用算法——分治法">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-31T16:00:00.000Z">2020-04-01</time></div>
+                    <a href="/2020/04/01/3 算法/常用算法——分治法/" class="title has-link-black-ter is-size-6 has-text-weight-normal">常用算法——分治法</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/03/10/2 MySQL/MySQL优化系列（五）/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（五）（缓存篇）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-09T16:00:00.000Z">2020-03-10</time></div>
+                    <a href="/2020/03/10/2 MySQL/MySQL优化系列（五）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（五）（缓存篇）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/03/03/2 MySQL/MySQL优化系列（四）/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（四）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-02T16:00:00.000Z">2020-03-03</time></div>
+                    <a href="/2020/03/03/2 MySQL/MySQL优化系列（四）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（四）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/02/24/2 MySQL/MySQL优化系列（三）/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（三）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-02-23T16:00:00.000Z">2020-02-24</time></div>
+                    <a href="/2020/02/24/2 MySQL/MySQL优化系列（三）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（三）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/02/22/2 MySQL/MySQL优化系列（二）/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（二）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-02-21T16:00:00.000Z">2020-02-22</time></div>
+                    <a href="/2020/02/22/2 MySQL/MySQL优化系列（二）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（二）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/04/">
+                <span class="level-start">
+                    <span class="level-item">April 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/03/">
+                <span class="level-start">
+                    <span class="level-item">March 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/02/">
+                <span class="level-start">
+                    <span class="level-item">February 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">October 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">September 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/MySQL优化/">
+                        <span class="tag">MySQL优化</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/hexo/">
+                        <span class="tag">hexo</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/mysql/">
+                        <span class="tag">mysql</span>
+                        <span class="tag is-grey">6</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/数据结构/">
+                        <span class="tag">数据结构</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/缓存/">
+                        <span class="tag">缓存</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right ">
+    
+        <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2020/04/01/3 算法/常用算法——分治法/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="常用算法——分治法">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-31T16:00:00.000Z">2020-04-01</time></div>
+                    <a href="/2020/04/01/3 算法/常用算法——分治法/" class="title has-link-black-ter is-size-6 has-text-weight-normal">常用算法——分治法</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/03/10/2 MySQL/MySQL优化系列（五）/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（五）（缓存篇）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-09T16:00:00.000Z">2020-03-10</time></div>
+                    <a href="/2020/03/10/2 MySQL/MySQL优化系列（五）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（五）（缓存篇）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/03/03/2 MySQL/MySQL优化系列（四）/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（四）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-02T16:00:00.000Z">2020-03-03</time></div>
+                    <a href="/2020/03/03/2 MySQL/MySQL优化系列（四）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（四）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/02/24/2 MySQL/MySQL优化系列（三）/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（三）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-02-23T16:00:00.000Z">2020-02-24</time></div>
+                    <a href="/2020/02/24/2 MySQL/MySQL优化系列（三）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（三）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/02/22/2 MySQL/MySQL优化系列（二）/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（二）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-02-21T16:00:00.000Z">2020-02-22</time></div>
+                    <a href="/2020/02/22/2 MySQL/MySQL优化系列（二）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（二）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/04/">
+                <span class="level-start">
+                    <span class="level-item">April 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/03/">
+                <span class="level-start">
+                    <span class="level-item">March 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/02/">
+                <span class="level-start">
+                    <span class="level-item">February 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">October 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">September 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/MySQL优化/">
+                        <span class="tag">MySQL优化</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/hexo/">
+                        <span class="tag">hexo</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/mysql/">
+                        <span class="tag">mysql</span>
+                        <span class="tag is-grey">6</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/数据结构/">
+                        <span class="tag">数据结构</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/缓存/">
+                        <span class="tag">缓存</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/banner/3.jpg" alt="MySQL优化系列（二）" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2020 zhy&nbsp;
+                Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> & <a
+                        href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a>
+                
+                <br>
+                <span id="busuanzi_container_site_uv">
+                共<span id="busuanzi_value_site_uv">0</span>个访客
+                </span>
+                
+                </p>
+            </div>
+            <div class="level-end">
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-Hans");</script>
+
+
+<script>
+var IcarusThemeSettings = {
+    site: {
+        url: 'http://yoursite.com',
+        external_link: {"enable":true,"exclude":[]}
+    },
+    article: {
+        highlight: {
+            clipboard: true,
+            fold: 'unfolded'
+        }
+    }
+};
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+
+
+
+
+
+<script src="/js/animation.js"></script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+<script src="/js/gallery.js" defer></script>
+
+
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+
+
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+	
+	<script src="/js/click.js"></script>
+	<script src="/js/snow.js"></script>
+</body>
+</html>
