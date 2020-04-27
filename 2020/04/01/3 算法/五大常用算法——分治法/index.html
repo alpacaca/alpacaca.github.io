@@ -7,22 +7,22 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-<title>常用算法——分治法 - zhy&#39;s blog</title>
+<title>五大常用算法 - zhy&#39;s blog</title>
 
 
-    <meta name="description" content="常用算法——分治法">
-<meta name="keywords" content="zhy blog">
+    <meta name="description" content="五大常用算法——分治法">
+<meta name="keywords" content="算法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="常用算法——分治法">
-<meta property="og:url" content="http://yoursite.com/2020/04/01/3 算法/常用算法——分治法/index.html">
+<meta property="og:title" content="五大常用算法">
+<meta property="og:url" content="http://yoursite.com/2020/04/01/3 算法/五大常用算法——分治法/index.html">
 <meta property="og:site_name" content="zhy&#39;s blog">
-<meta property="og:description" content="常用算法——分治法">
+<meta property="og:description" content="五大常用算法——分治法">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/images/og_image.png">
-<meta property="og:updated_time" content="2020-04-26T02:09:37.382Z">
+<meta property="og:updated_time" content="2020-04-27T23:02:14.514Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="常用算法——分治法">
-<meta name="twitter:description" content="常用算法——分治法">
+<meta name="twitter:title" content="五大常用算法">
+<meta name="twitter:description" content="五大常用算法——分治法">
 <meta name="twitter:image" content="http://yoursite.com/images/og_image.png">
 
 
@@ -81,7 +81,7 @@
         <div class="navbar-brand is-flex-center">
             <a class="navbar-item navbar-logo" href="/">
             
-                <img src="/images/banner/3.jpg" alt="常用算法——分治法" height="28">
+                <img src="/images/banner/3.jpg" alt="五大常用算法" height="28">
             
             </a>
         </div>
@@ -143,7 +143,7 @@
                 <span class="level-item has-text-grey">
                     
                     
-                    8 minutes 读完 (大约 1223 个字)
+                    8 minutes 读完 (大约 1208 个字)
                 </span>
                 
                 
@@ -157,17 +157,17 @@
         
         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                常用算法——分治法
+                五大常用算法
             
         </h1>
         <div class="content">
-            <img src="/2020/04/01/3%20算法/常用算法——分治法/image1.jpg" title="算法">
-<h1 id="常用算法——分治法"><a href="#常用算法——分治法" class="headerlink" title="常用算法——分治法"></a>常用算法——分治法</h1><a id="more"></a>
+            <img src="/2020/04/01/3%20算法/五大常用算法——分治法/image1.jpg" title="算法">
+<h1 id="五大常用算法——分治法"><a href="#五大常用算法——分治法" class="headerlink" title="五大常用算法——分治法"></a>五大常用算法——分治法</h1><a id="more"></a>
 <blockquote>
 <p>分而治之，治而合之</p>
 </blockquote>
 <p>说明：文中动态插图援引微信公众号：《五分钟学算法》</p>
-<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;分治法（Divide and Conquer, D&amp;C），将一个复杂问题纵向拆分为多个最优结构原子问题，再将原子问题的求解合并，组成复杂问题的最终解。递归是分治法的常用手段，也是经典手段。</p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>​    分治法（Divide and Conquer, D&amp;C），将一个复杂问题纵向拆分为多个最优结构原子问题，再将原子问题的求解合并，组成复杂问题的最终解。递归是分治法的常用手段，也是经典手段。</p>
 <h2 id="使用条件"><a href="#使用条件" class="headerlink" title="使用条件"></a>使用条件</h2><ol>
 <li>复杂问题拆分后就容易求解。</li>
 <li>拆分后的原子问题具有最优子结构。</li>
@@ -179,10 +179,10 @@
 <li>解决：对原子问题进行求解。</li>
 <li>合并：将原子问题解合并，组成最终解。</li>
 </ol>
-<h2 id="算法复杂度"><a href="#算法复杂度" class="headerlink" title="算法复杂度"></a>算法复杂度</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一个规模为n的实例可以划分为k个规模为n/k的实例，其中α个实例是需要求解的：</p>
+<h2 id="算法复杂度"><a href="#算法复杂度" class="headerlink" title="算法复杂度"></a>算法复杂度</h2><p>​    一个规模为n的实例可以划分为k个规模为n/k的实例，其中α个实例是需要求解的：</p>
 <center>O(N) = αT(n/k) + f(n)</center>
 
-<p>f(n)与具体的拆分和合并算法有关。</p>
+<p>​    f(n)与具体的拆分和合并算法有关。</p>
 <h2 id="经典算法"><a href="#经典算法" class="headerlink" title="经典算法"></a>经典算法</h2><p><strong>归并排序（Merge Sort）</strong>：</p>
 <ol>
 <li>拆分：将一个无序序列递归拆分，最终拆分为长度为1的子序列。</li>
@@ -192,8 +192,8 @@
 <blockquote>
 <p>自上而下拆分， 自下而上合并</p>
 </blockquote>
-<img src="/2020/04/01/3%20算法/常用算法——分治法/mergesort.gif" title="算法">
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MergeSorted</span> <span class="keyword">implements</span> <span class="title">IArraySort</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] sort(<span class="keyword">int</span>[] srcArray) &#123;</span><br><span class="line">        <span class="keyword">int</span>[] arr = Arrays.copyOf(srcArray, srcArray.length); <span class="comment">// 操作副本排序，不影响原数组</span></span><br><span class="line">        <span class="keyword">if</span> (arr.length &lt; <span class="number">2</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> arr;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> middle = srcArray.length / <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">int</span>[] leftArr = Arrays.copyOfRange(arr, <span class="number">0</span>, middle);</span><br><span class="line">        <span class="keyword">int</span>[] rightArr = Arrays.copyOfRange(arr,  middle, arr.length);</span><br><span class="line">        <span class="keyword">return</span> merge(sort(leftArr), sort(rightArr));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span>[] merge(<span class="keyword">int</span>[] leftArr, <span class="keyword">int</span>[] rightArr) &#123;</span><br><span class="line">        <span class="keyword">int</span>[] result = <span class="keyword">new</span> <span class="keyword">int</span>[leftArr.length + rightArr.length];</span><br><span class="line">        <span class="keyword">int</span> index = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (leftArr.length &gt; <span class="number">0</span> &amp;&amp; rightArr.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (leftArr[<span class="number">0</span>] &lt;= rightArr[<span class="number">0</span>]) &#123;</span><br><span class="line">                result[index] = leftArr[<span class="number">0</span>];</span><br><span class="line">                index++;</span><br><span class="line">                leftArr = Arrays.copyOfRange(leftArr, <span class="number">1</span>, leftArr.length);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                result[index] = rightArr[<span class="number">0</span>];</span><br><span class="line">                index++;</span><br><span class="line">                rightArr = Arrays.copyOfRange(rightArr, <span class="number">1</span>, rightArr.length);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (leftArr.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            result[index] = leftArr[<span class="number">0</span>];</span><br><span class="line">            index ++;</span><br><span class="line">            leftArr = Arrays.copyOfRange(leftArr, <span class="number">1</span>, leftArr.length);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (rightArr.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            result[index] = rightArr[<span class="number">0</span>];</span><br><span class="line">            index ++;</span><br><span class="line">            rightArr = Arrays.copyOfRange(rightArr, <span class="number">1</span>, rightArr.length);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] arr = &#123;<span class="number">3</span>,<span class="number">23</span>,<span class="number">4</span>,<span class="number">13</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">63</span>,<span class="number">6</span>,<span class="number">2</span>&#125;;</span><br><span class="line">        arr = <span class="keyword">new</span> MergeSorted().sort(arr);</span><br><span class="line">        System.out.println(arr.length);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i : arr) &#123;</span><br><span class="line">            System.out.print(i + <span class="string">" "</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<img src="/2020/04/01/3%20算法/五大常用算法——分治法/mergesort.gif" title="算法">
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">public class MergeSorted implements IArraySort &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public int[] sort(int[] srcArray) &#123;</span><br><span class="line">        int[] arr = Arrays.copyOf(srcArray, srcArray.length); // 操作副本排序，不影响原数组</span><br><span class="line">        if (arr.length &lt; 2) &#123;</span><br><span class="line">            return arr;</span><br><span class="line">        &#125;</span><br><span class="line">        int middle = srcArray.length / 2;</span><br><span class="line">        int[] leftArr = Arrays.copyOfRange(arr, 0, middle);</span><br><span class="line">        int[] rightArr = Arrays.copyOfRange(arr,  middle, arr.length);</span><br><span class="line">        return merge(sort(leftArr), sort(rightArr));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private int[] merge(int[] leftArr, int[] rightArr) &#123;</span><br><span class="line">        int[] result = new int[leftArr.length + rightArr.length];</span><br><span class="line">        int index = 0;</span><br><span class="line">        while (leftArr.length &gt; 0 &amp;&amp; rightArr.length &gt; 0) &#123;</span><br><span class="line">            if (leftArr[0] &lt;= rightArr[0]) &#123;</span><br><span class="line">                result[index] = leftArr[0];</span><br><span class="line">                index++;</span><br><span class="line">                leftArr = Arrays.copyOfRange(leftArr, 1, leftArr.length);</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                result[index] = rightArr[0];</span><br><span class="line">                index++;</span><br><span class="line">                rightArr = Arrays.copyOfRange(rightArr, 1, rightArr.length);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        while (leftArr.length &gt; 0) &#123;</span><br><span class="line">            result[index] = leftArr[0];</span><br><span class="line">            index ++;</span><br><span class="line">            leftArr = Arrays.copyOfRange(leftArr, 1, leftArr.length);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        while (rightArr.length &gt; 0) &#123;</span><br><span class="line">            result[index] = rightArr[0];</span><br><span class="line">            index ++;</span><br><span class="line">            rightArr = Arrays.copyOfRange(rightArr, 1, rightArr.length);</span><br><span class="line">        &#125;</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        int[] arr = &#123;3,23,4,13,4,5,63,6,2&#125;;</span><br><span class="line">        arr = new MergeSorted().sort(arr);</span><br><span class="line">        System.out.println(arr.length);</span><br><span class="line">        for (int i : arr) &#123;</span><br><span class="line">            System.out.print(i + &quot; &quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>快速排序（Quick Sort）</strong></p>
 <ol>
 <li>解决：设置基准点pivot，并定位两端索引位置left和right，一边排序找到比pivot小的放在左边，比pivot大的放在右边。</li>
@@ -203,16 +203,23 @@
 <blockquote>
 <p>自上而下排序并拆分</p>
 </blockquote>
-<img src="/2020/04/01/3%20算法/常用算法——分治法/quicsort.gif" title="算法">
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">QuikSort</span> <span class="keyword">implements</span> <span class="title">IArraySort</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] sort(<span class="keyword">int</span>[] sourceArray) &#123;</span><br><span class="line">        <span class="comment">// 对 arr 进行拷贝，不改变参数内容</span></span><br><span class="line">        <span class="keyword">int</span>[] arr = Arrays.copyOf(sourceArray, sourceArray.length);</span><br><span class="line">        quickSort(arr, <span class="number">0</span>, arr.length - <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> arr;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">quickSort</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> left, <span class="keyword">int</span> right)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (left &gt; right) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> leftIndex = left;</span><br><span class="line">        <span class="keyword">int</span> rightIndex = right;</span><br><span class="line">        <span class="keyword">int</span> pivot = arr[leftIndex]; <span class="comment">// 基准</span></span><br><span class="line">        <span class="keyword">while</span> (left &lt; right) &#123;</span><br><span class="line">            <span class="keyword">while</span> (left &lt; right &amp;&amp; arr[right] &gt;= pivot) &#123;</span><br><span class="line">                right--;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">while</span> (left &lt; right &amp;&amp; arr[left] &lt;= pivot) &#123;</span><br><span class="line">                left++;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (left &lt; right) &#123;</span><br><span class="line">                swap(arr, right, left);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        swap(arr, leftIndex, left); <span class="comment">// 此时left==right</span></span><br><span class="line">        quickSort(arr, leftIndex, left-<span class="number">1</span>);</span><br><span class="line">        quickSort(arr,left + <span class="number">1</span>, rightIndex);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> temp = arr[i];</span><br><span class="line">        arr[i] = arr[j];</span><br><span class="line">        arr[j] = temp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] arr = &#123;<span class="number">6</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">7</span>,<span class="number">9</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">10</span>,<span class="number">8</span>&#125;;</span><br><span class="line">        arr = <span class="keyword">new</span> QuikSort().sort(arr);</span><br><span class="line">        System.out.println(arr.length);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i : arr) &#123;</span><br><span class="line">            System.out.print(i + <span class="string">" "</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<img src="/2020/04/01/3%20算法/五大常用算法——分治法/quicksort.gif" title="算法">
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">public class QuikSort implements IArraySort &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public int[] sort(int[] sourceArray) &#123;</span><br><span class="line">        // 对 arr 进行拷贝，不改变参数内容</span><br><span class="line">        int[] arr = Arrays.copyOf(sourceArray, sourceArray.length);</span><br><span class="line">        quickSort(arr, 0, arr.length - 1);</span><br><span class="line">        return arr;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private void quickSort(int[] arr, int left, int right) &#123;</span><br><span class="line">        if (left &gt; right) &#123;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        int leftIndex = left;</span><br><span class="line">        int rightIndex = right;</span><br><span class="line">        int pivot = arr[leftIndex]; // 基准</span><br><span class="line">        while (left &lt; right) &#123;</span><br><span class="line">            while (left &lt; right &amp;&amp; arr[right] &gt;= pivot) &#123;</span><br><span class="line">                right--;</span><br><span class="line">            &#125;</span><br><span class="line">            while (left &lt; right &amp;&amp; arr[left] &lt;= pivot) &#123;</span><br><span class="line">                left++;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            if (left &lt; right) &#123;</span><br><span class="line">                swap(arr, right, left);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        swap(arr, leftIndex, left); // 此时left==right</span><br><span class="line">        quickSort(arr, leftIndex, left-1);</span><br><span class="line">        quickSort(arr,left + 1, rightIndex);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    private void swap(int[] arr, int i, int j) &#123;</span><br><span class="line">        int temp = arr[i];</span><br><span class="line">        arr[i] = arr[j];</span><br><span class="line">        arr[j] = temp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        int[] arr = &#123;6,1,2,7,9,3,4,5,10,8&#125;;</span><br><span class="line">        arr = new QuikSort().sort(arr);</span><br><span class="line">        System.out.println(arr.length);</span><br><span class="line">        for (int i : arr) &#123;</span><br><span class="line">            System.out.print(i + &quot; &quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>注意</strong>：如果基准点pivot设置为左顶端数，那么应该保证先从右侧开始比较，这样可以保证最终left和right停留的相同位置是小于pivot的，所以可以交换，否则，交换的将是大于pivot的值，不满足快排条件。</p>
 <p><strong>汉诺塔</strong></p>
 <p>A、B、C三根柱子，其中A柱子上面有从小叠到大的n个圆盘，现要求将A柱子上的圆盘移到C柱子上去，期间只有一个原则：一次只能移到一个盘子且大盘子不能在小盘子上面，求移动的步骤和移动的次数</p>
 <p>把n-1个盘子由A 移到 B；把第n个盘子由 A移到 C；把n-1个盘子由B 移到 C；</p>
-<img src="/2020/04/01/3%20算法/常用算法——分治法/hanoi.gif" title="算法">
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Hanoi</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> step = <span class="number">1</span>; <span class="comment">// 步数</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">hanoi</span><span class="params">(<span class="keyword">int</span> plateNum, String a, String b, String c)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (plateNum == <span class="number">1</span>) &#123;</span><br><span class="line">            move(plateNum, a, c);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            hanoi(plateNum - <span class="number">1</span>, a, c, b);</span><br><span class="line">            move(plateNum, a, c);</span><br><span class="line">            hanoi(plateNum - <span class="number">1</span>, b, a, c);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">move</span><span class="params">(<span class="keyword">int</span> plateNum, String from, String to)</span> </span>&#123;</span><br><span class="line">        System.out.printf(<span class="string">"%d step, %d plate move from %s to %s \n"</span>, step++, plateNum, from, to);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        hanoi(<span class="number">3</span>, <span class="string">"A"</span>, <span class="string">"B"</span>, <span class="string">"C"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1 step, 1 plate move from A to C </span><br><span class="line">2 step, 2 plate move from A to B </span><br><span class="line">3 step, 1 plate move from C to B </span><br><span class="line">4 step, 3 plate move from A to C </span><br><span class="line">5 step, 1 plate move from B to A </span><br><span class="line">6 step, 2 plate move from B to C </span><br><span class="line">7 step, 1 plate move from A to C</span><br></pre></td></tr></table></figure>
-
+<img src="/2020/04/01/3%20算法/五大常用算法——分治法/hanoi.gif" title="算法">
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">public class Hanoi &#123;</span><br><span class="line"></span><br><span class="line">    private static int step = 1; // 步数</span><br><span class="line"></span><br><span class="line">    public static void hanoi(int plateNum, String a, String b, String c) &#123;</span><br><span class="line">        if (plateNum == 1) &#123;</span><br><span class="line">            move(plateNum, a, c);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            hanoi(plateNum - 1, a, c, b);</span><br><span class="line">            move(plateNum, a, c);</span><br><span class="line">            hanoi(plateNum - 1, b, a, c);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static void move(int plateNum, String from, String to) &#123;</span><br><span class="line">        System.out.printf(&quot;%d step, %d plate move from %s to %s \n&quot;, step++, plateNum, from, to);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        hanoi(3, &quot;A&quot;, &quot;B&quot;, &quot;C&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">1 step, 1 plate move from A to C </span><br><span class="line">2 step, 2 plate move from A to B </span><br><span class="line">3 step, 1 plate move from C to B </span><br><span class="line">4 step, 3 plate move from A to C </span><br><span class="line">5 step, 1 plate move from B to A </span><br><span class="line">6 step, 2 plate move from B to C </span><br><span class="line">7 step, 1 plate move from A to C</span><br></pre></td></tr></table></figure>
+        </div>
+        
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/算法/">算法</a>
+                </div>
+            </div>
         </div>
         
         
@@ -262,7 +269,7 @@
 <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
 <script>
 	var gitment = new Gitment({
-		id: '96bd187b36cb7db49dc8b7c9f2d5ebd9',
+		id: '46f8d46a16d364dd91267ea9f3f1ad67',
 		owner: 'alpaca',
 		repo: 'alpacaca.github.io',
 		oauth: {
@@ -346,7 +353,7 @@
                     </p>
                     <a href="/tags">
                         <p class="title has-text-weight-normal">
-                            5
+                            6
                         </p>
                     </a>
                 </div>
@@ -416,7 +423,7 @@
         <h3 class="menu-label">
             标签云
         </h3>
-        <a href="/tags/MySQL优化/" style="font-size: 16.67px;">MySQL优化</a> <a href="/tags/hexo/" style="font-size: 13.33px;">hexo</a> <a href="/tags/mysql/" style="font-size: 20px;">mysql</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/缓存/" style="font-size: 10px;">缓存</a>
+        <a href="/tags/MySQL优化/" style="font-size: 16.67px;">MySQL优化</a> <a href="/tags/hexo/" style="font-size: 13.33px;">hexo</a> <a href="/tags/mysql/" style="font-size: 20px;">mysql</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/缓存/" style="font-size: 10px;">缓存</a>
     </div>
 </div>
     
@@ -431,16 +438,16 @@
         
         <article class="media">
             
-            <a href="/2020/04/01/3 算法/常用算法——分治法/" class="media-left">
+            <a href="/2020/04/01/3 算法/五大常用算法——分治法/" class="media-left">
                 <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="常用算法——分治法">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="五大常用算法">
                 </p>
             </a>
             
             <div class="media-content">
                 <div class="content">
                     <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-31T16:00:00.000Z">2020-04-01</time></div>
-                    <a href="/2020/04/01/3 算法/常用算法——分治法/" class="title has-link-black-ter is-size-6 has-text-weight-normal">常用算法——分治法</a>
+                    <a href="/2020/04/01/3 算法/五大常用算法——分治法/" class="title has-link-black-ter is-size-6 has-text-weight-normal">五大常用算法</a>
                     <p class="is-size-7 is-uppercase">
                         
                     </p>
@@ -627,6 +634,13 @@
                 <div class="control">
                     <a class="tags has-addons" href="/tags/数据结构/">
                         <span class="tag">数据结构</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/算法/">
+                        <span class="tag">算法</span>
                         <span class="tag is-grey">1</span>
                     </a>
                 </div>
@@ -662,16 +676,16 @@
         
         <article class="media">
             
-            <a href="/2020/04/01/3 算法/常用算法——分治法/" class="media-left">
+            <a href="/2020/04/01/3 算法/五大常用算法——分治法/" class="media-left">
                 <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="常用算法——分治法">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="五大常用算法">
                 </p>
             </a>
             
             <div class="media-content">
                 <div class="content">
                     <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-31T16:00:00.000Z">2020-04-01</time></div>
-                    <a href="/2020/04/01/3 算法/常用算法——分治法/" class="title has-link-black-ter is-size-6 has-text-weight-normal">常用算法——分治法</a>
+                    <a href="/2020/04/01/3 算法/五大常用算法——分治法/" class="title has-link-black-ter is-size-6 has-text-weight-normal">五大常用算法</a>
                     <p class="is-size-7 is-uppercase">
                         
                     </p>
@@ -863,6 +877,13 @@
                 </div>
                 
                 <div class="control">
+                    <a class="tags has-addons" href="/tags/算法/">
+                        <span class="tag">算法</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
                     <a class="tags has-addons" href="/tags/缓存/">
                         <span class="tag">缓存</span>
                         <span class="tag is-grey">1</span>
@@ -886,7 +907,7 @@
             <div class="level-start has-text-centered-mobile">
                 <a class="footer-logo is-block has-mb-6" href="/">
                 
-                    <img src="/images/banner/3.jpg" alt="常用算法——分治法" height="28">
+                    <img src="/images/banner/3.jpg" alt="五大常用算法" height="28">
                 
                 </a>
                 <p class="is-size-7">
