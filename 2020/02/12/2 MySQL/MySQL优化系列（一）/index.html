@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
 
-<meta name="generator" content="Hexo 3.9.0" />
+<meta name="generator" content="Hexo 4.2.0" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
@@ -11,18 +11,18 @@
 
 
     <meta name="description" content="MySQL优化系列（一）">
-<meta name="keywords" content="mysql,MySQL优化">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL优化系列（一）">
-<meta property="og:url" content="http://yoursite.com/2020/02/12/2 MySQL/MySQL优化系列（一）/index.html">
+<meta property="og:url" content="http://yoursite.com/2020/02/12/2%20MySQL/MySQL%E4%BC%98%E5%8C%96%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89/index.html">
 <meta property="og:site_name" content="zhy&#39;s blog">
 <meta property="og:description" content="MySQL优化系列（一）">
-<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/images/og_image.png">
-<meta property="og:updated_time" content="2020-04-23T15:10:28.348Z">
+<meta property="article:published_time" content="2020-02-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-05-11T13:06:58.246Z">
+<meta property="article:author" content="zhy">
+<meta property="article:tag" content="mysql">
+<meta property="article:tag" content="MySQL优化">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MySQL优化系列（一）">
-<meta name="twitter:description" content="MySQL优化系列（一）">
 <meta name="twitter:image" content="http://yoursite.com/images/og_image.png">
 
 
@@ -161,8 +161,12 @@
             
         </h1>
         <div class="content">
-            <img src="/2020/02/12/2%20MySQL/MySQL优化系列（一）/image1.jpg" title="MySQL">
+            <img src="/2020/02/12/2%20MySQL/MySQL%E4%BC%98%E5%8C%96%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89/image1.jpg" class="" title="MySQL">
+
+
+
 <h1 id="MySQL优化系列（一）"><a href="#MySQL优化系列（一）" class="headerlink" title="MySQL优化系列（一）"></a>MySQL优化系列（一）</h1><a id="more"></a>
+
 <h2 id="0-总述"><a href="#0-总述" class="headerlink" title="0 总述"></a>0 总述</h2><p>按照Java当前框架式的开发模式，我总结<strong>单系统</strong>Mysql优化主要分为三类：</p>
 <ol>
 <li>代码级优化。</li>
@@ -194,8 +198,10 @@
 <li>关系型数据库中，ORM框架支持的一二级缓存。</li>
 <li>非关系型数据库中，redis数据库缓存。</li>
 </ol>
-<img src="/2020/02/12/2%20MySQL/MySQL优化系列（一）/MySQL优化总结.png" title="MySQL优化脑图">
-<p><br /></p>
+<img src="/2020/02/12/2%20MySQL/MySQL%E4%BC%98%E5%8C%96%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89/MySQL%E4%BC%98%E5%8C%96%E6%80%BB%E7%BB%93.png" class="" title="MySQL优化脑图">
+
+<br />
+
 <h2 id="1-准备"><a href="#1-准备" class="headerlink" title="1 准备"></a>1 准备</h2><h3 id="1-1-数据准备"><a href="#1-1-数据准备" class="headerlink" title="1.1 数据准备"></a>1.1 数据准备</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在展开研究Mysql数据库优化前，我们先创建一组数据，用于分析所有涉及的操作行为。四张数据表的数据字典如下：（主键id均为整型自增，非特别说明都使用varchar类型）</p>
 <blockquote>
 <p><code>tb_course</code> : id，name（课程名），is_required（是否必修课 boolean），credit（学分 int）</p>
@@ -204,10 +210,15 @@
 <p><code>tb_student_course</code> :  id，student_id（学生id），course_id（课程id），is_pass（是否及格 boolean），score（得分 int）</p>
 </blockquote>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;创建数据库脚本代码如下：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> <span class="string">`optdemo`</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> <span class="string">'utf8'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">USE</span> <span class="string">`optdemo`</span>;</span><br><span class="line"></span><br><span class="line">#创建课程表，包括id，名称，是否必修课，学分</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">table</span> <span class="string">`tb_course`</span>(</span><br><span class="line">	<span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> auto_increment,</span><br><span class="line">	<span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">20</span>),</span><br><span class="line">	is_required <span class="built_in">boolean</span>,</span><br><span class="line">	credit <span class="built_in">int</span></span><br><span class="line">)<span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> = utf8;</span><br><span class="line"></span><br><span class="line">#创建老师表，包括id，名称，年龄，教授课程</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">table</span> <span class="string">`tb_teacher`</span>(</span><br><span class="line">	<span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> auto_increment,</span><br><span class="line">	<span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">20</span>),</span><br><span class="line">	age <span class="built_in">int</span>,</span><br><span class="line">	course_id <span class="built_in">int</span></span><br><span class="line">)<span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> = utf8;</span><br><span class="line"></span><br><span class="line">#创建学生表，包括id，名称，年龄，所学课程</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">table</span> <span class="string">`tb_student`</span>(</span><br><span class="line">	<span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> auto_increment,</span><br><span class="line">	<span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">20</span>),</span><br><span class="line">	age <span class="built_in">int</span></span><br><span class="line">)<span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> = utf8;</span><br><span class="line"></span><br><span class="line">#创建学生--课程关系表，包括id，学生id，课程id，是否通过</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">table</span> <span class="string">`tb_student_course`</span>(</span><br><span class="line">	<span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> auto_increment,</span><br><span class="line">	student_id <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">	course_id <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">	is_pass <span class="built_in">boolean</span>,</span><br><span class="line">	score <span class="built_in">int</span></span><br><span class="line">)<span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> = utf8;</span><br><span class="line"></span><br><span class="line">#初始化表</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`tb_course`</span> (<span class="keyword">name</span>, is_required, credit) </span><br><span class="line"><span class="keyword">VALUES</span> </span><br><span class="line">(<span class="string">'C'</span>, <span class="literal">true</span>, <span class="number">4</span>), </span><br><span class="line">(<span class="string">'JAVA'</span>, <span class="literal">true</span>, <span class="number">4</span>), </span><br><span class="line">(<span class="string">'数据结构'</span>, <span class="literal">true</span>, <span class="number">3</span>), </span><br><span class="line">(<span class="string">'操作系统'</span>, <span class="literal">true</span>, <span class="number">4</span>), </span><br><span class="line">(<span class="string">'C#'</span>, <span class="literal">false</span>, <span class="number">2</span>), </span><br><span class="line">(<span class="string">'Python'</span>, <span class="literal">false</span>, <span class="number">3</span>), </span><br><span class="line">(<span class="string">'人工智能'</span>, <span class="literal">true</span>, <span class="number">4</span>), </span><br><span class="line">(<span class="string">'TCP/IP'</span>, <span class="literal">false</span>, <span class="number">2</span>), </span><br><span class="line">(<span class="string">'计算机网络'</span>, <span class="literal">true</span>, <span class="number">3</span>),</span><br><span class="line">(<span class="string">'Linux'</span>, <span class="literal">false</span>, <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`tb_teacher`</span> (<span class="keyword">name</span>, age, course_id)</span><br><span class="line"><span class="keyword">VALUES</span></span><br><span class="line">(<span class="string">'老张'</span>, <span class="number">45</span>, <span class="number">1</span>),</span><br><span class="line">(<span class="string">'老王'</span>, <span class="number">46</span>, <span class="number">2</span>),</span><br><span class="line">(<span class="string">'老李'</span>, <span class="number">48</span>, <span class="number">3</span>),</span><br><span class="line">(<span class="string">'老赵'</span>, <span class="number">35</span>, <span class="number">4</span>),</span><br><span class="line">(<span class="string">'老吴'</span>, <span class="number">55</span>, <span class="number">5</span>),</span><br><span class="line">(<span class="string">'老孙'</span>, <span class="number">45</span>, <span class="number">6</span>),</span><br><span class="line">(<span class="string">'老刘'</span>, <span class="number">40</span>, <span class="number">7</span>),</span><br><span class="line">(<span class="string">'老贾'</span>, <span class="number">39</span>, <span class="number">8</span>),</span><br><span class="line">(<span class="string">'老钱'</span>, <span class="number">32</span>, <span class="number">9</span>),</span><br><span class="line">(<span class="string">'老周'</span>, <span class="number">36</span>, <span class="number">10</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`tb_student`</span> (<span class="keyword">name</span>, age)</span><br><span class="line"><span class="keyword">VALUES</span></span><br><span class="line">(<span class="string">'小张'</span>, <span class="number">18</span>),</span><br><span class="line">(<span class="string">'小王'</span>, <span class="number">18</span>),</span><br><span class="line">(<span class="string">'小李'</span>, <span class="number">18</span>),</span><br><span class="line">(<span class="string">'小赵'</span>, <span class="number">18</span>),</span><br><span class="line">(<span class="string">'小吴'</span>, <span class="number">18</span>),</span><br><span class="line">(<span class="string">'小孙'</span>, <span class="number">18</span>),</span><br><span class="line">(<span class="string">'小刘'</span>, <span class="number">18</span>),</span><br><span class="line">(<span class="string">'小贾'</span>, <span class="number">18</span>),</span><br><span class="line">(<span class="string">'小钱'</span>, <span class="number">18</span>),</span><br><span class="line">(<span class="string">'小周'</span>, <span class="number">18</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`tb_student_course`</span> (student_id, course_id, is_pass, score)</span><br><span class="line"><span class="keyword">VALUES</span></span><br><span class="line">(<span class="number">1</span>,<span class="number">1</span>,<span class="literal">true</span>, <span class="number">80</span>), (<span class="number">1</span>,<span class="number">2</span>,<span class="literal">true</span>, <span class="number">90</span>), (<span class="number">1</span>,<span class="number">3</span>,<span class="literal">true</span>, <span class="number">92</span>), (<span class="number">1</span>,<span class="number">4</span>,<span class="literal">true</span>, <span class="number">93</span>), (<span class="number">1</span>,<span class="number">7</span>,<span class="literal">true</span>,<span class="number">87</span>), (<span class="number">1</span>,<span class="number">9</span>,<span class="literal">true</span>, <span class="number">89</span>), (<span class="number">1</span>,<span class="number">10</span>,<span class="literal">true</span>, <span class="number">78</span>), </span><br><span class="line">(<span class="number">2</span>,<span class="number">1</span>,<span class="literal">true</span>, <span class="number">99</span>), (<span class="number">2</span>,<span class="number">2</span>,<span class="literal">true</span>, <span class="number">98</span>), (<span class="number">2</span>,<span class="number">3</span>,<span class="literal">true</span>, <span class="number">100</span>), (<span class="number">2</span>,<span class="number">4</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">2</span>,<span class="number">7</span>,<span class="literal">true</span>,<span class="number">95</span>), (<span class="number">2</span>,<span class="number">8</span>,<span class="literal">true</span>,<span class="number">91</span>), (<span class="number">2</span>,<span class="number">9</span>,<span class="literal">false</span>,<span class="number">55</span>),</span><br><span class="line">(<span class="number">3</span>,<span class="number">1</span>,<span class="literal">true</span>, <span class="number">76</span>), (<span class="number">3</span>,<span class="number">2</span>,<span class="literal">true</span>,<span class="number">68</span>), (<span class="number">3</span>,<span class="number">3</span>,<span class="literal">true</span>,<span class="number">82</span>), (<span class="number">3</span>,<span class="number">5</span>,<span class="literal">true</span>,<span class="number">77</span>), (<span class="number">3</span>,<span class="number">7</span>,<span class="literal">true</span>,<span class="number">71</span>), (<span class="number">3</span>,<span class="number">9</span>,<span class="literal">false</span>,<span class="number">59</span>),</span><br><span class="line">(<span class="number">4</span>,<span class="number">1</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">4</span>,<span class="number">2</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">4</span>,<span class="number">3</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">4</span>,<span class="number">4</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">4</span>,<span class="number">7</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">4</span>,<span class="number">9</span>,<span class="literal">true</span>,<span class="number">100</span>),</span><br><span class="line">(<span class="number">5</span>,<span class="number">1</span>,<span class="literal">false</span>, <span class="number">42</span>), (<span class="number">5</span>,<span class="number">2</span>,<span class="literal">false</span>,<span class="number">39</span>), (<span class="number">5</span>,<span class="number">3</span>,<span class="literal">false</span>,<span class="number">33</span>), (<span class="number">5</span>,<span class="number">4</span>,<span class="literal">false</span>,<span class="number">21</span>), (<span class="number">5</span>,<span class="number">5</span>,<span class="literal">true</span>,<span class="number">60</span>), (<span class="number">5</span>,<span class="number">7</span>,<span class="literal">false</span>,<span class="number">0</span>), (<span class="number">5</span>,<span class="number">9</span>,<span class="literal">false</span>,<span class="number">58</span>),</span><br><span class="line">(<span class="number">6</span>,<span class="number">1</span>,<span class="literal">false</span>,<span class="number">82</span>), (<span class="number">6</span>,<span class="number">2</span>,<span class="literal">true</span>,<span class="number">78</span>), (<span class="number">6</span>,<span class="number">3</span>,<span class="literal">true</span>,<span class="number">78</span>), (<span class="number">6</span>,<span class="number">4</span>,<span class="literal">false</span>,<span class="number">49</span>), (<span class="number">6</span>,<span class="number">6</span>,<span class="literal">true</span>,<span class="number">63</span>), (<span class="number">6</span>,<span class="number">7</span>,<span class="literal">false</span>,<span class="number">47</span>), (<span class="number">6</span>,<span class="number">9</span>,<span class="literal">true</span>,<span class="number">82</span>),</span><br><span class="line">(<span class="number">7</span>,<span class="number">1</span>,<span class="literal">true</span>,<span class="number">98</span>), (<span class="number">7</span>,<span class="number">2</span>,<span class="literal">true</span>,<span class="number">96</span>), (<span class="number">7</span>,<span class="number">3</span>,<span class="literal">true</span>,<span class="number">92</span>), (<span class="number">7</span>,<span class="number">4</span>,<span class="literal">true</span>,<span class="number">91</span>), (<span class="number">7</span>,<span class="number">5</span>,<span class="literal">true</span>,<span class="number">96</span>), (<span class="number">7</span>,<span class="number">6</span>,<span class="literal">true</span>,<span class="number">99</span>), (<span class="number">7</span>,<span class="number">7</span>,<span class="literal">true</span>,<span class="number">93</span>), (<span class="number">7</span>,<span class="number">8</span>,<span class="literal">true</span>,<span class="number">99</span>), (<span class="number">7</span>,<span class="number">9</span>,<span class="literal">true</span>,<span class="number">94</span>), (<span class="number">7</span>,<span class="number">10</span>,<span class="literal">true</span>,<span class="number">98</span>),</span><br><span class="line">(<span class="number">8</span>,<span class="number">1</span>,<span class="literal">false</span>,<span class="number">32</span>), (<span class="number">8</span>,<span class="number">2</span>,<span class="literal">false</span>,<span class="number">33</span>), (<span class="number">8</span>,<span class="number">3</span>,<span class="literal">false</span>,<span class="number">42</span>), (<span class="number">8</span>,<span class="number">4</span>,<span class="literal">false</span>,<span class="number">43</span>), (<span class="number">8</span>,<span class="number">7</span>,<span class="literal">false</span>,<span class="number">52</span>), (<span class="number">8</span>,<span class="number">9</span>,<span class="literal">false</span>,<span class="number">53</span>),</span><br><span class="line">(<span class="number">9</span>,<span class="number">1</span>,<span class="literal">false</span>,<span class="number">36</span>), (<span class="number">9</span>,<span class="number">2</span>,<span class="literal">false</span>,<span class="number">39</span>), (<span class="number">9</span>,<span class="number">3</span>,<span class="literal">false</span>,<span class="number">56</span>), (<span class="number">9</span>,<span class="number">4</span>,<span class="literal">false</span>,<span class="number">55</span>), (<span class="number">9</span>,<span class="number">7</span>,<span class="literal">false</span>,<span class="number">55</span>), (<span class="number">9</span>,<span class="number">9</span>,<span class="literal">false</span>,<span class="number">51</span>),</span><br><span class="line">(<span class="number">10</span>,<span class="number">1</span>,<span class="literal">true</span>,<span class="number">86</span>), (<span class="number">10</span>,<span class="number">2</span>,<span class="literal">true</span>,<span class="number">88</span>), (<span class="number">10</span>,<span class="number">3</span>,<span class="literal">true</span>,<span class="number">92</span>), (<span class="number">10</span>,<span class="number">4</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">10</span>,<span class="number">5</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">10</span>,<span class="number">6</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">10</span>,<span class="number">7</span>,<span class="literal">false</span>,<span class="number">100</span>), (<span class="number">10</span>,<span class="number">8</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">10</span>,<span class="number">9</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">10</span>,<span class="number">10</span>,<span class="literal">true</span>,<span class="number">100</span>);</span><br></pre></td></tr></table></figure>
-<p><br /></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> <span class="string">`optdemo`</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> <span class="string">'utf8'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">USE</span> <span class="string">`optdemo`</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">#创建课程表，包括id，名称，是否必修课，学分</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">table</span> <span class="string">`tb_course`</span>(</span><br><span class="line">	<span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> auto_increment,</span><br><span class="line">	<span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">20</span>),</span><br><span class="line">	is_required <span class="built_in">boolean</span>,</span><br><span class="line">	credit <span class="built_in">int</span></span><br><span class="line">)<span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> = utf8;</span><br><span class="line"></span><br><span class="line"><span class="comment">#创建老师表，包括id，名称，年龄，教授课程</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">table</span> <span class="string">`tb_teacher`</span>(</span><br><span class="line">	<span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> auto_increment,</span><br><span class="line">	<span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">20</span>),</span><br><span class="line">	age <span class="built_in">int</span>,</span><br><span class="line">	course_id <span class="built_in">int</span></span><br><span class="line">)<span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> = utf8;</span><br><span class="line"></span><br><span class="line"><span class="comment">#创建学生表，包括id，名称，年龄，所学课程</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">table</span> <span class="string">`tb_student`</span>(</span><br><span class="line">	<span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> auto_increment,</span><br><span class="line">	<span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">20</span>),</span><br><span class="line">	age <span class="built_in">int</span></span><br><span class="line">)<span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> = utf8;</span><br><span class="line"></span><br><span class="line"><span class="comment">#创建学生--课程关系表，包括id，学生id，课程id，是否通过</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">table</span> <span class="string">`tb_student_course`</span>(</span><br><span class="line">	<span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> auto_increment,</span><br><span class="line">	student_id <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">	course_id <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">	is_pass <span class="built_in">boolean</span>,</span><br><span class="line">	score <span class="built_in">int</span></span><br><span class="line">)<span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> = utf8;</span><br><span class="line"></span><br><span class="line"><span class="comment">#初始化表</span></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`tb_course`</span> (<span class="keyword">name</span>, is_required, credit) </span><br><span class="line"><span class="keyword">VALUES</span> </span><br><span class="line">(<span class="string">'C'</span>, <span class="literal">true</span>, <span class="number">4</span>), </span><br><span class="line">(<span class="string">'JAVA'</span>, <span class="literal">true</span>, <span class="number">4</span>), </span><br><span class="line">(<span class="string">'数据结构'</span>, <span class="literal">true</span>, <span class="number">3</span>), </span><br><span class="line">(<span class="string">'操作系统'</span>, <span class="literal">true</span>, <span class="number">4</span>), </span><br><span class="line">(<span class="string">'C#'</span>, <span class="literal">false</span>, <span class="number">2</span>), </span><br><span class="line">(<span class="string">'Python'</span>, <span class="literal">false</span>, <span class="number">3</span>), </span><br><span class="line">(<span class="string">'人工智能'</span>, <span class="literal">true</span>, <span class="number">4</span>), </span><br><span class="line">(<span class="string">'TCP/IP'</span>, <span class="literal">false</span>, <span class="number">2</span>), </span><br><span class="line">(<span class="string">'计算机网络'</span>, <span class="literal">true</span>, <span class="number">3</span>),</span><br><span class="line">(<span class="string">'Linux'</span>, <span class="literal">false</span>, <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`tb_teacher`</span> (<span class="keyword">name</span>, age, course_id)</span><br><span class="line"><span class="keyword">VALUES</span></span><br><span class="line">(<span class="string">'老张'</span>, <span class="number">45</span>, <span class="number">1</span>),</span><br><span class="line">(<span class="string">'老王'</span>, <span class="number">46</span>, <span class="number">2</span>),</span><br><span class="line">(<span class="string">'老李'</span>, <span class="number">48</span>, <span class="number">3</span>),</span><br><span class="line">(<span class="string">'老赵'</span>, <span class="number">35</span>, <span class="number">4</span>),</span><br><span class="line">(<span class="string">'老吴'</span>, <span class="number">55</span>, <span class="number">5</span>),</span><br><span class="line">(<span class="string">'老孙'</span>, <span class="number">45</span>, <span class="number">6</span>),</span><br><span class="line">(<span class="string">'老刘'</span>, <span class="number">40</span>, <span class="number">7</span>),</span><br><span class="line">(<span class="string">'老贾'</span>, <span class="number">39</span>, <span class="number">8</span>),</span><br><span class="line">(<span class="string">'老钱'</span>, <span class="number">32</span>, <span class="number">9</span>),</span><br><span class="line">(<span class="string">'老周'</span>, <span class="number">36</span>, <span class="number">10</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`tb_student`</span> (<span class="keyword">name</span>, age)</span><br><span class="line"><span class="keyword">VALUES</span></span><br><span class="line">(<span class="string">'小张'</span>, <span class="number">18</span>),</span><br><span class="line">(<span class="string">'小王'</span>, <span class="number">18</span>),</span><br><span class="line">(<span class="string">'小李'</span>, <span class="number">18</span>),</span><br><span class="line">(<span class="string">'小赵'</span>, <span class="number">18</span>),</span><br><span class="line">(<span class="string">'小吴'</span>, <span class="number">18</span>),</span><br><span class="line">(<span class="string">'小孙'</span>, <span class="number">18</span>),</span><br><span class="line">(<span class="string">'小刘'</span>, <span class="number">18</span>),</span><br><span class="line">(<span class="string">'小贾'</span>, <span class="number">18</span>),</span><br><span class="line">(<span class="string">'小钱'</span>, <span class="number">18</span>),</span><br><span class="line">(<span class="string">'小周'</span>, <span class="number">18</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`tb_student_course`</span> (student_id, course_id, is_pass, score)</span><br><span class="line"><span class="keyword">VALUES</span></span><br><span class="line">(<span class="number">1</span>,<span class="number">1</span>,<span class="literal">true</span>, <span class="number">80</span>), (<span class="number">1</span>,<span class="number">2</span>,<span class="literal">true</span>, <span class="number">90</span>), (<span class="number">1</span>,<span class="number">3</span>,<span class="literal">true</span>, <span class="number">92</span>), (<span class="number">1</span>,<span class="number">4</span>,<span class="literal">true</span>, <span class="number">93</span>), (<span class="number">1</span>,<span class="number">7</span>,<span class="literal">true</span>,<span class="number">87</span>), (<span class="number">1</span>,<span class="number">9</span>,<span class="literal">true</span>, <span class="number">89</span>), (<span class="number">1</span>,<span class="number">10</span>,<span class="literal">true</span>, <span class="number">78</span>), </span><br><span class="line">(<span class="number">2</span>,<span class="number">1</span>,<span class="literal">true</span>, <span class="number">99</span>), (<span class="number">2</span>,<span class="number">2</span>,<span class="literal">true</span>, <span class="number">98</span>), (<span class="number">2</span>,<span class="number">3</span>,<span class="literal">true</span>, <span class="number">100</span>), (<span class="number">2</span>,<span class="number">4</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">2</span>,<span class="number">7</span>,<span class="literal">true</span>,<span class="number">95</span>), (<span class="number">2</span>,<span class="number">8</span>,<span class="literal">true</span>,<span class="number">91</span>), (<span class="number">2</span>,<span class="number">9</span>,<span class="literal">false</span>,<span class="number">55</span>),</span><br><span class="line">(<span class="number">3</span>,<span class="number">1</span>,<span class="literal">true</span>, <span class="number">76</span>), (<span class="number">3</span>,<span class="number">2</span>,<span class="literal">true</span>,<span class="number">68</span>), (<span class="number">3</span>,<span class="number">3</span>,<span class="literal">true</span>,<span class="number">82</span>), (<span class="number">3</span>,<span class="number">5</span>,<span class="literal">true</span>,<span class="number">77</span>), (<span class="number">3</span>,<span class="number">7</span>,<span class="literal">true</span>,<span class="number">71</span>), (<span class="number">3</span>,<span class="number">9</span>,<span class="literal">false</span>,<span class="number">59</span>),</span><br><span class="line">(<span class="number">4</span>,<span class="number">1</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">4</span>,<span class="number">2</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">4</span>,<span class="number">3</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">4</span>,<span class="number">4</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">4</span>,<span class="number">7</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">4</span>,<span class="number">9</span>,<span class="literal">true</span>,<span class="number">100</span>),</span><br><span class="line">(<span class="number">5</span>,<span class="number">1</span>,<span class="literal">false</span>, <span class="number">42</span>), (<span class="number">5</span>,<span class="number">2</span>,<span class="literal">false</span>,<span class="number">39</span>), (<span class="number">5</span>,<span class="number">3</span>,<span class="literal">false</span>,<span class="number">33</span>), (<span class="number">5</span>,<span class="number">4</span>,<span class="literal">false</span>,<span class="number">21</span>), (<span class="number">5</span>,<span class="number">5</span>,<span class="literal">true</span>,<span class="number">60</span>), (<span class="number">5</span>,<span class="number">7</span>,<span class="literal">false</span>,<span class="number">0</span>), (<span class="number">5</span>,<span class="number">9</span>,<span class="literal">false</span>,<span class="number">58</span>),</span><br><span class="line">(<span class="number">6</span>,<span class="number">1</span>,<span class="literal">false</span>,<span class="number">82</span>), (<span class="number">6</span>,<span class="number">2</span>,<span class="literal">true</span>,<span class="number">78</span>), (<span class="number">6</span>,<span class="number">3</span>,<span class="literal">true</span>,<span class="number">78</span>), (<span class="number">6</span>,<span class="number">4</span>,<span class="literal">false</span>,<span class="number">49</span>), (<span class="number">6</span>,<span class="number">6</span>,<span class="literal">true</span>,<span class="number">63</span>), (<span class="number">6</span>,<span class="number">7</span>,<span class="literal">false</span>,<span class="number">47</span>), (<span class="number">6</span>,<span class="number">9</span>,<span class="literal">true</span>,<span class="number">82</span>),</span><br><span class="line">(<span class="number">7</span>,<span class="number">1</span>,<span class="literal">true</span>,<span class="number">98</span>), (<span class="number">7</span>,<span class="number">2</span>,<span class="literal">true</span>,<span class="number">96</span>), (<span class="number">7</span>,<span class="number">3</span>,<span class="literal">true</span>,<span class="number">92</span>), (<span class="number">7</span>,<span class="number">4</span>,<span class="literal">true</span>,<span class="number">91</span>), (<span class="number">7</span>,<span class="number">5</span>,<span class="literal">true</span>,<span class="number">96</span>), (<span class="number">7</span>,<span class="number">6</span>,<span class="literal">true</span>,<span class="number">99</span>), (<span class="number">7</span>,<span class="number">7</span>,<span class="literal">true</span>,<span class="number">93</span>), (<span class="number">7</span>,<span class="number">8</span>,<span class="literal">true</span>,<span class="number">99</span>), (<span class="number">7</span>,<span class="number">9</span>,<span class="literal">true</span>,<span class="number">94</span>), (<span class="number">7</span>,<span class="number">10</span>,<span class="literal">true</span>,<span class="number">98</span>),</span><br><span class="line">(<span class="number">8</span>,<span class="number">1</span>,<span class="literal">false</span>,<span class="number">32</span>), (<span class="number">8</span>,<span class="number">2</span>,<span class="literal">false</span>,<span class="number">33</span>), (<span class="number">8</span>,<span class="number">3</span>,<span class="literal">false</span>,<span class="number">42</span>), (<span class="number">8</span>,<span class="number">4</span>,<span class="literal">false</span>,<span class="number">43</span>), (<span class="number">8</span>,<span class="number">7</span>,<span class="literal">false</span>,<span class="number">52</span>), (<span class="number">8</span>,<span class="number">9</span>,<span class="literal">false</span>,<span class="number">53</span>),</span><br><span class="line">(<span class="number">9</span>,<span class="number">1</span>,<span class="literal">false</span>,<span class="number">36</span>), (<span class="number">9</span>,<span class="number">2</span>,<span class="literal">false</span>,<span class="number">39</span>), (<span class="number">9</span>,<span class="number">3</span>,<span class="literal">false</span>,<span class="number">56</span>), (<span class="number">9</span>,<span class="number">4</span>,<span class="literal">false</span>,<span class="number">55</span>), (<span class="number">9</span>,<span class="number">7</span>,<span class="literal">false</span>,<span class="number">55</span>), (<span class="number">9</span>,<span class="number">9</span>,<span class="literal">false</span>,<span class="number">51</span>),</span><br><span class="line">(<span class="number">10</span>,<span class="number">1</span>,<span class="literal">true</span>,<span class="number">86</span>), (<span class="number">10</span>,<span class="number">2</span>,<span class="literal">true</span>,<span class="number">88</span>), (<span class="number">10</span>,<span class="number">3</span>,<span class="literal">true</span>,<span class="number">92</span>), (<span class="number">10</span>,<span class="number">4</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">10</span>,<span class="number">5</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">10</span>,<span class="number">6</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">10</span>,<span class="number">7</span>,<span class="literal">false</span>,<span class="number">100</span>), (<span class="number">10</span>,<span class="number">8</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">10</span>,<span class="number">9</span>,<span class="literal">true</span>,<span class="number">100</span>), (<span class="number">10</span>,<span class="number">10</span>,<span class="literal">true</span>,<span class="number">100</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<br />
+
 <h3 id="1-2-Mysql逻辑分层结构"><a href="#1-2-Mysql逻辑分层结构" class="headerlink" title="1.2 Mysql逻辑分层结构"></a>1.2 Mysql逻辑分层结构</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首先确定一个概念，通常开发中操作的是Mysql Client客户端，与Client相连并且处理数据和存储数据的称为Mysql Server或者Database Manager System（DBMS），Client职责就是输入并发送给Server处理，所以这里我们只讨论Server的逻辑分层结构。</p>
-<img src="/2020/02/12/2%20MySQL/MySQL优化系列（一）/架构图.png" title="Mysql架构图">
+<img src="/2020/02/12/2%20MySQL/MySQL%E4%BC%98%E5%8C%96%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89/%E6%9E%B6%E6%9E%84%E5%9B%BE.png" class="" title="Mysql架构图">
+
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从上图大体可以看出来，按逻辑共分为四层，概括一下包含：连接层、服务层、数据驱动层（引擎层）和数据层。</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;① <strong>连接层</strong>被设计为连接池形式，主要负责与Client的通信，同时提供授权和安全等策略；</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;② <strong>服务层</strong>是Mysql Server的核心结构，主要包括：管理服务、SQL接口、SQL解析器、SQL优化器和缓存，具体介绍请看下一段。</p>
@@ -217,7 +228,8 @@
 <blockquote>
 <p>由于SQL优化器的存在，我们写的SQL并不一定是Server执行的SQL。</p>
 </blockquote>
-<p><br /></p>
+<br />
+
 <h3 id="1-3-DQL执行顺序与SQL优化器"><a href="#1-3-DQL执行顺序与SQL优化器" class="headerlink" title="1.3 DQL执行顺序与SQL优化器"></a>1.3 DQL执行顺序与SQL优化器</h3><blockquote>
 <p>DQL : Data Query Language 数据查询语言，特指Select及相关的(group by etc.)操作统称。</p>
 <p>DML : Data Manipulation Language 数据操作语言，包含INSERT、DELETE、UPDATE。</p>
@@ -225,30 +237,38 @@
 </blockquote>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在数据库DQL中，存在一条线性的关键字匹配和处理流程，这里所说的关键字就是与数据库操作有关的系统关键字。首先看下列关键字序列：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span></span><br><span class="line">    &lt; select_list &gt;</span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">    &lt; left_table &gt; </span><br><span class="line">&lt; join_type &gt; <span class="keyword">JOIN</span> &lt; right_table &gt; </span><br><span class="line"><span class="keyword">ON</span> &lt; join_condition &gt;</span><br><span class="line"><span class="keyword">WHERE</span></span><br><span class="line">    &lt; where_condition &gt;</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span></span><br><span class="line">    &lt; group_by_list &gt;</span><br><span class="line"><span class="keyword">HAVING</span></span><br><span class="line">    &lt; having_condition &gt;</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span></span><br><span class="line">    &lt; order_by_condition &gt;</span><br><span class="line"><span class="keyword">LIMIT</span> &lt; limit_number &gt;</span><br></pre></td></tr></table></figure>
+
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这是一条日常开发中涉及较多关键字的SQL，也是SQL解析器认为合法的表示流程，但实际上，SQL解析器解析之后是按照如下顺序执行：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">FROM &lt;left_table&gt;</span><br><span class="line">ON &lt;join_condition&gt;</span><br><span class="line">&lt;join_type&gt; JOIN &lt;right_table&gt;</span><br><span class="line">WHERE &lt;where_condition&gt;</span><br><span class="line">GROUP BY &lt;group_by_list&gt;</span><br><span class="line">HAVING &lt;having_condition&gt;</span><br><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line"><span class="keyword">DISTINCT</span> &lt;select_list&gt;</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> &lt;order_by_condition&gt;</span><br><span class="line"><span class="keyword">LIMIT</span> &lt;limit_number&gt;</span><br></pre></td></tr></table></figure>
+
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;掌握Mysql执行过程很重要，因为在后续优化过程中，经常需要确定驱动表以及多表查询时的执行顺序影响效率问题。</p>
 <blockquote>
 <p>简化表示：FROM…ON…JOIN…WHERE…GROUP BY… HAVING…SELECT…DISTINCT…ORDER BY…LIMIT</p>
 <p>简单来说，就是按顺序找到表，再从表中抽数据，再组织数据</p>
 </blockquote>
-<p><br /></p>
+<br />
+
 <h2 id="2-代码级优化"><a href="#2-代码级优化" class="headerlink" title="2 代码级优化"></a>2 代码级优化</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;代码级优化是指，针对手写或者ORM框架生成的原生SQL语句进行优化，优化目的是产生运行效率更高的执行语句。多数情况下，我们针对DQL进行优化。</p>
-<p><br /></p>
+<br />
+
 <h3 id="2-1-使用联接代替子查询"><a href="#2-1-使用联接代替子查询" class="headerlink" title="2.1 使用联接代替子查询"></a>2.1 使用联接代替子查询</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;子查询是指，使用SELECT查询出目标结果集，然后将该结果集当作其他查询的过滤条件使用。换句话说就是一个SELECT查询中的WHERE条件嵌套另一个或多个SELECT语句，这种写法不仅将多个逻辑联系起来更符合自然逻辑，而且避免了执行中的死锁和事务安全问题，但是，在执行过程中，Mysql会对子查询创建临时表，这就增加了IO消耗。</p>
 <blockquote>
 <p>例：查询选修了Python课程的学生信息。</p>
 </blockquote>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="string">`tb_student`</span></span><br><span class="line"><span class="keyword">WHERE</span> <span class="keyword">id</span> <span class="keyword">IN</span> ( </span><br><span class="line">    <span class="keyword">SELECT</span> student_id <span class="keyword">FROM</span> <span class="string">`tb_student_course`</span></span><br><span class="line">	<span class="keyword">WHERE</span> course_id <span class="keyword">IN</span> ( </span><br><span class="line">        <span class="keyword">SELECT</span> <span class="keyword">id</span> <span class="keyword">FROM</span> <span class="string">`tb_course`</span></span><br><span class="line">		<span class="keyword">WHERE</span> <span class="keyword">name</span> = <span class="string">'Python'</span>));</span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p><font color=red>声明：</font>为了方便，使用SELECT *写法，实际业务处理中应使用具体字段SELECT id, name, age写法。</p>
 </blockquote>
 <p>上述例子中，使用了三层SELECT语句组成的完整查询，逻辑清晰但实际运行效率并不高，下面改成JOIN写法。</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> t1.* </span><br><span class="line"><span class="keyword">FROM</span> <span class="string">`tb_student`</span> t1 <span class="keyword">JOIN</span> <span class="string">`tb_student_course`</span> t2 </span><br><span class="line"><span class="keyword">ON</span> t1.id = t2.student_id <span class="keyword">JOIN</span> <span class="string">`tb_course`</span> t3</span><br><span class="line"><span class="keyword">ON</span> t2.course_id = t3.id</span><br><span class="line"><span class="keyword">WHERE</span> t3.name = <span class="string">'Python'</span>;</span><br></pre></td></tr></table></figure>
+
 <p>或者</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> t1.* </span><br><span class="line"><span class="keyword">FROM</span> <span class="string">`tb_student`</span> t1, <span class="string">`tb_student_course`</span> t2, <span class="string">`tb_course`</span> t3 </span><br><span class="line"><span class="keyword">WHERE</span> t1.id = t2.student_id <span class="keyword">AND</span> t2.course_id = t3.id <span class="keyword">AND</span> t3.name = <span class="string">'Python'</span>;</span><br></pre></td></tr></table></figure>
+
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在排除SQL优化器和缓存条件（重复执行，效率会提高）时，从执行时间来看，后两者效率明显比前者效率高。</p>
-<p><br /></p>
+<br />
+
 <h3 id="2-2-删除操作"><a href="#2-2-删除操作" class="headerlink" title="2.2 删除操作"></a>2.2 删除操作</h3><h4 id="2-2-1-DELETE、DROP和TRUNCATE的区别"><a href="#2-2-1-DELETE、DROP和TRUNCATE的区别" class="headerlink" title="2.2.1 DELETE、DROP和TRUNCATE的区别"></a>2.2.1 DELETE、DROP和TRUNCATE的区别</h4><ol>
 <li>DELETE属于DML，执行操作时，每次从目标表中删除一行数据，并且删除行为作为日志保存以便进行”恢复“操作；而DROP和TRUNCATE属于DDL，其操作不能回滚。</li>
 <li>DELETE时会执行相关的触发器，并且执行之后需要显示的commit才能完成删除动作<sup>[1]</sup>；而DROP和TRUNCATE会隐式commit，且不会执行触发器。</li>
@@ -260,10 +280,15 @@
 <blockquote>
 <p>[2] : 举个例子，例如表中id主键自增且当前id=10，当DELETE 全表之后再新增，id为11；而TRUNCATE和DROP之后再新增，id=1。</p>
 </blockquote>
-<p><br /></p>
+<br />
+
 <h4 id="2-2-2-DELETE大数据量优化"><a href="#2-2-2-DELETE大数据量优化" class="headerlink" title="2.2.2 DELETE大数据量优化"></a>2.2.2 DELETE大数据量优化</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DELETE删除大数据量后，不仅产生了许多日志空间，且所删除的空间并未被释放，此时需要使用OPTIMIZE TABLE [数据库]来释放。</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DELETE</span> <span class="keyword">FROM</span> <span class="string">`tb_student_course`</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">OPTIMIZE</span> <span class="keyword">TABLE</span> <span class="string">`tb_student_course`</span>;</span><br></pre></td></tr></table></figure>
-<p><br /></p>
+
+
+
+<br />
+
 <h3 id="2-3-避免使用SELECT"><a href="#2-3-避免使用SELECT" class="headerlink" title="2.3 避免使用SELECT *"></a>2.3 避免使用SELECT *</h3><ol>
 <li><p>使用SELECT *会查询全表字段作为结果集，当我们只需要部分而不是全部字段作为结果集时，就会造成资源浪费，不仅降低了查询效率，还增加了网络IO使用率；当多人维护表时，如果表字段发生变化（增加或者删除）就会造成预期外的结果，或者需要额外的后台代码进行过滤，不利于维护。</p>
 </li>
@@ -272,34 +297,42 @@
 <li><p>SELECT 目标列正好是索引时，会更快的从内存（B+Tree）中读取数据并返回而不产生本地IO。</p>
 </li>
 <li><p>【本条转自】：<a href="https://blog.csdn.net/u013240038/article/details/90731874">https://blog.csdn.net/u013240038/article/details/90731874</a></p>
-<p> 连接查询时，<em> 无法进入缓冲池查询。<br> 每次驱动表加载一条数据到内存中，然后被驱动表所有的数据都需要往内存中加载一遍进行比较。效率很低，所以mysql中可以指定一个缓冲池的大小，缓冲池大的话可以同时加载多条驱动表的数据进行比较，放的数据条数越多io操作就越少，性能也就越好。所以，如果此时使用select </em> 放一些无用的列，只会白白的占用缓冲空间。浪费本可以提高性能的机会。</p>
+<p> 连接查询时，* 无法进入缓冲池查询。<br> 每次驱动表加载一条数据到内存中，然后被驱动表所有的数据都需要往内存中加载一遍进行比较。效率很低，所以mysql中可以指定一个缓冲池的大小，缓冲池大的话可以同时加载多条驱动表的数据进行比较，放的数据条数越多io操作就越少，性能也就越好。所以，如果此时使用select * 放一些无用的列，只会白白的占用缓冲空间。浪费本可以提高性能的机会。</p>
 </li>
 </ol>
-<p><br /></p>
+<br />
+
 <h3 id="2-4-分页优化"><a href="#2-4-分页优化" class="headerlink" title="2.4 分页优化"></a>2.4 分页优化</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数据库层级的分页优化，实际上就是针对LIMIT关键字的优化，Mysql支持的LIMIT关键字系统中可以用作分页处理，表达式：LIMIT offset,rows 或 LIMIT rows。比如<code>LIMIT 123456,50</code>，从123456行开始查询50条数据；<code>LIMIT 50</code>将查询结果取前50条数据。LIMIT虽然使用方便但在大数据量时就会出现性能问题，随着offset增大，性能急剧下降，究其原因是因为<code>LIMIT 123456,50</code>会先扫描123456+50=123506条数据，然后返回50条，额外扫描的123456并不是我们需要的，事实上这样的设计显得多余，当数据量级增加之后，性能必然骤降。</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;优化方式一：从实际情况来看，受影响的似乎只有<code>LIMIT offset, rows</code>形式，而<code>LIMIT rows</code>并不影响性能，实际上后者只扫描rows行数据，所以我们可以进行如下替换：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">table</span> <span class="keyword">LIMIT</span> <span class="number">123456</span>,<span class="number">50</span>;</span><br><span class="line">#LIMIT扫描123506条数据</span><br><span class="line">#转换后</span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">table</span> <span class="keyword">WHERE</span> <span class="keyword">id</span> &gt;= <span class="number">123456</span> <span class="keyword">LIMIT</span> <span class="number">50</span>;</span><br><span class="line">#LIMIT只扫描50条数据</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">table</span> <span class="keyword">LIMIT</span> <span class="number">123456</span>,<span class="number">50</span>;</span><br><span class="line"><span class="comment">#LIMIT扫描123506条数据</span></span><br><span class="line"><span class="comment">#转换后</span></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">table</span> <span class="keyword">WHERE</span> <span class="keyword">id</span> &gt;= <span class="number">123456</span> <span class="keyword">LIMIT</span> <span class="number">50</span>;</span><br><span class="line"><span class="comment">#LIMIT只扫描50条数据</span></span><br></pre></td></tr></table></figure>
+
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;优化方式二：使用覆盖索引，在后续介绍索引时将深入介绍，在此简单提一下：覆盖索引是指，查询列正好全部具有索引，则结果直接从B+Tree中获取而不用回表操作。比如<code>SELECT col1 FROM tb_test LIMIT 123456,50；</code>，正好col1具有索引，那么执行该语句的时候会直接从col1索引对应的数据结构中获得结果，而不用回表到tb_test中再次查询，减少了磁盘IO。</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> <span class="string">`tb_test`</span> <span class="keyword">ADD</span> <span class="keyword">INDEX</span> col1_index(col1);</span><br><span class="line"><span class="keyword">SELECT</span> col1 <span class="keyword">FROM</span> tb_test <span class="keyword">LIMIT</span> <span class="number">123456</span>, <span class="number">50</span>;</span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p>注：创建表并添加主键之后，会自动创建主键索引 Primary Key Index。</p>
 </blockquote>
-<p><br /></p>
+<br />
+
 <h3 id="2-5-JOIN时使驱动表为小数据量表"><a href="#2-5-JOIN时使驱动表为小数据量表" class="headerlink" title="2.5 JOIN时使驱动表为小数据量表"></a>2.5 JOIN时使驱动表为小数据量表</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在前文中我们已经提到使用JOIN代替子查询可以明显提高效率，但JOIN本身也有需要更进一步的优化。首先介绍一下JOIN的原理：将驱动表的查询结果作为“输入”，当作条件逐条的在被驱动表内进行过滤，最终返回过滤后的数据，这种JOIN的方式被称作NEST LOOP。</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> t1.* </span><br><span class="line"><span class="keyword">FROM</span> tabel1 t1 <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> table2 t2 </span><br><span class="line"><span class="keyword">ON</span> t1.condition = t2.condition</span><br><span class="line"><span class="keyword">JOIN</span> table3 t3</span><br><span class="line"><span class="keyword">ON</span> t1.condition = t3.condition <span class="keyword">AND</span> t2.condition = t3.condition</span><br><span class="line"><span class="keyword">WHERE</span> ....</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> t2.id <span class="keyword">DESC</span>;</span><br></pre></td></tr></table></figure>
+
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这是一个相对复杂的例子，其中用到了LEFT JOIN和JOIN，解析一下过程：将table1当作驱动表查询并返回结果result1，将result1当作被驱动表t2的“输入”，并将result1中的数据逐条取出在table2中匹配，并将最终的结果返回result2，将table1和table2联合查询后的结果result2当作table3的”输入“，并逐条匹配并返回最终结果result3，排序后当作最终的结果返回。所以在使用多表JOIN时，明确表的数据条的多少，有助于我们确定使用小表作为驱动表，从而减少循环次数，达到优化的目的。</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;庆幸的是，在不显式地指定驱动表时，SQL优化器帮助我们将最小的表作为驱动表来执行，所谓显式指定是指LEFT JOIN时左侧表为驱动表，RIGHT JOIN时右侧表为驱动表，而JOIN属于隐式，SQL优化器会自行决定小表为驱动表。</p>
 <blockquote>
 <p>思考：上述SQL还存在严重影响性能的地方，可以先做思考，将在后续索引章节介绍。</p>
 </blockquote>
-<p><br /></p>
+<br />
+
 <h3 id="2-6-避免使用LIKE和正则匹配"><a href="#2-6-避免使用LIKE和正则匹配" class="headerlink" title="2.6 避免使用LIKE和正则匹配"></a>2.6 避免使用LIKE和正则匹配</h3><blockquote>
 <p>题：找出年龄是5或5的倍数的所有老师信息。</p>
 </blockquote>
 <p>使用LIKE关键字查找如下：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> tb_teacher</span><br><span class="line"><span class="keyword">WHERE</span> age <span class="keyword">LIKE</span> <span class="string">"%5"</span> <span class="keyword">OR</span> age <span class="keyword">LIKE</span> <span class="string">"%0"</span>;</span><br></pre></td></tr></table></figure>
+
 <p>使用正则表达式如下：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> tb_teacher</span><br><span class="line"><span class="keyword">WHERE</span> age REGEXP <span class="string">".5|0"</span>;</span><br></pre></td></tr></table></figure>
+
 <p>两者效果等价，结果如下：</p>
 <table>
 <thead>
@@ -310,8 +343,7 @@
 <th>course_id</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>1</td>
 <td>老张</td>
 <td>55</td>
@@ -341,12 +373,12 @@
 <td>40</td>
 <td>7</td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <p>可以看到LIKE和正则在进行内容过滤检索时很灵活，也很方便，但是 这两者查询都是基于全表的查询，大数据量时查询效率很低，所以给出一下两种解决办法。</p>
 <ol>
 <li><p>当使用MyISAM引擎时，建议使用全文索引FULLTEXT，因为只有MyISAM引擎是支撑该特殊索引方式的，所以可以在创建表的时候使用<code>FULLTEXT(字段)</code>来定义，如下：</p>
  <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">table</span> <span class="string">`tb_student`</span>(</span><br><span class="line">	<span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> auto_increment,</span><br><span class="line">	<span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">20</span>),</span><br><span class="line">	age <span class="built_in">int</span>,</span><br><span class="line">    description <span class="built_in">text</span>,</span><br><span class="line">    FULLTEXT(description)</span><br><span class="line">)<span class="keyword">ENGINE</span> = Myisam <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> = utf8;</span><br></pre></td></tr></table></figure>
+
 <p> Mysql会创建索引表维护该索引列，查询时使用如下方式：</p>
  <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> tb_student <span class="keyword">WHERE</span> <span class="keyword">MATCH</span>(description) AGAINST(<span class="string">'关键字'</span>);</span><br></pre></td></tr></table></figure>
 </li>
@@ -360,7 +392,7 @@
             <div class="level-start">
                 <div class="level-item">
                     <span class="is-size-6 has-text-grey has-mr-7">#</span>
-                    <a class="has-link-grey -link" href="/tags/MySQL优化/">MySQL优化</a>, <a class="has-link-grey -link" href="/tags/mysql/">mysql</a>
+                    <a class="has-link-grey -link" href="/tags/MySQL%E4%BC%98%E5%8C%96/" rel="tag">MySQL优化</a>, <a class="has-link-grey -link" href="/tags/mysql/" rel="tag">mysql</a>
                 </div>
             </div>
         </div>
@@ -391,7 +423,7 @@
     <div class="level post-navigation is-flex-wrap is-mobile">
         
         <div class="level-start">
-            <a class="level level-item has-link-grey  article-nav-prev" href="/2020/02/22/2 MySQL/MySQL优化系列（二）/">
+            <a class="level level-item has-link-grey  article-nav-prev" href="/2020/02/22/2%20MySQL/MySQL%E4%BC%98%E5%8C%96%E7%B3%BB%E5%88%97%EF%BC%88%E4%BA%8C%EF%BC%89/">
                 <i class="level-item fas fa-chevron-left"></i>
                 <span class="level-item">MySQL优化系列（二）</span>
             </a>
@@ -399,7 +431,7 @@
         
         
         <div class="level-end">
-            <a class="level level-item has-link-grey  article-nav-next" href="/2018/10/08/2 MySQL/mysql-5-7-x zip版详细配置/">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2018/10/08/2%20MySQL/mysql-5-7-x%20zip%E7%89%88%E8%AF%A6%E7%BB%86%E9%85%8D%E7%BD%AE/">
                 <span class="level-item">mysql-5.7.x zip版详细配置</span>
                 <i class="level-item fas fa-chevron-right"></i>
             </a>
@@ -479,7 +511,7 @@
                     </p>
                     <a href="/archives">
                         <p class="title has-text-weight-normal">
-                            11
+                            22
                         </p>
                     </a>
                 </div>
@@ -503,7 +535,7 @@
                     </p>
                     <a href="/tags">
                         <p class="title has-text-weight-normal">
-                            6
+                            7
                         </p>
                     </a>
                 </div>
@@ -573,7 +605,7 @@
         <h3 class="menu-label">
             标签云
         </h3>
-        <a href="/tags/MySQL优化/" style="font-size: 16.67px;">MySQL优化</a> <a href="/tags/hexo/" style="font-size: 13.33px;">hexo</a> <a href="/tags/mysql/" style="font-size: 20px;">mysql</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/缓存/" style="font-size: 10px;">缓存</a>
+        <a href="/tags/MySQL%E4%BC%98%E5%8C%96/" style="font-size: 15px;">MySQL优化</a> <a href="/tags/hexo/" style="font-size: 12.5px;">hexo</a> <a href="/tags/mysql/" style="font-size: 17.5px;">mysql</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">数据结构</a> <a href="/tags/%E6%BA%90%E7%A0%81/" style="font-size: 20px;">源码</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 12.5px;">算法</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a>
     </div>
 </div>
     
@@ -588,16 +620,16 @@
         
         <article class="media">
             
-            <a href="/2020/04/01/3 算法/五大常用算法——分治法/" class="media-left">
+            <a href="/2020/05/25/4%20%E6%BA%90%E7%A0%81/Java%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94ConcurrentHashMap%EF%BC%88%E4%BA%8C%EF%BC%89/" class="media-left">
                 <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="五大常用算法">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Java源码——ConcurrentHashMap（二）">
                 </p>
             </a>
             
             <div class="media-content">
                 <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-31T16:00:00.000Z">2020-04-01</time></div>
-                    <a href="/2020/04/01/3 算法/五大常用算法——分治法/" class="title has-link-black-ter is-size-6 has-text-weight-normal">五大常用算法</a>
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-05-24T16:00:00.000Z">2020-05-25</time></div>
+                    <a href="/2020/05/25/4%20%E6%BA%90%E7%A0%81/Java%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94ConcurrentHashMap%EF%BC%88%E4%BA%8C%EF%BC%89/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Java源码——ConcurrentHashMap（二）</a>
                     <p class="is-size-7 is-uppercase">
                         
                     </p>
@@ -607,16 +639,16 @@
         
         <article class="media">
             
-            <a href="/2020/03/10/2 MySQL/MySQL优化系列（五）/" class="media-left">
+            <a href="/2020/05/20/4%20%E6%BA%90%E7%A0%81/Java%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94ConcurrentHashMap%EF%BC%88%E4%B8%80%EF%BC%89/" class="media-left">
                 <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（五）（缓存篇）">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Java源码——ConcurrentHashMap（一）">
                 </p>
             </a>
             
             <div class="media-content">
                 <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-09T16:00:00.000Z">2020-03-10</time></div>
-                    <a href="/2020/03/10/2 MySQL/MySQL优化系列（五）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（五）（缓存篇）</a>
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-05-19T16:00:00.000Z">2020-05-20</time></div>
+                    <a href="/2020/05/20/4%20%E6%BA%90%E7%A0%81/Java%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94ConcurrentHashMap%EF%BC%88%E4%B8%80%EF%BC%89/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Java源码——ConcurrentHashMap（一）</a>
                     <p class="is-size-7 is-uppercase">
                         
                     </p>
@@ -626,16 +658,16 @@
         
         <article class="media">
             
-            <a href="/2020/03/03/2 MySQL/MySQL优化系列（四）/" class="media-left">
+            <a href="/2020/05/15/4%20%E6%BA%90%E7%A0%81/Java%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94TreeMap%E5%92%8C%E7%BA%A2%E9%BB%91%E6%A0%91/" class="media-left">
                 <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（四）">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Java源码——TreeMap和红黑树">
                 </p>
             </a>
             
             <div class="media-content">
                 <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-02T16:00:00.000Z">2020-03-03</time></div>
-                    <a href="/2020/03/03/2 MySQL/MySQL优化系列（四）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（四）</a>
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-05-14T16:00:00.000Z">2020-05-15</time></div>
+                    <a href="/2020/05/15/4%20%E6%BA%90%E7%A0%81/Java%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94TreeMap%E5%92%8C%E7%BA%A2%E9%BB%91%E6%A0%91/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Java源码——TreeMap和红黑树</a>
                     <p class="is-size-7 is-uppercase">
                         
                     </p>
@@ -645,16 +677,16 @@
         
         <article class="media">
             
-            <a href="/2020/02/24/2 MySQL/MySQL优化系列（三）/" class="media-left">
+            <a href="/2020/05/07/4%20%E6%BA%90%E7%A0%81/Java%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94HashMap/" class="media-left">
                 <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（三）">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Java源码——HashMap">
                 </p>
             </a>
             
             <div class="media-content">
                 <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-02-23T16:00:00.000Z">2020-02-24</time></div>
-                    <a href="/2020/02/24/2 MySQL/MySQL优化系列（三）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（三）</a>
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-05-06T16:00:00.000Z">2020-05-07</time></div>
+                    <a href="/2020/05/07/4%20%E6%BA%90%E7%A0%81/Java%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94HashMap/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Java源码——HashMap</a>
                     <p class="is-size-7 is-uppercase">
                         
                     </p>
@@ -664,16 +696,16 @@
         
         <article class="media">
             
-            <a href="/2020/02/22/2 MySQL/MySQL优化系列（二）/" class="media-left">
+            <a href="/2020/05/07/4%20%E6%BA%90%E7%A0%81/Java%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94HashMap%EF%BC%88%E4%B8%80%EF%BC%89/" class="media-left">
                 <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（二）">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Java源码——HashMap">
                 </p>
             </a>
             
             <div class="media-content">
                 <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-02-21T16:00:00.000Z">2020-02-22</time></div>
-                    <a href="/2020/02/22/2 MySQL/MySQL优化系列（二）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（二）</a>
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-05-06T16:00:00.000Z">2020-05-07</time></div>
+                    <a href="/2020/05/07/4%20%E6%BA%90%E7%A0%81/Java%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94HashMap%EF%BC%88%E4%B8%80%EF%BC%89/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Java源码——HashMap</a>
                     <p class="is-size-7 is-uppercase">
                         
                     </p>
@@ -693,12 +725,23 @@
         <ul class="menu-list">
         
         <li>
+            <a class="level is-marginless" href="/archives/2020/05/">
+                <span class="level-start">
+                    <span class="level-item">May 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">8</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
             <a class="level is-marginless" href="/archives/2020/04/">
                 <span class="level-start">
                     <span class="level-item">April 2020</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">1</span>
+                    <span class="level-item tag">4</span>
                 </span>
             </a>
         </li>
@@ -761,7 +804,7 @@
             <div class="field is-grouped is-grouped-multiline">
                 
                 <div class="control">
-                    <a class="tags has-addons" href="/tags/MySQL优化/">
+                    <a class="tags has-addons" href="/tags/MySQL%E4%BC%98%E5%8C%96/">
                         <span class="tag">MySQL优化</span>
                         <span class="tag is-grey">5</span>
                     </a>
@@ -782,21 +825,28 @@
                 </div>
                 
                 <div class="control">
-                    <a class="tags has-addons" href="/tags/数据结构/">
+                    <a class="tags has-addons" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
                         <span class="tag">数据结构</span>
                         <span class="tag is-grey">1</span>
                     </a>
                 </div>
                 
                 <div class="control">
-                    <a class="tags has-addons" href="/tags/算法/">
-                        <span class="tag">算法</span>
-                        <span class="tag is-grey">1</span>
+                    <a class="tags has-addons" href="/tags/%E6%BA%90%E7%A0%81/">
+                        <span class="tag">源码</span>
+                        <span class="tag is-grey">8</span>
                     </a>
                 </div>
                 
                 <div class="control">
-                    <a class="tags has-addons" href="/tags/缓存/">
+                    <a class="tags has-addons" href="/tags/%E7%AE%97%E6%B3%95/">
+                        <span class="tag">算法</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E7%BC%93%E5%AD%98/">
                         <span class="tag">缓存</span>
                         <span class="tag is-grey">1</span>
                     </a>
@@ -826,16 +876,16 @@
         
         <article class="media">
             
-            <a href="/2020/04/01/3 算法/五大常用算法——分治法/" class="media-left">
+            <a href="/2020/05/25/4%20%E6%BA%90%E7%A0%81/Java%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94ConcurrentHashMap%EF%BC%88%E4%BA%8C%EF%BC%89/" class="media-left">
                 <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="五大常用算法">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Java源码——ConcurrentHashMap（二）">
                 </p>
             </a>
             
             <div class="media-content">
                 <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-31T16:00:00.000Z">2020-04-01</time></div>
-                    <a href="/2020/04/01/3 算法/五大常用算法——分治法/" class="title has-link-black-ter is-size-6 has-text-weight-normal">五大常用算法</a>
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-05-24T16:00:00.000Z">2020-05-25</time></div>
+                    <a href="/2020/05/25/4%20%E6%BA%90%E7%A0%81/Java%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94ConcurrentHashMap%EF%BC%88%E4%BA%8C%EF%BC%89/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Java源码——ConcurrentHashMap（二）</a>
                     <p class="is-size-7 is-uppercase">
                         
                     </p>
@@ -845,16 +895,16 @@
         
         <article class="media">
             
-            <a href="/2020/03/10/2 MySQL/MySQL优化系列（五）/" class="media-left">
+            <a href="/2020/05/20/4%20%E6%BA%90%E7%A0%81/Java%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94ConcurrentHashMap%EF%BC%88%E4%B8%80%EF%BC%89/" class="media-left">
                 <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（五）（缓存篇）">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Java源码——ConcurrentHashMap（一）">
                 </p>
             </a>
             
             <div class="media-content">
                 <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-09T16:00:00.000Z">2020-03-10</time></div>
-                    <a href="/2020/03/10/2 MySQL/MySQL优化系列（五）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（五）（缓存篇）</a>
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-05-19T16:00:00.000Z">2020-05-20</time></div>
+                    <a href="/2020/05/20/4%20%E6%BA%90%E7%A0%81/Java%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94ConcurrentHashMap%EF%BC%88%E4%B8%80%EF%BC%89/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Java源码——ConcurrentHashMap（一）</a>
                     <p class="is-size-7 is-uppercase">
                         
                     </p>
@@ -864,16 +914,16 @@
         
         <article class="media">
             
-            <a href="/2020/03/03/2 MySQL/MySQL优化系列（四）/" class="media-left">
+            <a href="/2020/05/15/4%20%E6%BA%90%E7%A0%81/Java%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94TreeMap%E5%92%8C%E7%BA%A2%E9%BB%91%E6%A0%91/" class="media-left">
                 <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（四）">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Java源码——TreeMap和红黑树">
                 </p>
             </a>
             
             <div class="media-content">
                 <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-02T16:00:00.000Z">2020-03-03</time></div>
-                    <a href="/2020/03/03/2 MySQL/MySQL优化系列（四）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（四）</a>
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-05-14T16:00:00.000Z">2020-05-15</time></div>
+                    <a href="/2020/05/15/4%20%E6%BA%90%E7%A0%81/Java%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94TreeMap%E5%92%8C%E7%BA%A2%E9%BB%91%E6%A0%91/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Java源码——TreeMap和红黑树</a>
                     <p class="is-size-7 is-uppercase">
                         
                     </p>
@@ -883,16 +933,16 @@
         
         <article class="media">
             
-            <a href="/2020/02/24/2 MySQL/MySQL优化系列（三）/" class="media-left">
+            <a href="/2020/05/07/4%20%E6%BA%90%E7%A0%81/Java%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94HashMap/" class="media-left">
                 <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（三）">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Java源码——HashMap">
                 </p>
             </a>
             
             <div class="media-content">
                 <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-02-23T16:00:00.000Z">2020-02-24</time></div>
-                    <a href="/2020/02/24/2 MySQL/MySQL优化系列（三）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（三）</a>
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-05-06T16:00:00.000Z">2020-05-07</time></div>
+                    <a href="/2020/05/07/4%20%E6%BA%90%E7%A0%81/Java%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94HashMap/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Java源码——HashMap</a>
                     <p class="is-size-7 is-uppercase">
                         
                     </p>
@@ -902,16 +952,16 @@
         
         <article class="media">
             
-            <a href="/2020/02/22/2 MySQL/MySQL优化系列（二）/" class="media-left">
+            <a href="/2020/05/07/4%20%E6%BA%90%E7%A0%81/Java%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94HashMap%EF%BC%88%E4%B8%80%EF%BC%89/" class="media-left">
                 <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="MySQL优化系列（二）">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Java源码——HashMap">
                 </p>
             </a>
             
             <div class="media-content">
                 <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-02-21T16:00:00.000Z">2020-02-22</time></div>
-                    <a href="/2020/02/22/2 MySQL/MySQL优化系列（二）/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（二）</a>
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-05-06T16:00:00.000Z">2020-05-07</time></div>
+                    <a href="/2020/05/07/4%20%E6%BA%90%E7%A0%81/Java%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94HashMap%EF%BC%88%E4%B8%80%EF%BC%89/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Java源码——HashMap</a>
                     <p class="is-size-7 is-uppercase">
                         
                     </p>
@@ -931,12 +981,23 @@
         <ul class="menu-list">
         
         <li>
+            <a class="level is-marginless" href="/archives/2020/05/">
+                <span class="level-start">
+                    <span class="level-item">May 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">8</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
             <a class="level is-marginless" href="/archives/2020/04/">
                 <span class="level-start">
                     <span class="level-item">April 2020</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">1</span>
+                    <span class="level-item tag">4</span>
                 </span>
             </a>
         </li>
@@ -999,7 +1060,7 @@
             <div class="field is-grouped is-grouped-multiline">
                 
                 <div class="control">
-                    <a class="tags has-addons" href="/tags/MySQL优化/">
+                    <a class="tags has-addons" href="/tags/MySQL%E4%BC%98%E5%8C%96/">
                         <span class="tag">MySQL优化</span>
                         <span class="tag is-grey">5</span>
                     </a>
@@ -1020,21 +1081,28 @@
                 </div>
                 
                 <div class="control">
-                    <a class="tags has-addons" href="/tags/数据结构/">
+                    <a class="tags has-addons" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
                         <span class="tag">数据结构</span>
                         <span class="tag is-grey">1</span>
                     </a>
                 </div>
                 
                 <div class="control">
-                    <a class="tags has-addons" href="/tags/算法/">
-                        <span class="tag">算法</span>
-                        <span class="tag is-grey">1</span>
+                    <a class="tags has-addons" href="/tags/%E6%BA%90%E7%A0%81/">
+                        <span class="tag">源码</span>
+                        <span class="tag is-grey">8</span>
                     </a>
                 </div>
                 
                 <div class="control">
-                    <a class="tags has-addons" href="/tags/缓存/">
+                    <a class="tags has-addons" href="/tags/%E7%AE%97%E6%B3%95/">
+                        <span class="tag">算法</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E7%BC%93%E5%AD%98/">
                         <span class="tag">缓存</span>
                         <span class="tag is-grey">1</span>
                     </a>
