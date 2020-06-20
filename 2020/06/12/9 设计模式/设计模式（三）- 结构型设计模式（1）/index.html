@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8" />
+
+<meta name="generator" content="Hexo 4.2.0" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<title>设计模式（三） - zhy&#39;s blog</title>
+
+
+    <meta name="description" content="设计模式（三）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式（三）">
+<meta property="og:url" content="http://yoursite.com/2020/06/12/9%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%89%EF%BC%89-%20%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%881%EF%BC%89/index.html">
+<meta property="og:site_name" content="zhy&#39;s blog">
+<meta property="og:description" content="设计模式（三）">
+<meta property="og:image" content="http://yoursite.com/images/og_image.png">
+<meta property="article:published_time" content="2020-06-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-06-20T18:19:49.446Z">
+<meta property="article:author" content="zhy">
+<meta property="article:tag" content="设计模式">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/images/og_image.png">
+
+
+
+
+
+
+
+<link rel="icon" href="/images/favicon.svg">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+<style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+    
+    
+    
+    
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+    
+    <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/banner/3.jpg" alt="设计模式（三）" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/categories">Categories</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    <a class="navbar-item" target="_blank" rel="noopener" title="My GitHub" href="https://alpacaca.github.io">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main">
+<div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2020-06-11T16:00:00.000Z">2020-06-12</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    33 minutes 读完 (大约 4976 个字)
+                </span>
+                
+                
+                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
+                    <i class="far fa-eye"></i>
+                    <span id="busuanzi_value_page_pv">0</span>次访问
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                设计模式（三）
+            
+        </h1>
+        <div class="content">
+            <img src="/2020/06/12/9%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%89%EF%BC%89-%20%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%881%EF%BC%89/image1.jpg" class="" title="设计模式">
+
+<h1 id="设计模式（三）"><a href="#设计模式（三）" class="headerlink" title="设计模式（三）"></a>设计模式（三）</h1><a id="more"></a>
+
+<h2 id="4-结构型设计模式"><a href="#4-结构型设计模式" class="headerlink" title="4 结构型设计模式"></a>4 结构型设计模式</h2><ul>
+<li>适配器模式、装饰模式、代理模式、外观模式、桥接模式、组合模式、亨元模式</li>
+</ul>
+<h3 id="4-1-适配器模式（Adapter）"><a href="#4-1-适配器模式（Adapter）" class="headerlink" title="4.1 适配器模式（Adapter）"></a>4.1 适配器模式（Adapter）</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;适配器模式解决，一个类的接口变换成客户端所期待的另一种接口，从而使原本因接口不匹配而无法在一起工作的两个类能够在一起工作。适配器模式分为：<strong>类适配器、对象适配器和缺省适配器</strong>三种实现。</p>
+<blockquote>
+<p>题引：中国民用交流电220V，50Hz。美国民用交流电110V，60Hz。国内生产的某款手机充电器标准是输入220V电压输出5V电压，所以如果拿着国产的手机去美国显然是无法使用的，此时就需要一款转换器加装在国产手机充电器上，使能够正常在美国使用。</p>
+</blockquote>
+<p><strong>类适配器</strong></p>
+<img src="/2020/06/12/9%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%89%EF%BC%89-%20%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%881%EF%BC%89/designpattern1.png" class="" title="设计模式">
+
+
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>类适配器采用继承被适配对象和实现目标接口来完成</strong>，如上图，要想国产手机充电器可以在美国使用就需要使用美国标准的110V电压输入和国产充电器5V输出充电使用。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 美国充电器标准</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IAmericaCharger</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">inVoltage110</span><span class="params">(String in)</span></span>; <span class="comment">// 110V</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">outVoltage5</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">charge</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 中国充电器标准</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IChinaCharger</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">inVoltage220</span><span class="params">(String in)</span></span>; <span class="comment">// 220V</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">outVoltage5</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">charge</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 国产某手机充电器</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ChinaCharger</span> <span class="keyword">implements</span> <span class="title">IChinaCharger</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">inVoltage220</span><span class="params">(String in)</span> </span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">outVoltage5</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">charge</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 国产充电器的适配器，适配美国标准使用</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ChargerAdapter</span> <span class="keyword">extends</span> <span class="title">ChinaCharger</span> <span class="keyword">implements</span> <span class="title">IAmericaCharger</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">inVoltage110</span><span class="params">(String in)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.inVoltage220(in); <span class="comment">// 输入转换，国产充电器可以在美国使用</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 输出标准outVoltage5和充电标准charge，与国产充电器标准一致，即已经在父类中被调用，无需重写方法。</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>根据组合/聚合复用原则，很明显类适配器使用了继承方式而非组合/聚合方式，所以更常用的则是使用聚合方式的对像适配器</p>
+<p><strong>对像适配器</strong></p>
+<img src="/2020/06/12/9%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%89%EF%BC%89-%20%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%881%EF%BC%89/designpattern2.png" class="" title="设计模式">
+
+
+
+<p>对像适配器采用聚合的方式使用，降低了对象之间的耦合性。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 国产充电器的适配器，适配美国标准使用</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ChargerAdapter</span> <span class="keyword">implements</span> <span class="title">IAmericaCharger</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> IChinaCharger chinaCharger;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ChargerAdapter</span><span class="params">(IChinaCharger chinaCharger)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.chinaCharger = chinaCharger;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">inVoltage110</span><span class="params">(String in)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.inVoltage220(in); <span class="comment">// 输入转换，国产充电器可以在美国使用</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">outVoltage5</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.outVoltage5();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">charge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.charge();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>缺省适配器</strong></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为一个接口提供缺省实现，这样子类型可以从这个缺省实现进行扩展，而不必从原有接口进行扩展。这是为了方便建立一个不平庸的适配器类而提供的一种平庸实现。</p>
+<blockquote>
+<p>“国际充电器组织” 制订了统一的充电标准，然而每个地区或国家的具体实现都不相同，这就要求在“国际标准”和“落地方案”中采用一个中间缺省抽象层，用于一种更大众和均匀的实现，个别国家则可以在此基础上自己指定具体实现方案。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 国际充电器标准</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IInternationalCharger</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">inVoltage</span><span class="params">(String in)</span></span>; </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">outVoltage</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">charge</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 缺省适配器抽象类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> AbstractChargerAdapter implements IInternationalCharger &#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">inVoltage</span><span class="params">(String in)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 国际上普遍使用220V，那么缺省适配器就用220V作为普遍实现标准</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">outVoltage</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 采用普遍使用的5V输出</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">charge</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 中国适配器采用国际标准</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ChinaCharger</span> <span class="keyword">extends</span> <span class="title">AbstractChargerAdapter</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 中国与国际接轨，标准一致，无需重写</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 美国适配器采用国际标准</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AmericaCharger</span> <span class="keyword">extends</span> <span class="title">AbstractChargerAdapter</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 重写输入标准，其他标准一致无需重写</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">inVoltage</span><span class="params">(String in)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 美国重写输入标准采用110V</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="4-2-装饰模式（Decoration）"><a href="#4-2-装饰模式（Decoration）" class="headerlink" title="4.2 装饰模式（Decoration）"></a>4.2 装饰模式（Decoration）</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;装饰模式可以动态的往对象行为（方法）上添加附加行为，灵活应用了子类覆写父类方法的特性，可以提供比继承更有弹性的替代方案。装饰模式中具有以下几种特点:</p>
+<ul>
+<li>抽象角色：要包装的原始类，属于抽象类或接口。</li>
+<li>具体抽象角色：具体被装饰的对象，属于抽象角色的实现类。</li>
+<li>装饰类：继承或实现抽象角色，并使用抽象角色的聚合态作为成员变量调用方法，一般为抽象类。</li>
+<li>装饰实现类：动态添加附属行为的类，是装饰类的实现类。</li>
+</ul>
+<blockquote>
+<p>题引：有一杯纯水，通过装饰类往水中动态的添加各种东西，比如加点柠檬，加些冰块或者放点茶叶进去。最终将纯水变为我们需要的饮品。</p>
+</blockquote>
+<img src="/2020/06/12/9%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%89%EF%BC%89-%20%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%881%EF%BC%89/designpattern3.png" class="" title="设计模式">
+
+
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 抽象角色</span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">IWater</span> </span>&#123;</span><br><span class="line">    <span class="function">String <span class="title">getFeature</span><span class="params">()</span></span>; <span class="comment">// 水里有什么</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 抽象角色实现类，一杯纯纯的水</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Water</span> <span class="keyword">implements</span> <span class="title">IWater</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFeature</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"pure water"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下来定义水的装饰类和装饰实现类，通过子类实现不同的添加功能</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 抽象装饰类，持有水的接口对象</span></span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">WaterDecoration</span> <span class="keyword">implements</span> <span class="title">IWater</span> </span>&#123;</span><br><span class="line">    IWater water ;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">WaterDecoration</span><span class="params">(IWater water)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.water = water;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFeature</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> water.getFeature();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 加入柠檬变成柠檬水</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LemonWater</span> <span class="keyword">extends</span> <span class="title">WaterDecoration</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LemonWater</span><span class="params">(IWater water)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(water);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFeature</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.getFeature() + <span class="string">" with lemon"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 加入冰，让它称为一杯冰水</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IceWater</span> <span class="keyword">extends</span> <span class="title">WaterDecoration</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">IceWater</span><span class="params">(IWater water)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(water);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFeature</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.getFeature() + <span class="string">" with ice"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 加入茶叶</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TeaWater</span> <span class="keyword">extends</span> <span class="title">WaterDecoration</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TeaWater</span><span class="params">(IWater water)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(water);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFeature</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.getFeature() + <span class="string">" with tea"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下列测试，动态添加佐料进去</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 伪代码</span></span><br><span class="line">IWater water = <span class="keyword">new</span> Water();</span><br><span class="line">water = <span class="keyword">new</span> LemonWater(water);</span><br><span class="line">water = <span class="keyword">new</span> IceWater(water);</span><br><span class="line">water = <span class="keyword">new</span> TeaWater(water);</span><br><span class="line">System.out.println(water.getFeature());</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出</span></span><br><span class="line"><span class="comment">// pure water with lemon with ice with tea</span></span><br></pre></td></tr></table></figure>
+
+<p>如果只有一个抽象角色的实现类时，可以将装饰类直接继承使用</p>
+<img src="/2020/06/12/9%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%89%EF%BC%89-%20%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%881%EF%BC%89/designpattern4.png" class="" title="设计模式">
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Water</span> <span class="keyword">implements</span> <span class="title">IWater</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFeature</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"pure water"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">WaterDecoration</span> <span class="keyword">extends</span> <span class="title">Water</span> </span>&#123;</span><br><span class="line">    Water water ;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">WaterDecoration</span><span class="params">(Water water)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.water = water;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFeature</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> water.getFeature();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="4-3-代理模式（Proxy）"><a href="#4-3-代理模式（Proxy）" class="headerlink" title="4.3 代理模式（Proxy）"></a>4.3 代理模式（Proxy）</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;代理模式被广泛的应用于框架产品比如Spring和Mybatis，代理模式可以分为：<strong>静态代理、JDK动态代理和CGLIB代理</strong>。</p>
+<p><strong>静态代理</strong></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;静态代理通过代理类实现接口或继承抽象类，并与实际被代理对象通过聚合方式产生调用关系。</p>
+<blockquote>
+<p>题引：要举办一场婚礼，除了婚宴以外还需要找婚庆公司订车队、订司仪、婚礼现场布置等等前置工作，还有答谢宾客等后置动作。</p>
+</blockquote>
+<img src="/2020/06/12/9%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%89%EF%BC%89-%20%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%881%EF%BC%89/designpattern5.png" class="" title="设计模式">
+
+
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">IWedding</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">wedding</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Wedding</span> <span class="keyword">implements</span> <span class="title">IWedding</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">wedding</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"举办婚礼"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WeddingProxy</span> <span class="keyword">implements</span> <span class="title">IWedding</span> </span>&#123;</span><br><span class="line">    IWedding wedding;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">WeddingProxy</span><span class="params">(IWedding wedding)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.wedding = wedding;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">wedding</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"找婚庆公司"</span>);</span><br><span class="line">        System.out.println(<span class="string">"布置现场"</span>);</span><br><span class="line">        wedding.wedding();</span><br><span class="line">        System.out.println(<span class="string">"答谢宾客"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试伪代码</span></span><br><span class="line">IWedding wedding = <span class="keyword">new</span> Wedding();</span><br><span class="line">IWedding proxy = <span class="keyword">new</span> WeddingProxy(wedding);</span><br><span class="line">proxy.wedding();</span><br><span class="line"><span class="comment">// 输出</span></span><br><span class="line"><span class="comment">// 找婚庆公司</span></span><br><span class="line"><span class="comment">// 布置现场</span></span><br><span class="line"><span class="comment">// 举办婚礼</span></span><br><span class="line"><span class="comment">// 答谢宾客</span></span><br></pre></td></tr></table></figure>
+
+<p>静态代理在编译阶段即可确定，需要通过代理类持有被代理对象的实例，并实现代理对象接口或抽象类的方法，从而达到扩展的目的。</p>
+<p><strong>JDK动态代理</strong></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;JDK动态代理利用Java反射机制，在运行期创建对对象的代理实现功能扩展，无需显示的创建代理类，只需要创建代理处理器即可完成。JDK代理要求被代理对象必须实现接口，否则无法使用。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WeddingProxyHandler</span> <span class="keyword">implements</span> <span class="title">InvocationHandler</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Object proxyObject;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">WeddingProxyHandler</span><span class="params">(<span class="keyword">final</span> Object proxyObject)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.proxyObject = proxyObject;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Object proxy参数指代理对象本身</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"找婚庆公司"</span>);</span><br><span class="line">        System.out.println(<span class="string">"布置现场"</span>);</span><br><span class="line">        Object result = method.invoke(proxyObject, args);</span><br><span class="line">        System.out.println(<span class="string">"答谢宾客"</span>);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试伪代码</span></span><br><span class="line">IWedding wedding = <span class="keyword">new</span> Wedding();</span><br><span class="line">ClassLoader classLoader = IWedding<span class="class">.<span class="keyword">class</span>.<span class="title">getClassLoader</span>()</span>;</span><br><span class="line">Class[] interfaces = wedding.getClass().getInterfaces();</span><br><span class="line">WeddingProxyHandler proxy = <span class="keyword">new</span> WeddingProxyHandler();</span><br><span class="line">IWedding proxy = Proxy.newProxyInstance(classLoader, interfaces, proxy);</span><br><span class="line">proxy.wedding();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出与静态代理一致</span></span><br></pre></td></tr></table></figure>
+
+<p>出于Java机制的限制，一个类无法存在多继承关系，所以JDK动态代理始终需要通过接口完成代理而无法针对父类进行代理。</p>
+<p><strong>CGLIB代理</strong></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;JDK代理从源码层面采用反射机制完成代理，在类加载阶段因为只是创建实例类所以该阶段执行效率高，而在运行期不断的通过反射完成所以该阶段效率并不高。相反的，CGLIB代理原理是通过ASM技术，采用动态修改字节码，在加载期向字节码写入代理功能，所以类加载阶段效率不如JDK代理，但是一旦创建实例类，在运行期就会被当作普通对象来正常使用，所以在运行期效率远高于JDK代理。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;除此之外，JDK动态代理只能代理实现接口的对象，而CGLIB代理不仅可以实现非接口类的代理，目前也支持实现接口对象的代理。所以在Spring的选择中，如果对象实现接口默认采用动态代理，除此之外都使用CGLIB代理，当然也可以强制要求实现接口的对象也使用CGLIB代理。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Wedding</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">wedding</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"举办婚礼"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WeddingProxy</span> <span class="keyword">implements</span> <span class="title">MethodInterceptor</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">intercept</span><span class="params">(Object o, Method method, Object[] params, MethodProxy proxy)</span></span></span><br><span class="line"><span class="function">    	<span class="keyword">throws</span> Throwable</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"找婚庆公司"</span>);</span><br><span class="line">        System.out.println(<span class="string">"布置现场"</span>);</span><br><span class="line">        Object result = proxy.invokeSuper(o, params);</span><br><span class="line">        System.out.println(<span class="string">"答谢宾客"</span>);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用，伪代码</span></span><br><span class="line">Enhancer enhancer = <span class="keyword">new</span> Enhancer();</span><br><span class="line">enhancer.setSuperclass(Wedding<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">enhancer.setCallback(<span class="keyword">new</span> WeddingProxy());</span><br><span class="line">Wedding wedding = (Wedding) enhancer.create();</span><br><span class="line">wedding.wedding();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出结果同上</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="4-4-外观模式（Facade）"><a href="#4-4-外观模式（Facade）" class="headerlink" title="4.4 外观模式（Facade）"></a>4.4 外观模式（Facade）</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;外观模式相对容易理解，它更像是一种面板，通过面板可以执行很多操作。如今复杂系统会由多个子系统组成，对于用户来说，一个用户面向多个子系统是一件很烦躁的事情，外观模式可以把子系统整合使用户只正对一个面板类，通过面板类可以执行内部分装的各类子系统。符合迪米特原则，但违反了开闭原则。</p>
+<blockquote>
+<p>题引：如今的全自动洗衣机不仅可以洗衣、甩干、侵泡，还可以提供除螨、高温杀菌、定时清洗等诸多功能，用户通过面板按键可以轻松执行对应的功能。</p>
+</blockquote>
+<img src="/2020/06/12/9%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%89%EF%BC%89-%20%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%881%EF%BC%89/designpattern6.png" class="" title="设计模式">
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Facade门面类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WashingMachineMenu</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> MainFunction mainFunction;</span><br><span class="line">    <span class="keyword">private</span> AssistantFunction assistant;</span><br><span class="line">    <span class="keyword">private</span> DetergentFunction detergent;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">WashingMachineMenu</span><span class="params">(MainFunction mainFunction, </span></span></span><br><span class="line"><span class="function"><span class="params">                              AssistantFunction assistant,</span></span></span><br><span class="line"><span class="function"><span class="params">                              DetergentFunction detergent)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.mainFunction = mainFunction;</span><br><span class="line">        <span class="keyword">this</span>.assistant = assistant;</span><br><span class="line">        <span class="keyword">this</span>.detergent = detergent;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">wash</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        mainFunction.wash();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dry</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        mainFunction.dry();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">soak</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        mainFunction.soak();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">antiAcne</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        assistant.antiAcne();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sterilize</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        assistant.sterilize();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">schedual</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        assistant.schedual();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addPowder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        detergent.addPowder();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addLiquid</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        detergent.addLiquid();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addSoftener</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        detergent.addSoftener();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 各子系统</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MainFunction</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">wash</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="comment">//</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dry</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="comment">//</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">soak</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="comment">//</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AssistantFunction</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">antiAcne</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="comment">//</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sterilize</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="comment">//</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">schedual</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="comment">//</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DetergentFunction</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addPowder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="comment">//</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addLiquid</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="comment">//</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addSoftener</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="comment">//</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="4-5-桥接模式（Bridge）"><a href="#4-5-桥接模式（Bridge）" class="headerlink" title="4.5 桥接模式（Bridge）"></a>4.5 桥接模式（Bridge）</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将实现与抽象放在两个不同的层次，使两个层次隔离，修改互不影响。假如在实际应用中，某个类存在多个独立变化的维度，可以通过桥接模式将维度拆分为两层独立结构，互相扩展互不影响。通常需要识别类的两个层次分别定义抽象类和接口，使抽象类聚合接口，分别拓展两个层次抽象的具体实现。</p>
+<blockquote>
+<p>题引：市场上有很多品牌的各类家用电器，比如美的空调、美的洗衣机、美的扫地机器人、海尔空调、海尔洗衣机、海尔扫地机器人、格力空调、格力扫地机器人等等。通过桥接模式实现，并支持扩展品牌和商品的扩展能力。</p>
+</blockquote>
+<img src="/2020/06/12/9%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%89%EF%BC%89-%20%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%881%EF%BC%89/designpattern7.png" class="" title="设计模式">
+
+
+
+<p>首先，定义家用电器接口及其实现类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IAppliance</span> </span>&#123;</span><br><span class="line">	<span class="function">String <span class="title">type</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 洗衣机</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WashingMachine</span> <span class="keyword">implements</span> <span class="title">IAppliance</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String type = <span class="string">"washing machine"</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">type</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> type;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 空调</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AirConditioner</span> <span class="keyword">implements</span> <span class="title">IAppliance</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String type = <span class="string">"air conditioner"</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">type</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> type;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 扫地机器人</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SweepRobot</span> <span class="keyword">implements</span> <span class="title">IAppliance</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String type = <span class="string">"sweep robot"</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">type</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> type;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>接下来定义品牌抽象类及其实现类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractBrand</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> IAppliance appliance;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">AbstractBrand</span><span class="params">(IAppliance appliance)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.appliance = appliance;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">description</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 美的</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MideaBrand</span> <span class="keyword">extends</span> <span class="title">AbstractBrand</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String brandName = <span class="string">"Midea"</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MideaBrand</span><span class="params">(IAppliance appliance)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(appliance);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">description</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.printf(<span class="string">"%s of %s \n"</span>, appliance.type, brandName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 海尔</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HaierBrand</span> <span class="keyword">extends</span> <span class="title">AbstractBrand</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String brandName = <span class="string">"Haier"</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">HaierBrand</span><span class="params">(IAppliance appliance)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(appliance);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">description</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.printf(<span class="string">"%s of %s \n"</span>, appliance.type, brandName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 格力</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GreeBrand</span> <span class="keyword">extends</span> <span class="title">AbstractBrand</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String brandName = <span class="string">"Gree"</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">GreeBrand</span><span class="params">(IAppliance appliance)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(appliance);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">description</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.printf(<span class="string">"%s of %s \n"</span>, appliance.type, brandName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>这样就将品牌和家用电器进行了分层，并各自实现具体对象，接下来通过调用组装我们需要的目标商品。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 调用，伪代码</span></span><br><span class="line">IApplication washingMachine = <span class="keyword">new</span> WashingMachine();</span><br><span class="line">IApplication airConditioner = <span class="keyword">new</span> AirConditioner();</span><br><span class="line">IApplication sweepRobot = <span class="keyword">new</span> SweepRobot();</span><br><span class="line"></span><br><span class="line">AbstractBrand mideaWashingMachine = <span class="keyword">new</span> MideaBrand(washingMachine);</span><br><span class="line">AbstractBrand mideaAirConditioner = <span class="keyword">new</span> MideaBrand(airConditioner);</span><br><span class="line">AbstractBrand mideaSweepRobot = <span class="keyword">new</span> MideaBrand(sweepRobot);</span><br><span class="line"></span><br><span class="line">AbstractBrand haierWashingMachine = <span class="keyword">new</span> HaierBrand(washingMachine);</span><br><span class="line">AbstractBrand haierAirConditioner = <span class="keyword">new</span> HaierBrand(airConditioner);</span><br><span class="line">AbstractBrand haierSweepRobot = <span class="keyword">new</span> HaierBrand(sweepRobot);</span><br><span class="line"></span><br><span class="line">AbstractBrand greeAirConditioner = <span class="keyword">new</span> GreeBrand(airConditioner);</span><br><span class="line">AbstractBrand greeSweepRobot = <span class="keyword">new</span> GreeBrand(sweepRobot);</span><br><span class="line"></span><br><span class="line">mideaWashingMachine.description();</span><br><span class="line">mideaAirConditioner.description();</span><br><span class="line">mideaSweepRobot.description();</span><br><span class="line"></span><br><span class="line">haierWashingMachine.description();</span><br><span class="line">haierAirConditioner.description();</span><br><span class="line">haierSweepRobot.description();</span><br><span class="line"></span><br><span class="line">greeAirConditioner.description();</span><br><span class="line">greeSweepRobot.description();</span><br><span class="line"></span><br><span class="line"><span class="comment">// output</span></span><br><span class="line"><span class="comment">// washing machine of Midea</span></span><br><span class="line"><span class="comment">// air conditioner of Midea</span></span><br><span class="line"><span class="comment">// sweep robot of Midea</span></span><br><span class="line"><span class="comment">// washing machine of Haier</span></span><br><span class="line"><span class="comment">// air conditioner of Haier</span></span><br><span class="line"><span class="comment">// sweep robot of Haier</span></span><br><span class="line"><span class="comment">// air conditioner of Gree</span></span><br><span class="line"><span class="comment">// sweep robot of Gree</span></span><br></pre></td></tr></table></figure>
+
+<p>由此可以看出，只要定义好了顶层的分层抽象逻辑，具体实现类就很容易进行横向扩展，再新增家用电器或者品牌都变得容易，但需要注意，如果实现类足够多，容易造成”类爆炸”。</p>
+<h3 id="4-6-组合模式（Composite-）"><a href="#4-6-组合模式（Composite-）" class="headerlink" title="4.6 组合模式（Composite ）"></a>4.6 组合模式（Composite ）</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假如一个对象拥有自己完整的属性和行为，它同时又是其他对象的组成部分，所以可以使用组合模式定义一个抽象层，该抽象层提供两个对象的行为，就可以通过抽象层对象来创建复杂的组合关系。比如，在OS的文件系统中，一个目录既可以包含多个目录，每个目录又可以包含多个文件。</p>
+<blockquote>
+<p>题引：一个大公司通常在世界各地有自己的分公司，而不管总公司还是分公司都独自成体系，有自己的职能部门。现在有一个公司，它在北京、旧金山和伦敦都有自己的分公司，总公司职能部门包括：人事部、财务部和秘书办；北京分公司有IT部、测试部、人事部；旧金山和伦敦分公司有业务部、人事部和财务部。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> AbstractOrganize &#123;</span><br><span class="line">    <span class="keyword">private</span> String name; <span class="comment">// 公司名或部门名</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 提供的方法，如果公司和部门都需要实现则定义抽象方法，否则实现方法但不提供内容</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addDepartment</span><span class="params">(Department... depts)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> UnsupportedOperationException(<span class="string">"abstrac not support"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeDepartment</span><span class="params">(Department dept)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> UnsupportedOperationException(<span class="string">"abstrac not support"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addCompany</span><span class="params">(Company... companies)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> UnsupportedOperationException(<span class="string">"abstrac not support"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">removeCompany</span><span class="params">(Company company)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> UnsupportedOperationException(<span class="string">"abstrac not support"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Company</span> <span class="keyword">extends</span> <span class="title">AbstractOrganize</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> List&lt;Department&gt; deptList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">private</span> List&lt;Company&gt; companyList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addDepartment</span><span class="params">(Department... depts)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (Department d : depts) &#123;</span><br><span class="line">            deptList.add(d);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">removeDepartment</span><span class="params">(Department dept)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> deptList.remove(dept);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addCompany</span><span class="params">(Company... companies)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (Company c : companies) &#123;</span><br><span class="line">            companyList.add(c);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">removeCompany</span><span class="params">(Company company)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> companyList.remove(company);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        deptList.forEach(System.out::println);</span><br><span class="line">        companyList.forEach(System.out::println);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// toString方法用于打印，省略</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Department</span> <span class="keyword">extends</span> <span class="title">AbstractOrganize</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试，伪代码</span></span><br><span class="line">AbstractOrganize headCompany = <span class="keyword">new</span> Company();</span><br><span class="line">AbstractOrganize pekingCompany = <span class="keyword">new</span> Company();</span><br><span class="line">AbstractOrganize sanFranciscoCompany = <span class="keyword">new</span> Company();</span><br><span class="line">AbstractOrganize londonCompany = <span class="keyword">new</span> Company();</span><br><span class="line">headCompany.addCompany(pekingCompany, sanFranciscoCompany, londonCompany);</span><br><span class="line"></span><br><span class="line">AbstractOrganize personnelDept = <span class="keyword">new</span> Department();</span><br><span class="line">AbstractOrganize financeDept = <span class="keyword">new</span> Department();</span><br><span class="line">AbstractOrganize secretaryDept = <span class="keyword">new</span> Department();</span><br><span class="line">AbstractOrganize itDept = <span class="keyword">new</span> Department();</span><br><span class="line">AbstractOrganize testDept = <span class="keyword">new</span> Department();</span><br><span class="line">AbstractOrganize businessDept = <span class="keyword">new</span> Department();</span><br><span class="line"></span><br><span class="line">headCompany.addDepartment(personnelDept, financeDept, secretaryDept);</span><br><span class="line">pekingCompany.addDepartment(itDept, testDept, personnelDept);</span><br><span class="line">sanFranciscoCompany.addDepartment(businessDept, financeDept, personnelDept);</span><br><span class="line">londonCompany.addDepartment(businessDept, financeDept, personnelDept);</span><br><span class="line"></span><br><span class="line">headCompany.print();</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="4-7-亨元模式（Flyweight）"><a href="#4-7-亨元模式（Flyweight）" class="headerlink" title="4.7 亨元模式（Flyweight）"></a>4.7 亨元模式（Flyweight）</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;亨元模式是指当系统中存在大量的相同对象时，可以通过共享技术，将相同的类共享给使用者，而非创建。比如围棋游戏中，黑白棋就是大量的重复对象，如果每个棋子都要创建对象，则会造成系统资源吃紧甚至OOM发生，所以如果采用共享技术，将一盘棋中的黑子和白子只创建一个对象，在其他落子位置复用对象则不会造成该问题。亨元模式大量的应用于”池“计数，比如线程池、数据连接池、缓存池等等。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;亨元模式的重点，是要<strong>区分内部状态和外部状态</strong>，所谓内部状态是指被亨元对象类（FlyWeightFactory）持有的内部控制管理对象，是亨元的具体实现类（ConcreteFlyWeight）；而外部状态是指随着外部状态的改变而发生变化的对象，是不可共享亨元类（UnSharedFlyWeight）；</p>
+<blockquote>
+<p>题引：对于一局围棋游戏，共享的是围棋棋子的颜色，而不可共享的是棋子的落子位置。</p>
+</blockquote>
+<img src="/2020/06/12/9%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%89%EF%BC%89-%20%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%881%EF%BC%89/designpattern8.png" class="" title="设计模式">
+
+
+
+<p>定义亨元模式接口（FlyWeight -&gt; IChess）及其实现类（ConcreteFlyWeight -&gt; Piece），对于围棋来说，颜色是共享状态，位置是不共享状态。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 亨元接口——棋子</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IChess</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setColor</span><span class="params">(Color color)</span></span>;</span><br><span class="line">    <span class="function">Color <span class="title">getColor</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">position</span><span class="params">(Coordinate)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 亨元实现类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Piece</span> <span class="keyword">implements</span> <span class="title">IChess</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Color color;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Piece</span><span class="params">(Color color)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.color = color;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setColor</span> <span class="params">(Color color)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.color = color;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Color <span class="title">getColor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> color;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">position</span><span class="params">(Coordinate c)</span> </span>&#123;</span><br><span class="line">        System.out.printf(<span class="string">"%s 落位（%d, %d）"</span>, color.getValue, c.getX(), c.getY());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>定义非共享对象(UnsharedFlyWeight -&gt; Coordinate)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Coordinate</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> x;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> y;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Coordinate</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.x = x;</span><br><span class="line">        <span class="keyword">this</span>.y = y;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getX</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getY</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> y;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后定义亨元模式的工厂类（FlyweightFactory -&gt; ChessFactory），由工厂类控制和管理共享对象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ChessFactory</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Map&lt;Color, IChess&gt; pieces = <span class="keyword">new</span> HashMap&lt;&gt;(); <span class="comment">// 内部控制棋子创建</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">ChessFactory</span><span class="params">()</span></span>&#123;&#125; <span class="comment">// 私有构造器，工厂类是单例的</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 静态内部类实现工厂单例对象</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">ChessFactoryInstanceHolder</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ChessFactory INSTANCE = <span class="keyword">new</span> ChessFactory();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 返回工厂单例</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ChessFactory <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> ChessFactoryInstanceHolder.INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> IChess <span class="title">getPiece</span><span class="params">(Color color)</span> </span>&#123;</span><br><span class="line">        IChess piece = pieces.get(color);</span><br><span class="line">        <span class="keyword">if</span> (Objects.isNull(piece)) &#123;</span><br><span class="line">            piece = <span class="keyword">new</span> Piece(color);</span><br><span class="line">            pieces.put(color, piece);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> piece;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getSize</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> pieces.size();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 测试，伪代码</span></span><br><span class="line"><span class="comment">// 黑子执子先行，模拟3步之内的操作</span></span><br><span class="line">ChessFactory factory = ChessFacotry.getInstance();</span><br><span class="line">IChess pieceBlack = factory.get(Color.BLACK);</span><br><span class="line">pieceBlack.position(<span class="keyword">new</span> Coordinate(<span class="number">5</span>,<span class="number">5</span>)); <span class="comment">// step1:黑子先落子棋盘坐标（5,5）位置</span></span><br><span class="line"></span><br><span class="line">IChess pieceWhite = facotry.get(Color.WHITE);</span><br><span class="line">pieceWhite.position(<span class="keyword">new</span> Coordinate(<span class="number">15.15</span>)); <span class="comment">// step2:白子随后落子（15,15）坐标位置</span></span><br><span class="line"></span><br><span class="line">pieceBlack = factory.get(Color.BLACK);</span><br><span class="line">pieceBlack.position(<span class="keyword">new</span> Coordinate(<span class="number">13</span>,<span class="number">4</span>)); <span class="comment">// step3:黑子落子（13,4）位置</span></span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">"当前棋子类型:"</span> + factory.getSize());</span><br><span class="line"><span class="comment">// output</span></span><br><span class="line"><span class="comment">// 黑子落位（5,5）</span></span><br><span class="line"><span class="comment">// 白子落位（15,15）</span></span><br><span class="line"><span class="comment">// 黑子落位（13,4）</span></span><br><span class="line"><span class="comment">// 当前棋子类型: 2</span></span><br></pre></td></tr></table></figure>
+
+
+        </div>
+        
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        <div class="social-share"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/css/share.min.css">
+<script src="https://cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/js/social-share.min.js"></script>
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
+            
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2020/06/08/9%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%BA%8C%EF%BC%89-%20%E5%88%9B%E5%BB%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
+                <span class="level-item">设计模式（二）</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="title is-5 has-text-weight-normal">评论</h3>
+        
+<div id="comment-container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+	var gitment = new Gitment({
+		id: '2bc27605c8089b90c8f85289837e27e3',
+		owner: 'alpaca',
+		repo: 'alpacaca.github.io',
+		oauth: {
+			client_id: 'e17f481b09f8cf119e89',
+			client_secret: 'bd462646e2303946237a040c2afde10a4f5cd418',
+		},
+	})
+	gitment.render('comment-container')
+</script>
+
+    </div>
+</div>
+</div>
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered" style="flex-shrink: 1">
+                <div>
+                    
+                    <figure class="image is-128x128 has-mb-6">
+						<div style="border-radius: 0.3">
+							<img class="" src="/images/avatar.jpg" alt="Alpacaca">
+						</div>
+                    </figure>
+                    
+                    <p class="is-size-4 is-block">
+                        Alpacaca
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        Web Developer
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>Xi&#39;an , China</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <a href="/archives">
+                        <p class="title has-text-weight-normal">
+                            29
+                        </p>
+                    </a>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <a href="/categories">
+                        <p class="title has-text-weight-normal">
+                            0
+                        </p>
+                    </a>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <a href="/tags">
+                        <p class="title has-text-weight-normal">
+                            15
+                        </p>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/alpacaca" target="_blank" rel="noopener">
+                关注我</a>
+        </div>
+        
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="Github" href="https://github.com/alpacaca">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="Facebook" href="https://facebook.com">
+                
+                <i class="fab fa-facebook"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="Twitter" href="https://twitter.com">
+                
+                <i class="fab fa-twitter"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="linkedin" href="https://www.linkedin.com/">
+                
+                <i class="fab fa-linkedin"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                分类
+            </h3>
+            <ul class="menu-list">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            标签云
+        </h3>
+        <a href="/tags/AQS/" style="font-size: 10px;">AQS</a> <a href="/tags/COW/" style="font-size: 10px;">COW</a> <a href="/tags/JUC/" style="font-size: 10px;">JUC</a> <a href="/tags/MySQL%E4%BC%98%E5%8C%96/" style="font-size: 16px;">MySQL优化</a> <a href="/tags/hexo/" style="font-size: 14px;">hexo</a> <a href="/tags/mysql/" style="font-size: 18px;">mysql</a> <a href="/tags/%E5%8D%8F%E7%A8%8B/" style="font-size: 10px;">协程</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 12px;">多线程</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">数据结构</a> <a href="/tags/%E6%BA%90%E7%A0%81/" style="font-size: 20px;">源码</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 14px;">算法</a> <a href="/tags/%E7%BA%A4%E7%A8%8B/" style="font-size: 10px;">纤程</a> <a href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" style="font-size: 10px;">线程池</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 12px;">设计模式</a>
+    </div>
+</div>
+    
+    
+        <div class="column-right-shadow is-hidden-widescreen ">
+        
+            <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2020/06/12/9%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%89%EF%BC%89-%20%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%881%EF%BC%89/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="设计模式（三）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-06-11T16:00:00.000Z">2020-06-12</time></div>
+                    <a href="/2020/06/12/9%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%89%EF%BC%89-%20%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%881%EF%BC%89/" class="title has-link-black-ter is-size-6 has-text-weight-normal">设计模式（三）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/06/08/9%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%BA%8C%EF%BC%89-%20%E5%88%9B%E5%BB%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="设计模式（二）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-06-07T16:00:00.000Z">2020-06-08</time></div>
+                    <a href="/2020/06/08/9%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%BA%8C%EF%BC%89-%20%E5%88%9B%E5%BB%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="title has-link-black-ter is-size-6 has-text-weight-normal">设计模式（二）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/06/05/9%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%80%EF%BC%89/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="设计模式（一）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-06-04T16:00:00.000Z">2020-06-05</time></div>
+                    <a href="/2020/06/05/9%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%80%EF%BC%89/" class="title has-link-black-ter is-size-6 has-text-weight-normal">设计模式（一）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/05/27/5%20%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="多线程基础（一）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-05-26T16:00:00.000Z">2020-05-27</time></div>
+                    <a href="/2020/05/27/5%20%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89/" class="title has-link-black-ter is-size-6 has-text-weight-normal">多线程基础（一）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/05/27/5%20%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="多线程基础（二）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-05-26T16:00:00.000Z">2020-05-27</time></div>
+                    <a href="/2020/05/27/5%20%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89/" class="title has-link-black-ter is-size-6 has-text-weight-normal">多线程基础（二）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/06/">
+                <span class="level-start">
+                    <span class="level-item">June 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/05/">
+                <span class="level-start">
+                    <span class="level-item">May 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">12</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/04/">
+                <span class="level-start">
+                    <span class="level-item">April 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/03/">
+                <span class="level-start">
+                    <span class="level-item">March 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/02/">
+                <span class="level-start">
+                    <span class="level-item">February 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">October 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">September 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/AQS/">
+                        <span class="tag">AQS</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/COW/">
+                        <span class="tag">COW</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/JUC/">
+                        <span class="tag">JUC</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/MySQL%E4%BC%98%E5%8C%96/">
+                        <span class="tag">MySQL优化</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/hexo/">
+                        <span class="tag">hexo</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/mysql/">
+                        <span class="tag">mysql</span>
+                        <span class="tag is-grey">6</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E5%8D%8F%E7%A8%8B/">
+                        <span class="tag">协程</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">
+                        <span class="tag">多线程</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
+                        <span class="tag">数据结构</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E6%BA%90%E7%A0%81/">
+                        <span class="tag">源码</span>
+                        <span class="tag is-grey">10</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E7%AE%97%E6%B3%95/">
+                        <span class="tag">算法</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E7%BA%A4%E7%A8%8B/">
+                        <span class="tag">纤程</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/">
+                        <span class="tag">线程池</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E7%BC%93%E5%AD%98/">
+                        <span class="tag">缓存</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
+                        <span class="tag">设计模式</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right ">
+    
+        <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2020/06/12/9%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%89%EF%BC%89-%20%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%881%EF%BC%89/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="设计模式（三）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-06-11T16:00:00.000Z">2020-06-12</time></div>
+                    <a href="/2020/06/12/9%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%89%EF%BC%89-%20%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%881%EF%BC%89/" class="title has-link-black-ter is-size-6 has-text-weight-normal">设计模式（三）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/06/08/9%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%BA%8C%EF%BC%89-%20%E5%88%9B%E5%BB%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="设计模式（二）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-06-07T16:00:00.000Z">2020-06-08</time></div>
+                    <a href="/2020/06/08/9%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%BA%8C%EF%BC%89-%20%E5%88%9B%E5%BB%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="title has-link-black-ter is-size-6 has-text-weight-normal">设计模式（二）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/06/05/9%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%80%EF%BC%89/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="设计模式（一）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-06-04T16:00:00.000Z">2020-06-05</time></div>
+                    <a href="/2020/06/05/9%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%80%EF%BC%89/" class="title has-link-black-ter is-size-6 has-text-weight-normal">设计模式（一）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/05/27/5%20%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="多线程基础（一）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-05-26T16:00:00.000Z">2020-05-27</time></div>
+                    <a href="/2020/05/27/5%20%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89/" class="title has-link-black-ter is-size-6 has-text-weight-normal">多线程基础（一）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/05/27/5%20%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="多线程基础（二）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-05-26T16:00:00.000Z">2020-05-27</time></div>
+                    <a href="/2020/05/27/5%20%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89/" class="title has-link-black-ter is-size-6 has-text-weight-normal">多线程基础（二）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/06/">
+                <span class="level-start">
+                    <span class="level-item">June 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/05/">
+                <span class="level-start">
+                    <span class="level-item">May 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">12</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/04/">
+                <span class="level-start">
+                    <span class="level-item">April 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/03/">
+                <span class="level-start">
+                    <span class="level-item">March 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/02/">
+                <span class="level-start">
+                    <span class="level-item">February 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">October 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">September 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/AQS/">
+                        <span class="tag">AQS</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/COW/">
+                        <span class="tag">COW</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/JUC/">
+                        <span class="tag">JUC</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/MySQL%E4%BC%98%E5%8C%96/">
+                        <span class="tag">MySQL优化</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/hexo/">
+                        <span class="tag">hexo</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/mysql/">
+                        <span class="tag">mysql</span>
+                        <span class="tag is-grey">6</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E5%8D%8F%E7%A8%8B/">
+                        <span class="tag">协程</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">
+                        <span class="tag">多线程</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
+                        <span class="tag">数据结构</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E6%BA%90%E7%A0%81/">
+                        <span class="tag">源码</span>
+                        <span class="tag is-grey">10</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E7%AE%97%E6%B3%95/">
+                        <span class="tag">算法</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E7%BA%A4%E7%A8%8B/">
+                        <span class="tag">纤程</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/">
+                        <span class="tag">线程池</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E7%BC%93%E5%AD%98/">
+                        <span class="tag">缓存</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
+                        <span class="tag">设计模式</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/banner/3.jpg" alt="设计模式（三）" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2020 zhy&nbsp;
+                Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> & <a
+                        href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a>
+                
+                <br>
+                <span id="busuanzi_container_site_uv">
+                共<span id="busuanzi_value_site_uv">0</span>个访客
+                </span>
+                
+                </p>
+            </div>
+            <div class="level-end">
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-Hans");</script>
+
+
+<script>
+var IcarusThemeSettings = {
+    site: {
+        url: 'http://yoursite.com',
+        external_link: {"enable":true,"exclude":[]}
+    },
+    article: {
+        highlight: {
+            clipboard: true,
+            fold: 'unfolded'
+        }
+    }
+};
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+
+
+
+
+
+<script src="/js/animation.js"></script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+<script src="/js/gallery.js" defer></script>
+
+
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+
+
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+	
+	<script src="/js/click.js"></script>
+	<script src="/js/snow.js"></script>
+</body>
+</html>
