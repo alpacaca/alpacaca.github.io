@@ -7,20 +7,16 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-<title>mysql-5.7.x zip版详细配置 - zhy&#39;s blog</title>
+<title>归档: 2020 - zhy&#39;s blog</title>
 
 
-    <meta name="description" content="MySQL 5.7.x 解压版配置和服务安装">
-<meta property="og:type" content="article">
-<meta property="og:title" content="mysql-5.7.x zip版详细配置">
-<meta property="og:url" content="http://yoursite.com/2018/10/08/2%20MySQL/mysql-5-7-x%20zip%E7%89%88%E8%AF%A6%E7%BB%86%E9%85%8D%E7%BD%AE/index.html">
+    <meta property="og:type" content="website">
+<meta property="og:title" content="zhy&#39;s blog">
+<meta property="og:url" content="http://yoursite.com/archives/2020/page/4/index.html">
 <meta property="og:site_name" content="zhy&#39;s blog">
-<meta property="og:description" content="MySQL 5.7.x 解压版配置和服务安装">
 <meta property="og:image" content="http://yoursite.com/images/og_image.png">
-<meta property="article:published_time" content="2018-10-07T16:02:43.000Z">
-<meta property="article:modified_time" content="2020-04-23T15:10:28.365Z">
 <meta property="article:author" content="zhy">
-<meta property="article:tag" content="mysql">
+<meta property="article:tag" content="zhy blog">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://yoursite.com/images/og_image.png">
 
@@ -80,7 +76,7 @@
         <div class="navbar-brand is-flex-center">
             <a class="navbar-item navbar-logo" href="/">
             
-                <img src="/images/banner/3.jpg" alt="mysql-5.7.x zip版详细配置" height="28">
+                <img src="/images/banner/3.jpg" alt="zhy&#39;s blog" height="28">
             
             </a>
         </div>
@@ -130,160 +126,56 @@
         <div class="container">
             <div class="columns">
                 <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main">
-<div class="card">
-    
-    <div class="card-content article ">
+
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="tag is-link">
+        2020
+        </h3>
+        <div class="timeline">
         
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2018-10-07T16:02:43.000Z">2018-10-08</time>
+            <article class="media">
                 
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    3 minutes 读完 (大约 466 个字)
-                </span>
-                
-                
-                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
-                    <i class="far fa-eye"></i>
-                    <span id="busuanzi_value_page_pv">0</span>次访问
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                mysql-5.7.x zip版详细配置
-            
-        </h1>
-        <div class="content">
-            
-
-<h1 id="MySQL-5-7-x-解压版配置和服务安装"><a href="#MySQL-5-7-x-解压版配置和服务安装" class="headerlink" title="MySQL 5.7.x 解压版配置和服务安装"></a>MySQL 5.7.x 解压版配置和服务安装</h1><a id="more"></a>
-
-<ol>
-<li>下载5.7.x zip版本MySQL并解压到本地</li>
-<li>在文件根目录下新建my.ini文件，并编辑如下内容</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line"></span><br><span class="line">port &#x3D; 3306</span><br><span class="line">basedir&#x3D;A:\dev\mysql-5.7.23-winx64</span><br><span class="line">datadir&#x3D;A:\dev\mysql-5.7.23-winx64\data</span><br><span class="line">#如果不生效，则使用下列表达形式</span><br><span class="line">#basedir&#x3D;A:\\dev\\mysql-5.7.23-winx64</span><br><span class="line">#datadir&#x3D;A:\\dev\\mysql-5.7.23-winx64\\data</span><br><span class="line"></span><br><span class="line">max_connections&#x3D;200</span><br><span class="line"></span><br><span class="line">character-set-server&#x3D;utf8</span><br><span class="line"></span><br><span class="line">default-storage-engine&#x3D;INNODB</span><br><span class="line"></span><br><span class="line">sql_mode&#x3D;NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[mysql]</span><br><span class="line">default-character-set&#x3D;utf8</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<h3>注意：</h3>
-此时根目录下还不存在data文件，但需要提前配置好datadir
-</blockquote>
-<ol start="3">
-<li><p>以管理员权限打开cmd，并进入根目录</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">c:\ &gt; cd A:\dev\mysql-5.7.23-winx64</span><br><span class="line"></span><br><span class="line">A:\dev\mysql-5.7.23-winx64 &gt; cd bin</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>先执行remove操作删除可能存在的服务，在安装新服务</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">A:\dev\mysql-5.7.23-winx64\bin &gt; mysqld -remove</span><br><span class="line"></span><br><span class="line">A:\dev\mysql-5.7.23-winx64\bin &gt; mysqld -instal</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>初始化MySQL服务，并在根目录下创建data目录，并创建初始化用户root</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">A:\dev\mysql-5.7.23-winx64\bin &gt; mysqld --initialize-insecure --user&#x3D;mysql</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>启动MySQL服务</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">A:\dev\mysql-5.7.23-winx64\bin &gt; net start mysql</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>为root用户创建登录密码</p>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">A:\dev\mysql-5.7.23-winx64\bin &gt; mysqladmin -u root -p password 新密码</span><br><span class="line">Enter password:</span><br></pre></td></tr></table></figure>
-<p>由于初始化密码为空，所以第二步骤可以直接enter</p>
-<ol start="8">
-<li><p>登录mysql成功！</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">A:\dev\mysql-5.7.23-winx64\bin &gt; mysql -u root -p </span><br><span class="line">Enter password:密码</span><br><span class="line"></span><br><span class="line">Welcome to the MySQL monitor.  Commands end with ; or \g.</span><br><span class="line">Your MySQL connection id is 9</span><br><span class="line">Server version: 5.7.23 MySQL Community Server (GPL)</span><br><span class="line"></span><br><span class="line">Copyright (c) 2000, 2018, Oracle and&#x2F;or its affiliates. All rights reserved.</span><br><span class="line"></span><br><span class="line">Oracle is a registered trademark of Oracle Corporation and&#x2F;or its</span><br><span class="line">affiliates. Other names may be trademarks of their respective</span><br><span class="line">owners.</span><br><span class="line"></span><br><span class="line">Type &#39;help;&#39; or &#39;\h&#39; for help. Type &#39;\c&#39; to clear the current input statement.</span><br><span class="line"></span><br><span class="line">mysql&gt;show databases;</span><br></pre></td></tr></table></figure>
-<p><br><br></p>
-<h1 id="安装和破解Navicat-Premium-12-x"><a href="#安装和破解Navicat-Premium-12-x" class="headerlink" title="安装和破解Navicat Premium 12.x"></a>安装和破解Navicat Premium 12.x</h1></li>
-<li><p>在<a href="https://www.lanzous.com/i1jw6ib" target="_blank" rel="noopener">这里</a>下载64位12.x版本Navicat Premium</p>
-</li>
-<li><p>在<a href="https://www.lanzous.com/i1jw6oh" target="_blank" rel="noopener">这里</a>下载注册机</p>
-</li>
-<li><p>正常安装后使用注册机破解</p>
-</li>
-<li><p>毕竟不是光彩的事情，详情<a href="https://blog.csdn.net/loveer0/article/details/82016644" target="_blank" rel="noopener">请戳这里</a></p>
-</li>
-</ol>
-
-        </div>
-        
-        <div class="level is-size-7 is-uppercase">
-            <div class="level-start">
-                <div class="level-item">
-                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
-                    <a class="has-link-grey -link" href="/tags/mysql/" rel="tag">mysql</a>
+                <div class="media-content">
+                    <div class="content">
+                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2020-02-11T16:00:00.000Z">2020-02-12</time>
+                        <a href="/2020/02/12/2%20MySQL/MySQL%E4%BC%98%E5%8C%96%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MySQL优化系列（一）</a>
+                        <div class="level article-meta is-mobile">
+                            <div class="level-left">
+                                
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+            </article>
         
-        
-        
-        <div class="social-share"></div>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/css/share.min.css">
-<script src="https://cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/js/social-share.min.js"></script>
-        
-    </div>
-</div>
-
-
-
-<div class="card">
-    <div class="card-content">
-        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
-        <div class="buttons is-centered">
-            
         </div>
     </div>
 </div>
 
 
 
+    
 <div class="card card-transparent">
-    <div class="level post-navigation is-flex-wrap is-mobile">
-        
-        <div class="level-start">
-            <a class="level level-item has-link-grey  article-nav-prev" href="/2020/02/12/2%20MySQL/MySQL%E4%BC%98%E5%8C%96%E7%B3%BB%E5%88%97%EF%BC%88%E4%B8%80%EF%BC%89/">
-                <i class="level-item fas fa-chevron-left"></i>
-                <span class="level-item">MySQL优化系列（一）</span>
-            </a>
+    <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+        <div class="pagination-previous">
+            <a class="is-flex-grow has-text-black-ter" href="/archives/2020/page/3/">上一页</a>
         </div>
-        
-        
-        <div class="level-end">
-            <a class="level level-item has-link-grey  article-nav-next" href="/2018/10/02/1%20Github%20+%20Hexo%20%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/4%20Github%20+%20Hexo%20%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2(%E5%9B%9B)/">
-                <span class="level-item">Github + Hexo 搭建博客(四)</span>
-                <i class="level-item fas fa-chevron-right"></i>
-            </a>
+        <div class="pagination-next is-invisible is-hidden-mobile">
+            <a class="is-flex-grow has-text-black-ter" href="/archives/2020/page/5/">下一页</a>
         </div>
-        
-    </div>
-</div>
-
-
-
-<div class="card">
-    <div class="card-content">
-        <h3 class="title is-5 has-text-weight-normal">评论</h3>
-        
-<div id="comment-container"></div>
-<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
-<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
-<script>
-	var gitment = new Gitment({
-		id: '00e838a9b7ada6311cd6b5904ac0c103',
-		owner: 'alpaca',
-		repo: 'alpacaca.github.io',
-		oauth: {
-			client_id: 'e17f481b09f8cf119e89',
-			client_secret: 'bd462646e2303946237a040c2afde10a4f5cd418',
-		},
-	})
-	gitment.render('comment-container')
-</script>
-
-    </div>
+        <ul class="pagination-list is-hidden-mobile">
+            
+            <li><a class="pagination-link has-text-black-ter" href="/archives/2020/">1</a></li>
+            
+            <li><a class="pagination-link has-text-black-ter" href="/archives/2020/page/2/">2</a></li>
+            
+            <li><a class="pagination-link has-text-black-ter" href="/archives/2020/page/3/">3</a></li>
+            
+            <li><a class="pagination-link is-current" href="/archives/2020/page/4/">4</a></li>
+            
+        </ul>
+    </nav>
 </div>
 </div>
                 
@@ -1080,7 +972,7 @@
             <div class="level-start has-text-centered-mobile">
                 <a class="footer-logo is-block has-mb-6" href="/">
                 
-                    <img src="/images/banner/3.jpg" alt="mysql-5.7.x zip版详细配置" height="28">
+                    <img src="/images/banner/3.jpg" alt="zhy&#39;s blog" height="28">
                 
                 </a>
                 <p class="is-size-7">
