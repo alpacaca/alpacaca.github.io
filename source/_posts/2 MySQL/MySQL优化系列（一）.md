@@ -5,6 +5,8 @@ tags: [mysql, MySQL优化]
 ---
 {% asset_img image1.jpg MySQL %}
 
+
+
 # MySQL优化系列（一）
 <!--more-->
 
@@ -14,7 +16,6 @@ tags: [mysql, MySQL优化]
 1. 代码级优化。
 2. 数据库级优化。
 3. 框架级优化。
-
 
 **代码级优化**主要包含：
 
