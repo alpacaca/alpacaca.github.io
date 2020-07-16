@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8" />
+
+<meta name="generator" content="Hexo 4.2.0" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<title>Redis（二） - zhy&#39;s blog</title>
+
+
+    <meta name="description" content="Redis（二）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis（二）">
+<meta property="og:url" content="http://yoursite.com/2020/04/01/10%20%E4%B8%AD%E9%97%B4%E4%BB%B6/Redis%EF%BC%88%E4%BA%8C%EF%BC%89/index.html">
+<meta property="og:site_name" content="zhy&#39;s blog">
+<meta property="og:description" content="Redis（二）">
+<meta property="og:image" content="http://yoursite.com/images/og_image.png">
+<meta property="article:published_time" content="2020-03-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-07-16T15:52:20.976Z">
+<meta property="article:author" content="zhy">
+<meta property="article:tag" content="中间件">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/images/og_image.png">
+
+
+
+
+
+
+
+<link rel="icon" href="/images/favicon.svg">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+<style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+    
+    
+    
+    
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+    
+    <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/banner/3.jpg" alt="Redis（二）" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/categories">Categories</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    <a class="navbar-item" target="_blank" rel="noopener" title="My GitHub" href="https://alpacaca.github.io">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main">
+<div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2020-03-31T16:00:00.000Z">2020-04-01</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    19 minutes 读完 (大约 2799 个字)
+                </span>
+                
+                
+                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
+                    <i class="far fa-eye"></i>
+                    <span id="busuanzi_value_page_pv">0</span>次访问
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                Redis（二）
+            
+        </h1>
+        <div class="content">
+            <img src="/2020/04/01/10%20%E4%B8%AD%E9%97%B4%E4%BB%B6/Redis%EF%BC%88%E4%BA%8C%EF%BC%89/image1.jpg" class="" title="Redis">
+
+<h1 id="Redis（二）"><a href="#Redis（二）" class="headerlink" title="Redis（二）"></a>Redis（二）</h1><a id="more"></a>
+
+
+
+<h2 id="4-Redis-事务控制"><a href="#4-Redis-事务控制" class="headerlink" title="4 Redis 事务控制"></a>4 Redis 事务控制</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所谓 Redis 事务，就是指一次执行一组指令，Redis 可以保证原子性和隔离性：</p>
+<ul>
+<li>事务是一个单独的隔离操作：<strong>事务中的所有命令都会序列化、按顺序地执行。</strong>事务在执行的过程中，不会被其他客户端发送来的命令请求所打断。</li>
+<li>事务是一个原子操作：事务中的命令要么全部被执行，要么全部都不执行。（事实上，Redis 并不能很好的保证事务的原子性，因为不支持回滚和 EXEC 执行错误处理）。</li>
+</ul>
+<p>Redis 使用 MULTI、EXEC、DISCARD、WATCH 和 UNWATCH 负责事务的使用，其具体使用周期如下：</p>
+<ol>
+<li>使用 MULTI 标记事务开启，之后的命令都将被视为事务内的命令，直到调用 EXEC 或 DISCARD；</li>
+<li>EXEC 提交事务，Redis 将事务内命令逐一入队并持久化，保证不会受到内存异常或其他指令的影响，按顺序依次执行；</li>
+<li>DISCARD 丢弃事务，一直到 MULTI 部分的指令都不会执行。</li>
+<li>WATCH 监控重要的 key ，相当于对关键key加锁，如果在事务提交前 key 被修改，那么本次事务不会提交。</li>
+<li>UNWATCH 用于取消监控命令，即撤销锁。</li>
+</ol>
+<p><strong>异常情况</strong></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果发生在 <a href="http://www.redis.cn/commands/exec.html">EXEC</a> 执行之前的错误，客户端会检查命令入队所得的返回值：如果命令入队时返回 <code>QUEUED</code> ，那么入队成功；否则，入队失败。服务器会对命令入队失败的情况进行记录，并在客户端调用 <a href="http://www.redis.cn/commands/exec.html">EXEC</a> 命令时，拒绝执行并自动放弃这个事务。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>在 EXEC 命令执行之后所产生的错误， 并没有对它们进行特别处理： 即使事务中有某些命令在执行时产生了错误， 事务中的其他命令仍然会继续执行 —— Redis 不会停止执行事务中的命令。。</strong></p>
+<p><strong>Redis 为何不支持回滚</strong></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Redis 官方勉强的解释如下：</p>
+<blockquote>
+<p>The Redis command will only fail because of the wrong syntax (and these problems cannot be found when entering the team), or the command is used on the wrong type of key: that is, from a practical point of view, the failed command It is caused by programming errors, and these errors should be discovered during the development process, and should not appear in the production environmen</p>
+</blockquote>
+<p>从实用性的角度来讲，失败的命令是由编程错误造成的，这些错误应该在开发过程中被发现，而不应该出现在生产环境中。</p>
+<blockquote>
+<p>Because there is no need to support rollback, Redis internals can be kept simple and fast.</p>
+</blockquote>
+<p>因为不需要对回滚进行支持，所以 Redis 的内部可以保持简单且快速。</p>
+<p><strong>使用事务</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"># 开启和提交事务</span><br><span class="line">127.0.0.1:6379&gt; multi</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; rpush list 1 2 3</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; lpush list 0 -1</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; rpoplpush list list_tmp</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; lrange list 0 -1</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; lrange list_tmp 0 -1</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; exec</span><br><span class="line">1) (integer) 3</span><br><span class="line">2) (integer) 5</span><br><span class="line">3) &quot;3&quot;</span><br><span class="line">4) 1) &quot;-1&quot;</span><br><span class="line">   2) &quot;0&quot;</span><br><span class="line">   3) &quot;1&quot;</span><br><span class="line">   4) &quot;2&quot;</span><br><span class="line">5) 1) &quot;3&quot;</span><br><span class="line"></span><br><span class="line"># 放弃事务</span><br><span class="line">127.0.0.1:6379&gt; multi</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; set key1 value1</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; set key2 value2</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; discard</span><br><span class="line">OK</span><br><span class="line"></span><br><span class="line"># 事务不支持原子性示例</span><br><span class="line">127.0.0.1:6379&gt; multi</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; rpush list 1 2 3</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; lset list 3 0</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; lrange list 0 -1</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; exec</span><br><span class="line">1) (integer) 3</span><br><span class="line">2) (error) ERR index out of range</span><br><span class="line">3) 1) &quot;1&quot;</span><br><span class="line">   2) &quot;2&quot;</span><br><span class="line">   3) &quot;3&quot;</span><br></pre></td></tr></table></figure>
+
+<p>使用 WATCH 进行加锁，UNWATCH 解锁</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># 在 watch 监控 money 后 ，创建事务标记前修改 money 值</span><br><span class="line">127.0.0.1:6379&gt; set money 100</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; watch money</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; set money 50</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; multi</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; set money 10</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; get money</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; exec</span><br><span class="line">(nil)</span><br><span class="line">127.0.0.1:6379&gt; unwatch</span><br><span class="line">OK</span><br></pre></td></tr></table></figure>
+
+<p>Watch 采用乐观锁策略， Watch 对监控对象加锁时会记录 version，每一次的修改都会创建不同的 version，在事务提交前会比较 version 与初始是否一致，如果不一致则证明被修改，放弃本次事务提交</p>
+<h2 id="5-Redis-持久化"><a href="#5-Redis-持久化" class="headerlink" title="5 Redis 持久化"></a>5 Redis 持久化</h2><blockquote>
+<p>redis 计划将 RDB 和 AOF 两种持久化模型合并为一种。（长期计划）</p>
+</blockquote>
+<h3 id="5-1-RDB"><a href="#5-1-RDB" class="headerlink" title="5.1 RDB"></a>5.1 RDB</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Redis Database（RDB）是 Redis 提供的一种通过 <strong>快照</strong> 技术实现数据持久化的功能，可以通过配置在指定时间间隔内将内存中的数据集快照写入磁盘中的二进制文件，默认使用 dump.rdb 文件。它提供了三种触发机制：</p>
+<ol>
+<li>通过配置文件自动触发 （bgsave 指令）:</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">### RDB 配置 ###</span></span><br><span class="line"><span class="comment"># 采用异步非阻塞的 bgsave 命令</span></span><br><span class="line">save 900 1		<span class="comment"># 如果 900s 内有至少1个 key 被修改，执行持久化操作</span></span><br><span class="line">save 300 10		<span class="comment"># 如果 300s 内有至少10个 key 被修改，执行持久化操作</span></span><br><span class="line">save 60 10000	<span class="comment"># 如果 60s 内有至少10000个 key 被修改，执行持久化操作</span></span><br><span class="line"></span><br><span class="line">persistence-available [(yes)|no] <span class="comment"># 是否持久化，在windows下可以关闭，会重定向到堆分配</span></span><br><span class="line">stop-writes-on-bgsave-error yes <span class="comment"># 持久化错误是否继续工作</span></span><br><span class="line">rdbcompression yes	<span class="comment"># 是否亚索 rdb 文件 （消耗cpu资源）</span></span><br><span class="line">rdbchecksum yes	<span class="comment"># rdb文件校验</span></span><br><span class="line">dbfilename dump.rdb	<span class="comment"># rdb 文件名</span></span><br><span class="line">dir ./	<span class="comment"># rdb文件保存路径</span></span><br></pre></td></tr></table></figure>
+
+
+
+<ol start="2">
+<li>通过 save 命令触发，该命令是同步阻塞式的，即执行save命令期间，Redis不能处理其他命令，直到RDB过程完成为止，执行完成时候如果存在老的RDB文件，就会被替换掉。</li>
+<li>通过 bgsave 命令触发，该命令是异步非阻塞式的，原理是 redis 主进程通过 fork 创建一个子进程，持久化的任务就交给子进程来完成</li>
+</ol>
+<img src="/2020/04/01/10%20%E4%B8%AD%E9%97%B4%E4%BB%B6/Redis%EF%BC%88%E4%BA%8C%EF%BC%89/1.png" class="" title="Redis">
+
+
+
+<p><strong>RDB 的优点：</strong></p>
+<ol>
+<li><p>RDB文件紧凑，全量备份，非常适合用于进行备份和灾后恢复。例如，您可能希望在最近的24小时内每小时存档一次RDB文件，并在30天之内每天保存一次RDB快照。可以轻松还原数据集的不同版本。</p>
+</li>
+<li><p>RDB持久化时主进程唯一需要做的就是 fork 一个子进程，通过子进程完成持久化，父进程永远不会执行磁盘I / O或类似操作。</p>
+</li>
+<li><p>RDB 在恢复大数据集时的速度比 AOF 的恢复速度要快（RDB 是数据导入，AOF 是指令回放）。</p>
+</li>
+</ol>
+<p><strong>RDB 的缺点：</strong></p>
+<ol>
+<li>在快照开始时子进程共享父进程内存快照数据，但持久化期间父进程修改的数据不会被子进程探知，如果期间发生意外，则这部分数据将会丢失。</li>
+<li>在大数据量且 CPU 负载运行时，频繁的 fork 会造成 CPU 的开销。‘</li>
+</ol>
+<blockquote>
+<p>注意：</p>
+<ol>
+<li>BGSAVE 执行期间会拒绝 SAVE 和 BGSAVE 命令。</li>
+<li>服务启动后会载入 rdb 文件，在此期间主进程处于阻塞状态。</li>
+</ol>
+</blockquote>
+<h3 id="5-2-AOF"><a href="#5-2-AOF" class="headerlink" title="5.2 AOF"></a>5.2 AOF</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RDB 在持久化开始时总是统计全量数据集并产生快照，这相对会花费一些时间，并且系统异常时数据丢失率高，AOF （Append Only File）可以作为恰当的替代方案，其原理类似于 MYSQL 的 bin.log 文件，每当 Redis 接收到写命令（set、lpush、lpop等） 时都会通过 write 函数将该命令追加到文件中，形成一个指令日志文件。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可以预见到，无论哪种 AOF 同步策略最终都会导致 aof 文件越来越大，redis 提供了一种 <strong>重写方案</strong> ——通过 <code>bgrewriteaof</code> 命令将内存中数据重写，其原理类似于 RDB 的快照原理：redis 主进程 fork 子进程，子进程收集内存全量数据集，<strong>以命令的形式重写数据到 aof 文件中</strong>，旧文件将被替换。</p>
+<img src="/2020/04/01/10%20%E4%B8%AD%E9%97%B4%E4%BB%B6/Redis%EF%BC%88%E4%BA%8C%EF%BC%89/2.png" class="" title="Redis">
+
+<p>AOF 通过配置提供了三种同步策略：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">###　AOF 配置 ###</span></span><br><span class="line">appendonly no <span class="comment"># 默认使用 rdb 持久化，不开启 aof 模式</span></span><br><span class="line"><span class="comment"># AOF同步策略</span></span><br><span class="line"><span class="comment"># always 每次写操作都会同步</span></span><br><span class="line"><span class="comment"># everysec 每秒同步一次</span></span><br><span class="line"><span class="comment"># no 不同步</span></span><br><span class="line">appendfsync always </span><br><span class="line"></span><br><span class="line">appendfilename <span class="string">"appendonly.aof"</span> <span class="comment"># aof 文件名</span></span><br><span class="line">no-appendfsync-on-rewrite no <span class="comment"># 重写期间是否同步</span></span><br><span class="line">auto-aof-rewrite-percentage 100 <span class="comment"># 当 aof 达到文件容量的百分比后自动重写</span></span><br><span class="line">auto-aof-rewrite-min-size 64mb <span class="comment"># 当 aof 文件大于文件容量后自动重写</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>在 Redis 灾后恢复时，通过将 aof 全量指令回放来完成数据的恢复。</p>
+<p><strong>AOF 的优点：</strong></p>
+<ol>
+<li>AOF 一般采用每秒同步策略，异常情况时数据丢失率低。</li>
+<li>AOF 文件写入性能高，没有任何磁盘寻址开销。</li>
+<li>AOF 智能的通过重写功能减少文件体量堆积。</li>
+</ol>
+<h2 id="6-Redis-实现订阅-发布"><a href="#6-Redis-实现订阅-发布" class="headerlink" title="6 Redis 实现订阅-发布"></a>6 Redis 实现订阅-发布</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Redis 可以作为消息中间件实现标准的消息 <strong>订阅-发布</strong> 功能：在分布式环境中，单节点的 redis 既可以作为接收消息的客户端（Subscriber）也可以作为发布消息的服务器（Publisher），在 sub 和 pub 之间存在消息传递的频道 channel，订阅者面向频道发起订阅并从频道接收下发的消息；同样的，发布者也针对频道下发，又频道负责消息分发。</p>
+
+
+
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Redis 通过 PSUBSCRIBE 、PUBSUB、 PUBLISH、PUNSUBSCRIBE、 SUBSCRIBE、 UNSUBSCRIBE 六个指令完成消息的订阅和发布功能</p>
+<ul>
+<li>PSUBSCRIBE ：订阅一个或多个匹配的频道；</li>
+<li>PUBSUB ：查看订阅与发布系统状态；</li>
+<li>PUBLISH ：将信息发送到指定的频道；</li>
+<li>PUNSUBSCRIBE ：退订所有匹配的频道；</li>
+<li>SUBSCRIBE ：订阅指定的一个或多个频道；</li>
+<li>UNSUBSCRIBE  ：退订指定的频道</li>
+</ul>
+<p><strong>演示</strong></p>
+<ol>
+<li>本地开启三个客户端窗口，其中选定两个为 subscriber，一个为 publisher。</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># sub1 订阅频道 msg_channel</span></span><br><span class="line">127.0.0.1:6379&gt; subscribe msg_channel</span><br><span class="line">Reading messages... (press Ctrl-C to quit)</span><br><span class="line">1) <span class="string">"subscribe"</span></span><br><span class="line">2) <span class="string">"msg_channel"</span></span><br><span class="line">3) (<span class="built_in">integer</span>) 1</span><br><span class="line"></span><br><span class="line"><span class="comment"># sub2 订阅频道 news_channel</span></span><br><span class="line">127.0.0.1:6379&gt; subscribe news_channel</span><br><span class="line">Reading messages... (press Ctrl-C to quit)</span><br><span class="line">1) <span class="string">"subscribe"</span></span><br><span class="line">2) <span class="string">"news_channel"</span></span><br><span class="line">3) (<span class="built_in">integer</span>) 1</span><br><span class="line"></span><br><span class="line"><span class="comment"># pub</span></span><br><span class="line">127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<ol start="2">
+<li>两个订阅者都订阅了 msg_channel 频道并处于消息监听状态，接下来 publisher 准备发送消息。</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># pub 向 msg_channel频道和news_channel频道分别下发两条消息消息</span></span><br><span class="line">127.0.0.1:6379&gt; publish msg_channel <span class="string">"This is first message from three body"</span></span><br><span class="line">127.0.0.1:6379&gt; publish msg_channel <span class="string">"dont repeat! dont repeat!! dont repeat!!!"</span></span><br><span class="line">127.0.0.1:6379&gt; publish news_channel <span class="string">"Kobe was a pity"</span></span><br><span class="line">127.0.0.1:6379&gt; publish news_channel <span class="string">"R.I.P"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># sub1</span></span><br><span class="line">127.0.0.1:6379&gt; subscribe msg_channel</span><br><span class="line">Reading messages... (press Ctrl-C to quit)</span><br><span class="line">1) <span class="string">"subscribe"</span></span><br><span class="line">2) <span class="string">"msg_channel"</span></span><br><span class="line">3) (<span class="built_in">integer</span>) 1</span><br><span class="line">1) <span class="string">"message"</span></span><br><span class="line">2) <span class="string">"msg_channel"</span></span><br><span class="line">3) <span class="string">"This is first message from three body"</span></span><br><span class="line">1) <span class="string">"message"</span></span><br><span class="line">2) <span class="string">"msg_channel"</span></span><br><span class="line">3) <span class="string">"dont repeat! dont repeat!! dont repeat!!!"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># sub2</span></span><br><span class="line">127.0.0.1:6379&gt; subscribe news_channel</span><br><span class="line">Reading messages... (press Ctrl-C to quit)</span><br><span class="line">1) <span class="string">"subscribe"</span></span><br><span class="line">2) <span class="string">"news_channel"</span></span><br><span class="line">3) (<span class="built_in">integer</span>) 1</span><br><span class="line">1) <span class="string">"message"</span></span><br><span class="line">2) <span class="string">"news_channel"</span></span><br><span class="line">3) <span class="string">"Kobe was a pity"</span></span><br><span class="line">1) <span class="string">"message"</span></span><br><span class="line">2) <span class="string">"news_channel"</span></span><br><span class="line">3) <span class="string">"R.I.P"</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>原理</strong>：在 redis 发布订阅模块下维护了一组 <strong>字典</strong> ，该字典即为频道，里面记录的频道名和订阅者信息，发布者向频道发送消息，该消息又订阅模块接收并通过字典获得所有订阅者并分发。</p>
+
+        </div>
+        
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/Redis/" rel="tag">Redis</a>, <a class="has-link-grey -link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        <div class="social-share"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/css/share.min.css">
+<script src="https://cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/js/social-share.min.js"></script>
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
+            
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        <div class="level-start">
+            <a class="level level-item has-link-grey  article-nav-prev" href="/2020/04/01/10%20%E4%B8%AD%E9%97%B4%E4%BB%B6/Redis%EF%BC%88%E4%B8%80%EF%BC%89/">
+                <i class="level-item fas fa-chevron-left"></i>
+                <span class="level-item">Redis（一）</span>
+            </a>
+        </div>
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2020/04/01/10%20%E4%B8%AD%E9%97%B4%E4%BB%B6/Redis%EF%BC%88%E4%B8%89%EF%BC%89/">
+                <span class="level-item">Redis（三）</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="title is-5 has-text-weight-normal">评论</h3>
+        
+<div id="comment-container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+	var gitment = new Gitment({
+		id: 'd2c48ea120aee3c3701c05436dcdfe8f',
+		owner: 'alpaca',
+		repo: 'alpacaca.github.io',
+		oauth: {
+			client_id: 'e17f481b09f8cf119e89',
+			client_secret: 'bd462646e2303946237a040c2afde10a4f5cd418',
+		},
+	})
+	gitment.render('comment-container')
+</script>
+
+    </div>
+</div>
+</div>
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered" style="flex-shrink: 1">
+                <div>
+                    
+                    <figure class="image is-128x128 has-mb-6">
+						<div style="border-radius: 0.3">
+							<img class="" src="/images/avatar.jpg" alt="Alpacaca">
+						</div>
+                    </figure>
+                    
+                    <p class="is-size-4 is-block">
+                        Alpacaca
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        Web Developer
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>Xi&#39;an , China</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <a href="/archives">
+                        <p class="title has-text-weight-normal">
+                            42
+                        </p>
+                    </a>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <a href="/categories">
+                        <p class="title has-text-weight-normal">
+                            0
+                        </p>
+                    </a>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <a href="/tags">
+                        <p class="title has-text-weight-normal">
+                            24
+                        </p>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/alpacaca" target="_blank" rel="noopener">
+                关注我</a>
+        </div>
+        
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="Github" href="https://github.com/alpacaca">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="Facebook" href="https://facebook.com">
+                
+                <i class="fab fa-facebook"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="Twitter" href="https://twitter.com">
+                
+                <i class="fab fa-twitter"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="linkedin" href="https://www.linkedin.com/">
+                
+                <i class="fab fa-linkedin"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                分类
+            </h3>
+            <ul class="menu-list">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            标签云
+        </h3>
+        <a href="/tags/AQS/" style="font-size: 10px;">AQS</a> <a href="/tags/COW/" style="font-size: 10px;">COW</a> <a href="/tags/JUC/" style="font-size: 10px;">JUC</a> <a href="/tags/Log/" style="font-size: 10px;">Log</a> <a href="/tags/Lombok/" style="font-size: 10px;">Lombok</a> <a href="/tags/MySQL%E4%BC%98%E5%8C%96/" style="font-size: 16px;">MySQL优化</a> <a href="/tags/Redis/" style="font-size: 12px;">Redis</a> <a href="/tags/Shiro/" style="font-size: 10px;">Shiro</a> <a href="/tags/Spring/" style="font-size: 16px;">Spring</a> <a href="/tags/SpringBoot/" style="font-size: 12px;">SpringBoot</a> <a href="/tags/hexo/" style="font-size: 14px;">hexo</a> <a href="/tags/mysql/" style="font-size: 18px;">mysql</a> <a href="/tags/swagger/" style="font-size: 10px;">swagger</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 14px;">中间件</a> <a href="/tags/%E5%8D%8F%E7%A8%8B/" style="font-size: 10px;">协程</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 12px;">多线程</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">数据结构</a> <a href="/tags/%E6%BA%90%E7%A0%81/" style="font-size: 20px;">源码</a> <a href="/tags/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%B7%A5%E5%85%B7/" style="font-size: 12px;">第三方工具</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 14px;">算法</a> <a href="/tags/%E7%BA%A4%E7%A8%8B/" style="font-size: 10px;">纤程</a> <a href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" style="font-size: 10px;">线程池</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 10px;">缓存</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 14px;">设计模式</a>
+    </div>
+</div>
+    
+    
+        <div class="column-right-shadow is-hidden-widescreen ">
+        
+            <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2020/07/01/6%20Spring/Spring%E5%8F%8A%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94SpringBoot%EF%BC%88%E4%BA%8C%EF%BC%89/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Spring及源码——SpringBoot（二）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-06-30T16:00:00.000Z">2020-07-01</time></div>
+                    <a href="/2020/07/01/6%20Spring/Spring%E5%8F%8A%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94SpringBoot%EF%BC%88%E4%BA%8C%EF%BC%89/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Spring及源码——SpringBoot（二）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/07/01/%E4%B8%89%E6%96%B9%E5%B7%A5%E5%85%B7/%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="日志系统">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-06-30T16:00:00.000Z">2020-07-01</time></div>
+                    <a href="/2020/07/01/%E4%B8%89%E6%96%B9%E5%B7%A5%E5%85%B7/%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F/" class="title has-link-black-ter is-size-6 has-text-weight-normal">日志系统</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/07/01/6%20Spring/Spring%E5%8F%8A%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94SpringBoot%EF%BC%88%E4%B8%89%EF%BC%89/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Spring及源码——SpringBoot（三）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-06-30T16:00:00.000Z">2020-07-01</time></div>
+                    <a href="/2020/07/01/6%20Spring/Spring%E5%8F%8A%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94SpringBoot%EF%BC%88%E4%B8%89%EF%BC%89/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Spring及源码——SpringBoot（三）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/07/01/6%20Spring/Spring%E5%8F%8A%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94SpringBoot%EF%BC%88%E4%B8%80%EF%BC%89/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Spring及源码——SpringBoot（一）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-06-30T16:00:00.000Z">2020-07-01</time></div>
+                    <a href="/2020/07/01/6%20Spring/Spring%E5%8F%8A%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94SpringBoot%EF%BC%88%E4%B8%80%EF%BC%89/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Spring及源码——SpringBoot（一）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/06/20/9%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E5%9B%9B%EF%BC%89-%20%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="设计模式（四）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-06-19T16:00:00.000Z">2020-06-20</time></div>
+                    <a href="/2020/06/20/9%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E5%9B%9B%EF%BC%89-%20%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="title has-link-black-ter is-size-6 has-text-weight-normal">设计模式（四）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/07/">
+                <span class="level-start">
+                    <span class="level-item">July 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/06/">
+                <span class="level-start">
+                    <span class="level-item">June 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">8</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/05/">
+                <span class="level-start">
+                    <span class="level-item">May 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">12</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/04/">
+                <span class="level-start">
+                    <span class="level-item">April 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">8</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/03/">
+                <span class="level-start">
+                    <span class="level-item">March 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/02/">
+                <span class="level-start">
+                    <span class="level-item">February 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">October 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">September 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/AQS/">
+                        <span class="tag">AQS</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/COW/">
+                        <span class="tag">COW</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/JUC/">
+                        <span class="tag">JUC</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Log/">
+                        <span class="tag">Log</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Lombok/">
+                        <span class="tag">Lombok</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/MySQL%E4%BC%98%E5%8C%96/">
+                        <span class="tag">MySQL优化</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Redis/">
+                        <span class="tag">Redis</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Shiro/">
+                        <span class="tag">Shiro</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Spring/">
+                        <span class="tag">Spring</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/SpringBoot/">
+                        <span class="tag">SpringBoot</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/hexo/">
+                        <span class="tag">hexo</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/mysql/">
+                        <span class="tag">mysql</span>
+                        <span class="tag is-grey">6</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/swagger/">
+                        <span class="tag">swagger</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/">
+                        <span class="tag">中间件</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E5%8D%8F%E7%A8%8B/">
+                        <span class="tag">协程</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">
+                        <span class="tag">多线程</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
+                        <span class="tag">数据结构</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E6%BA%90%E7%A0%81/">
+                        <span class="tag">源码</span>
+                        <span class="tag is-grey">10</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%B7%A5%E5%85%B7/">
+                        <span class="tag">第三方工具</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E7%AE%97%E6%B3%95/">
+                        <span class="tag">算法</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E7%BA%A4%E7%A8%8B/">
+                        <span class="tag">纤程</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/">
+                        <span class="tag">线程池</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E7%BC%93%E5%AD%98/">
+                        <span class="tag">缓存</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
+                        <span class="tag">设计模式</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right ">
+    
+        <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2020/07/01/6%20Spring/Spring%E5%8F%8A%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94SpringBoot%EF%BC%88%E4%BA%8C%EF%BC%89/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Spring及源码——SpringBoot（二）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-06-30T16:00:00.000Z">2020-07-01</time></div>
+                    <a href="/2020/07/01/6%20Spring/Spring%E5%8F%8A%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94SpringBoot%EF%BC%88%E4%BA%8C%EF%BC%89/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Spring及源码——SpringBoot（二）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/07/01/%E4%B8%89%E6%96%B9%E5%B7%A5%E5%85%B7/%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="日志系统">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-06-30T16:00:00.000Z">2020-07-01</time></div>
+                    <a href="/2020/07/01/%E4%B8%89%E6%96%B9%E5%B7%A5%E5%85%B7/%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F/" class="title has-link-black-ter is-size-6 has-text-weight-normal">日志系统</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/07/01/6%20Spring/Spring%E5%8F%8A%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94SpringBoot%EF%BC%88%E4%B8%89%EF%BC%89/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Spring及源码——SpringBoot（三）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-06-30T16:00:00.000Z">2020-07-01</time></div>
+                    <a href="/2020/07/01/6%20Spring/Spring%E5%8F%8A%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94SpringBoot%EF%BC%88%E4%B8%89%EF%BC%89/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Spring及源码——SpringBoot（三）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/07/01/6%20Spring/Spring%E5%8F%8A%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94SpringBoot%EF%BC%88%E4%B8%80%EF%BC%89/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Spring及源码——SpringBoot（一）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-06-30T16:00:00.000Z">2020-07-01</time></div>
+                    <a href="/2020/07/01/6%20Spring/Spring%E5%8F%8A%E6%BA%90%E7%A0%81%E2%80%94%E2%80%94SpringBoot%EF%BC%88%E4%B8%80%EF%BC%89/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Spring及源码——SpringBoot（一）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2020/06/20/9%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E5%9B%9B%EF%BC%89-%20%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="设计模式（四）">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-06-19T16:00:00.000Z">2020-06-20</time></div>
+                    <a href="/2020/06/20/9%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%88%E5%9B%9B%EF%BC%89-%20%E8%A1%8C%E4%B8%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="title has-link-black-ter is-size-6 has-text-weight-normal">设计模式（四）</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/07/">
+                <span class="level-start">
+                    <span class="level-item">July 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/06/">
+                <span class="level-start">
+                    <span class="level-item">June 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">8</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/05/">
+                <span class="level-start">
+                    <span class="level-item">May 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">12</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/04/">
+                <span class="level-start">
+                    <span class="level-item">April 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">8</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/03/">
+                <span class="level-start">
+                    <span class="level-item">March 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/02/">
+                <span class="level-start">
+                    <span class="level-item">February 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">October 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">September 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/AQS/">
+                        <span class="tag">AQS</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/COW/">
+                        <span class="tag">COW</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/JUC/">
+                        <span class="tag">JUC</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Log/">
+                        <span class="tag">Log</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Lombok/">
+                        <span class="tag">Lombok</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/MySQL%E4%BC%98%E5%8C%96/">
+                        <span class="tag">MySQL优化</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Redis/">
+                        <span class="tag">Redis</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Shiro/">
+                        <span class="tag">Shiro</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Spring/">
+                        <span class="tag">Spring</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/SpringBoot/">
+                        <span class="tag">SpringBoot</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/hexo/">
+                        <span class="tag">hexo</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/mysql/">
+                        <span class="tag">mysql</span>
+                        <span class="tag is-grey">6</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/swagger/">
+                        <span class="tag">swagger</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/">
+                        <span class="tag">中间件</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E5%8D%8F%E7%A8%8B/">
+                        <span class="tag">协程</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">
+                        <span class="tag">多线程</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
+                        <span class="tag">数据结构</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E6%BA%90%E7%A0%81/">
+                        <span class="tag">源码</span>
+                        <span class="tag is-grey">10</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E7%AC%AC%E4%B8%89%E6%96%B9%E5%B7%A5%E5%85%B7/">
+                        <span class="tag">第三方工具</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E7%AE%97%E6%B3%95/">
+                        <span class="tag">算法</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E7%BA%A4%E7%A8%8B/">
+                        <span class="tag">纤程</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/">
+                        <span class="tag">线程池</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E7%BC%93%E5%AD%98/">
+                        <span class="tag">缓存</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
+                        <span class="tag">设计模式</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/banner/3.jpg" alt="Redis（二）" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2020 zhy&nbsp;
+                Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> & <a
+                        href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a>
+                
+                <br>
+                <span id="busuanzi_container_site_uv">
+                共<span id="busuanzi_value_site_uv">0</span>个访客
+                </span>
+                
+                </p>
+            </div>
+            <div class="level-end">
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-Hans");</script>
+
+
+<script>
+var IcarusThemeSettings = {
+    site: {
+        url: 'http://yoursite.com',
+        external_link: {"enable":true,"exclude":[]}
+    },
+    article: {
+        highlight: {
+            clipboard: true,
+            fold: 'unfolded'
+        }
+    }
+};
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+
+
+
+
+
+<script src="/js/animation.js"></script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+<script src="/js/gallery.js" defer></script>
+
+
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+
+
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+	
+	<script src="/js/click.js"></script>
+	<script src="/js/snow.js"></script>
+</body>
+</html>
