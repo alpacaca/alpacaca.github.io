@@ -1,7 +1,7 @@
 ---
 title: MySQL优化系列（四）
 date: 2020-3-3
-tags: [mysql, MySQL优化]
+tags: [mysql, MySQL优化, 分布式事务, 分裤分表]
 ---
 {% asset_img image1.jpg MySQL %}
 
